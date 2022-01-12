@@ -30,8 +30,8 @@ window.onload = function () {
 socket.on("sendRoomArray", (roomList) => {
   console.log("RoomList", roomList);
   for (let room of roomList) {
-    const displayRoomName = document.createElement("a");
-    displayRoomName.setAttribute("href","/new-room");
+    const displayRoomName = document.createElement("p");
+
     displayRoomName.innerHTML = room;
  
       pHolder.append(displayRoomName);
@@ -86,9 +86,15 @@ constraints = {
 };
 
 async function connectToAnotherUser(userId) {
-  let stream = null;
+  var conn = myPeer.connect(userId);
 
-  try {
+  conn.on('open', function(){
+    // here you have conn.id
+    conn.send('hi!');
+  });
+  /*
+   let stream = null;
+  try { 
     stream = await navigator.mediaDevices.getDisplayMedia(constraints);
 
     // var conn = myPeer.connect(userId);
@@ -102,8 +108,19 @@ async function connectToAnotherUser(userId) {
   } catch (err) {
     console.log("something");
   }
+  */
 }
+var connCounter = 0;
 
+myPeer.on('connection', function(conn) {
+  conn.on('data', function(data){
+    // Will print 'hi!'
+    connCounter = connCounter + 1;
+    console.log(connCounter);
+    console.log(data);
+  });
+});
+/*
 myPeer.on("call", (call) => {
   answerToAnotherUser(call);
 });
@@ -123,14 +140,14 @@ async function answerToAnotherUser(call) {
     console.log("ooga booga");
   }
 }
-
+*/
 myPeer.on("connection", function (conn) {
   conn.on("data", function (data) {
     // Will print 'hi!'
     console.log(data);
   });
 });
-
+/*
 function addVideoStream(video, stream) {
   video.srcObject = stream;
   window.srcObject = stream;
