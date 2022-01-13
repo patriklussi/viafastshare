@@ -38,11 +38,11 @@ socket.on("sendRoomArray", (roomList) => {
 
     showRoomName = room;
     displayRoomName.addEventListener("click", () => {
-      userMediaStream
+      /*userMediaStream
         .getTracks()
         .forEach((track) =>
           senders.push(myPeer.addTrack(track, userMediaStream))
-        );
+        );*/
       socket.emit("join-room", userIdYes, room);
     });
   }
@@ -128,12 +128,24 @@ myPeer.on("connection", function (conn) {
 });
 
 async function shareMedia() {
-  if (!displayMediaStream) {
-    displayMediaStream = await navigator.mediaDevices.getDisplayMedia(
-      constraints
-    );
-  }
+  navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
+    console.log(stream.getTracks());
+    let video = document.createElement("video");
+    video.srcObject = stream;
+    video.play();
+    videoGrid.append(video);
+  });
 }
+
+/*{
+  if (!displayMediaStream) {
+    displayMediaStream = await navigator.mediaDevices.getDisplayMedia();
+  }
+  senders
+    .find((sender) => sender.track.kind === "video")
+    .replaceTrack(displayMediaStream.getTracks()[0]);
+  document.getElementById("video-grid").srcObject = displayMediaStream;
+}*/
 /*
 myPeer.on("call", (call) => {
   answerToAnotherUser(call);
