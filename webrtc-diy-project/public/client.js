@@ -4,12 +4,12 @@ const socket = io();
 const pHolder = document.querySelector("#pId");
 const roomNameButton = document.querySelector("#roomNameButton");
 const videoGrid = document.getElementById("videoGrid");
-const roomHolder = document.querySelector("#roomHolder")
+const roomHolder = document.querySelector("#roomHolder");
 const buttonBox = document.querySelector("#buttonBox");
 const peers = {};
-
+let userMediaStream;
 var roomListTwo = [];
-
+const senders = [];
 var myPeer = new Peer(undefined, {
   host: "/",
   port: "3001",
@@ -24,10 +24,8 @@ myPeer.on("open", function (id) {
 var showRoomName;
 
 window.onload = function () {
-    socket.emit("sendArrayInfo");
+  socket.emit("sendArrayInfo");
 };
-
-
 
 socket.on("sendRoomArray", (roomList) => {
   console.log("RoomList", roomList);
@@ -35,13 +33,16 @@ socket.on("sendRoomArray", (roomList) => {
     const displayRoomName = document.createElement("p");
 
     displayRoomName.innerHTML = room;
- 
-      pHolder.append(displayRoomName);
-    
-   
-      showRoomName = room;
+
+    pHolder.append(displayRoomName);
+
+    showRoomName = room;
     displayRoomName.addEventListener("click", () => {
-    
+      userMediaStream
+        .getTracks()
+        .forEach((track) =>
+          senders.push(myPeer.addTrack(track, userMediaStream))
+        );
       socket.emit("join-room", userIdYes, room);
     });
   }
@@ -53,7 +54,7 @@ roomNameButton.addEventListener("click", () => {
   socket.emit("room-name", room);
   console.log("Userid", userIdYes);
   console.log("roomname", room);
-  socket.emit("join-room", userIdYes, room);
+
   socket.emit("sendArrayInfo");
 });
 
@@ -93,7 +94,7 @@ constraints = {
 async function connectToAnotherUser(userId) {
   var conn = myPeer.connect(userId);
 
-  conn.on('open', function(){
+  conn.on("open", function () {
     // here you have conn.id
     conn.send("hi");
   });
@@ -117,19 +118,27 @@ async function connectToAnotherUser(userId) {
 }
 var connCounter = 0;
 
-myPeer.on('connection', function(conn) {
-  conn.on('data', function(data){
-    // Will print 'hi!'
-    connCounter = connCounter + 1;
-    console.log(connCounter);
-    console.log(data);
+myPeer.on("connection", function (conn) {
+  let button = document.createElement("button");
+  button.innerText = "Share screen";
+  buttonBox.append(button);
+  button.addEventListener("click", () => {
+    shareMedia();
   });
-
 });
+
+async function shareMedia() {
+  if (!displayMediaStream) {
+    displayMediaStream = await navigator.mediaDevices.getDisplayMedia(
+      constraints
+    );
+  }
+}
 /*
 myPeer.on("call", (call) => {
   answerToAnotherUser(call);
 });
+
 
 async function answerToAnotherUser(call) {
   let stream = null;
