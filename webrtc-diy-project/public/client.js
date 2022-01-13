@@ -1,15 +1,13 @@
 const connectToUser = document.querySelector("#roomButton");
-
-const socket = io();
-const pHolder = document.querySelector("#pId");
+const displayRoomName = document.querySelector("#displayRoomName");
 const roomNameButton = document.querySelector("#roomNameButton");
 const videoGrid = document.getElementById("videoGrid");
 const roomHolder = document.querySelector("#roomHolder");
 const buttonBox = document.querySelector("#buttonBox");
+
+const socket = io();
 const peers = {};
-let userMediaStream;
-var roomListTwo = [];
-const senders = [];
+
 var myPeer = new Peer(undefined, {
   host: "/",
   port: "3001",
@@ -30,19 +28,14 @@ window.onload = function () {
 socket.on("sendRoomArray", (roomList) => {
   console.log("RoomList", roomList);
   for (let room of roomList) {
-    const displayRoomName = document.createElement("p");
+    const roomName = document.createElement("p");
 
-    displayRoomName.innerHTML = room;
+    roomName.innerHTML = room;
 
-    pHolder.append(displayRoomName);
+    displayRoomName.append(roomName);
 
     showRoomName = room;
-    displayRoomName.addEventListener("click", () => {
-      /*userMediaStream
-        .getTracks()
-        .forEach((track) =>
-          senders.push(myPeer.addTrack(track, userMediaStream))
-        );*/
+    roomName.addEventListener("click", () => {
       socket.emit("join-room", userIdYes, room);
     });
   }
@@ -53,29 +46,10 @@ roomNameButton.addEventListener("click", () => {
   const room = roomNameInput.value;
   socket.emit("room-name", room);
   console.log("Userid", userIdYes);
-  console.log("roomname", room);
 
   socket.emit("sendArrayInfo");
 });
-
-/*
-socket.on("addRoom", (room) => {
-  roomListTwo.push(room);
-  console.log(room);
-  var ul = document.getElementById("roomHolder");
-  var li = document.createElement("li");
-
-  li.onclick = function () {
-    roomListTwo.push(room);
-  };
-
-  li.appendChild(document.createTextNode(room));
-  ul.appendChild(li);
-});
-*/
-
 socket.on("user-connected", (userId) => {
-  // connectToNewUser(userId,stream);
   connectToAnotherUser(userId);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
@@ -90,31 +64,11 @@ constraints = {
     displaySurface: "application" | "browser" | "monitor" | "window",
   },
 };
-var newUserId;
-async function connectToAnotherUser(userId) {
+var connectedUserId;
+function connectToAnotherUser(userId) {
   var conn = myPeer.connect(userId);
-  newUserId = userId;
- 
-
-  /*
-   let stream = null;
-  try { 
-    stream = await navigator.mediaDevices.getDisplayMedia(constraints);
-
-    // var conn = myPeer.connect(userId);
-    var call = myPeer.call(userId, stream);
-    // on open will be launch when you successfully connect to PeerServer
-    conn.on("open", function () {
-      // here you have conn.id
-      let conStr = "Hi from " + userId + "this is conn id" + conn.id;
-      conn.send(conStr);
-    });
-  } catch (err) {
-    console.log("something");
-  }
- */
+  connectedUserId = userId;
 }
-var connCounter = 0;
 
 myPeer.on("connection", function (conn) {
   let button = document.createElement("button");
@@ -125,73 +79,34 @@ myPeer.on("connection", function (conn) {
   });
 });
 
-
 let streamTracks;
 
 async function shareMedia() {
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
     console.log(stream.getTracks());
-    
-    var call = myPeer.call(newUserId, stream);
+
+    var call = myPeer.call(connectedUserId, stream);
     window.srcObject = stream;
   });
 }
 
-
-myPeer.on("call",(call)=>{
+myPeer.on("call", (call) => {
   call.answer(window.srcObject);
   let video = document.createElement("video");
-call.on("stream", (userVideoStream) => {
-  addVideoStream(video, userVideoStream);
+  call.on("stream", (userVideoStream) => {
+    addVideoStream(video, userVideoStream);
+  });
+  call.on("close", () => {
+    video.remove();
+  });
+  peers[connectedUserId] = call;
 });
-call.on("close", () => {
-  video.remove();
-});
-peers[newUserId] = call;
 
-})
-
-
-
-
-function addVideoStream(video,userVideoStream){
-
-  console.log(video);
+function addVideoStream(video, userVideoStream) {
   video.srcObject = userVideoStream;
-    video.play();
-    videoGrid.append(video);
+  video.play();
+  videoGrid.append(video);
 }
-/*{
-  if (!displayMediaStream) {
-    displayMediaStream = await navigator.mediaDevices.getDisplayMedia();
-  }
-  senders
-    .find((sender) => sender.track.kind === "video")
-    .replaceTrack(displayMediaStream.getTracks()[0]);
-  document.getElementById("video-grid").srcObject = displayMediaStream;
-}*/
-/*
-myPeer.on("call", (call) => {
-  answerToAnotherUser(call);
-});
-
-
-async function answerToAnotherUser(call) {
-  let stream = null;
-
-  try {
-    stream = await navigator.mediaDevices.getDisplayMedia(constraints);
-
-    call.answer(stream);
-    const video = document.createElement("video");
-    call.on("stream", (userVideoStream) => {
-      addVideoStream(video, userVideoStream);
-    });
-  } catch (err) {
-    console.log("ooga booga");
-  }
-}
-*/
 
 /*
 function addVideoStream(video, stream) {

@@ -22,30 +22,24 @@ app.get("/:room", (req, res) => {
 */
 app.get("/new-room", (req, res) => {
   res.render("room.ejs");
-
 });
 
-
 socket.on("connection", (socket) => {
-
- 
   console.log("connected");
   socket.on("sendArrayInfo", () => {
     socket.emit("sendRoomArray", roomList);
   });
 
   socket.on("room-name", (room) => {
-    console.log("Room name",room);
     roomList.push(room);
     socket.emit("addRoom", room, roomList);
   });
 
-
   socket.on("join-room", (userId, room) => {
-    console.log("Room",room);
-    console.log("UserID",userId);
-  socket.join(room);
-  socket.to(room).emit("user-connected", userId);
+    console.log("Room", room);
+    console.log("UserID", userId);
+    socket.join(room);
+    socket.to(room).emit("user-connected", userId);
   });
 });
 
