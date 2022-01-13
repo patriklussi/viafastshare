@@ -4,6 +4,8 @@ const socket = io();
 const pHolder = document.querySelector("#pId");
 const roomNameButton = document.querySelector("#roomNameButton");
 const videoGrid = document.getElementById("videoGrid");
+const roomHolder = document.querySelector("#roomHolder")
+const buttonBox = document.querySelector("#buttonBox");
 const peers = {};
 
 var roomListTwo = [];
@@ -19,7 +21,7 @@ myPeer.on("open", function (id) {
   userIdYes = id;
 });
 
-
+var showRoomName;
 
 window.onload = function () {
     socket.emit("sendArrayInfo");
@@ -37,7 +39,7 @@ socket.on("sendRoomArray", (roomList) => {
       pHolder.append(displayRoomName);
     
    
-
+      showRoomName = room;
     displayRoomName.addEventListener("click", () => {
     
       socket.emit("join-room", userIdYes, room);
@@ -76,6 +78,9 @@ socket.on("user-connected", (userId) => {
   connectToAnotherUser(userId);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
+  const li = document.createElement("li");
+  li.innerHTML = "User" + userId + "has connected to" + " " + showRoomName;
+  roomHolder.append(li);
 });
 
 constraints = {
@@ -90,7 +95,7 @@ async function connectToAnotherUser(userId) {
 
   conn.on('open', function(){
     // here you have conn.id
-    conn.send('hi!');
+    conn.send("hi");
   });
   /*
    let stream = null;
@@ -108,7 +113,7 @@ async function connectToAnotherUser(userId) {
   } catch (err) {
     console.log("something");
   }
-  */
+ */
 }
 var connCounter = 0;
 
@@ -119,6 +124,7 @@ myPeer.on('connection', function(conn) {
     console.log(connCounter);
     console.log(data);
   });
+
 });
 /*
 myPeer.on("call", (call) => {
@@ -141,12 +147,7 @@ async function answerToAnotherUser(call) {
   }
 }
 */
-myPeer.on("connection", function (conn) {
-  conn.on("data", function (data) {
-    // Will print 'hi!'
-    console.log(data);
-  });
-});
+
 /*
 function addVideoStream(video, stream) {
   video.srcObject = stream;
