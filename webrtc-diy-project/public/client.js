@@ -90,14 +90,12 @@ constraints = {
     displaySurface: "application" | "browser" | "monitor" | "window",
   },
 };
-
+var newUserId;
 async function connectToAnotherUser(userId) {
   var conn = myPeer.connect(userId);
+  newUserId = userId;
+ 
 
-  conn.on("open", function () {
-    // here you have conn.id
-    conn.send("hi");
-  });
   /*
    let stream = null;
   try { 
@@ -127,16 +125,42 @@ myPeer.on("connection", function (conn) {
   });
 });
 
+
+let streamTracks;
+
 async function shareMedia() {
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
     console.log(stream.getTracks());
-    let video = document.createElement("video");
-    video.srcObject = stream;
-    video.play();
-    videoGrid.append(video);
+    
+    var call = myPeer.call(newUserId, stream);
+    window.srcObject = stream;
   });
 }
 
+
+myPeer.on("call",(call)=>{
+  call.answer(window.srcObject);
+  let video = document.createElement("video");
+call.on("stream", (userVideoStream) => {
+  addVideoStream(video, userVideoStream);
+});
+call.on("close", () => {
+  video.remove();
+});
+peers[newUserId] = call;
+
+})
+
+
+
+
+function addVideoStream(video,userVideoStream){
+
+  console.log(video);
+  video.srcObject = userVideoStream;
+    video.play();
+    videoGrid.append(video);
+}
 /*{
   if (!displayMediaStream) {
     displayMediaStream = await navigator.mediaDevices.getDisplayMedia();
