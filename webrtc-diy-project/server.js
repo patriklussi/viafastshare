@@ -39,7 +39,7 @@ socket.on("connection", (socket) => {
     console.log("Room", room);
     console.log("UserID", userId);
     socket.join(room);
-    socket.to(room).emit("user-connected", userId);
+    socket.broadcast.to(room).emit("user-connected", userId);
   });
 });
 
