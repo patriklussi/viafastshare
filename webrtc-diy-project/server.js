@@ -12,7 +12,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("landing.ejs");
+  res.render("createRoom.ejs");
 });
 
 /*
@@ -21,7 +21,7 @@ app.get("/:room", (req, res) => {
 });
 */
 app.get("/create-room", (req, res) => {
-  res.render("createRoom.ejs");
+  res.render("createRoom.ejs",res);
 });
 
 socket.on("connection", (socket) => {
@@ -31,9 +31,7 @@ socket.on("connection", (socket) => {
   });
 
 
-  socket.on("name-save",(name)=>{
- socket.emit("name-send",name);
-  });
+
 
 
   socket.on("room-name", (room) => {
@@ -41,11 +39,11 @@ socket.on("connection", (socket) => {
     socket.emit("addRoom", room, roomList);
   });
 
-  socket.on("join-room", (userId, room) => {
+  socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
-    console.log("UserID", userId);
+    console.log("UserID", peerObj);
     socket.join(room);
-    socket.broadcast.to(room).emit("user-connected", userId);
+    socket.broadcast.to(room).emit("user-connected", peerObj.id,peerObj);
   });
 });
 

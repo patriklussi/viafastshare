@@ -40,7 +40,7 @@ socket.on("sendRoomArray", (roomList) => {
 
     showRoomName = room;
     roomName.addEventListener("click", () => {
-      socket.emit("join-room", userIdYes, room);
+      socket.emit("join-room", peerObj, room);
     });
   }
 });
@@ -55,8 +55,12 @@ socket.on("sendRoomArray", (roomList) => {
 nameOKBtn.addEventListener("click", () => {
   const enterName = document.querySelector("#enterName");
   let enterNameValue = enterName.value;
-
- socket.emit("name-save",enterNameValue);
+  if(enterNameValue === null){
+    console.log("hello");
+  }
+  peerObj.name = enterNameValue;
+  console.log(peerObj);
+ 
 });
 
 
@@ -77,14 +81,14 @@ roomNameButton.addEventListener("click", () => {
 
   socket.emit("sendArrayInfo");
 });
-socket.on("user-connected", (userId) => {
+socket.on("user-connected", (userId,peerObj) => {
   users.push(userId);
   connectToAnotherUser(users);
   console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
   const li = document.createElement("li");
-  li.innerHTML = "User" + userId + "has connected to" + " " + showRoomName;
+  li.innerHTML = "User" + peerObj.name + "has connected to" + " " + showRoomName;
   roomHolder.append(li);
 });
 
