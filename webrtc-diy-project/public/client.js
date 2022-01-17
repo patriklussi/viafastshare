@@ -42,6 +42,12 @@ socket.on("sendRoomArray", (roomList) => {
   }
 });
 
+nameOKBtn.addEventListener("click", () => {
+  const enterName = document.querySelector("#enterName");
+  let enterNameValue = enterName.value;
+  console.log(enterNameValue, "clicked!");
+});
+
 roomNameButton.addEventListener("click", () => {
   const roomNameInput = document.querySelector("#roomNameInput");
   const room = roomNameInput.value;

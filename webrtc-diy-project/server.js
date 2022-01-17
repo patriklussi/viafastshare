@@ -20,8 +20,8 @@ app.get("/:room", (req, res) => {
   res.render("room.ejs", { roomId: req.params.room });
 });
 */
-app.get("/new-room", (req, res) => {
-  res.render("room.ejs");
+app.get("/create-room", (req, res) => {
+  res.render("createRoom.ejs");
 });
 
 socket.on("connection", (socket) => {
