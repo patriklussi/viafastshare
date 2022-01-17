@@ -30,6 +30,12 @@ socket.on("connection", (socket) => {
     socket.emit("sendRoomArray", roomList);
   });
 
+
+  socket.on("name-save",(name)=>{
+ socket.emit("name-send",name);
+  });
+
+
   socket.on("room-name", (room) => {
     roomList.push(room);
     socket.emit("addRoom", room, roomList);

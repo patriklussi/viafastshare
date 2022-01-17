@@ -8,6 +8,7 @@ const buttonBox = document.querySelector("#buttonBox");
 const socket = io();
 const peers = {};
 const users = [];
+const peerObj = {};
 
 var myPeer = new Peer(undefined, {
   host: "/",
@@ -18,6 +19,8 @@ var userIdYes;
 myPeer.on("open", function (id) {
   console.log("My peer id", id);
   userIdYes = id;
+  peerObj.id = userIdYes;
+  console.log(peerObj);
 });
 
 var showRoomName;
@@ -42,11 +45,29 @@ socket.on("sendRoomArray", (roomList) => {
   }
 });
 
+
+
+
+
+
+
+
 nameOKBtn.addEventListener("click", () => {
   const enterName = document.querySelector("#enterName");
   let enterNameValue = enterName.value;
-  console.log(enterNameValue, "clicked!");
+
+ socket.emit("name-save",enterNameValue);
 });
+
+
+
+
+
+
+
+
+
+
 
 roomNameButton.addEventListener("click", () => {
   const roomNameInput = document.querySelector("#roomNameInput");
