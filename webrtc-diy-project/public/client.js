@@ -66,10 +66,20 @@ constraints = {
 };
 var connectedUserId;
 function connectToAnotherUser(userId) {
+  /*
   var conn = myPeer.connect(userId);
+  */
   connectedUserId = userId;
+  let button = document.createElement("button");
+  button.innerText = "Share screen";
+  buttonBox.append(button);
+  button.addEventListener("click", () => {
+    shareMedia();
+  });
+
 }
 
+/*
 myPeer.on("connection", function (conn) {
   let button = document.createElement("button");
   button.innerText = "Share screen";
@@ -78,6 +88,7 @@ myPeer.on("connection", function (conn) {
     shareMedia();
   });
 });
+*/
 
 let streamTracks;
 
@@ -91,7 +102,7 @@ async function shareMedia() {
 }
 
 myPeer.on("call", (call) => {
-  call.answer(window.srcObject);
+  call.answer();
   let video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
@@ -100,12 +111,15 @@ myPeer.on("call", (call) => {
     video.remove();
   });
   peers[connectedUserId] = call;
+  console.log("CALL",call)
+  console.log("Current Peer", peers);
 });
 
 function addVideoStream(video, userVideoStream) {
   video.srcObject = userVideoStream;
   video.play();
   videoGrid.append(video);
+  console.log("Current Peer", peers);
 }
 
 /*
