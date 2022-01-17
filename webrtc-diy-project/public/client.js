@@ -7,6 +7,7 @@ const buttonBox = document.querySelector("#buttonBox");
 
 const socket = io();
 const peers = {};
+const users = [];
 
 var myPeer = new Peer(undefined, {
   host: "/",
@@ -50,7 +51,9 @@ roomNameButton.addEventListener("click", () => {
   socket.emit("sendArrayInfo");
 });
 socket.on("user-connected", (userId) => {
-  connectToAnotherUser(userId);
+  users.push(userId);
+  connectToAnotherUser(users);
+  console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
   const li = document.createElement("li");
@@ -65,18 +68,17 @@ constraints = {
   },
 };
 var connectedUserId;
-function connectToAnotherUser(userId) {
+function connectToAnotherUser(users) {
   /*
   var conn = myPeer.connect(userId);
   */
-  connectedUserId = userId;
+  connectedUserId = users;
   let button = document.createElement("button");
   button.innerText = "Share screen";
   buttonBox.append(button);
   button.addEventListener("click", () => {
-    shareMedia();
+    shareMedia(connectedUserId);
   });
-
 }
 
 /*
@@ -95,8 +97,11 @@ let streamTracks;
 async function shareMedia() {
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
     console.log(stream.getTracks());
+    connectedUserId.forEach((id) => {
+      var call = myPeer.call(id, stream);
+      console.log("hejhej");
+    });
 
-    var call = myPeer.call(connectedUserId, stream);
     window.srcObject = stream;
   });
 }
@@ -111,7 +116,7 @@ myPeer.on("call", (call) => {
     video.remove();
   });
   peers[connectedUserId] = call;
-  console.log("CALL",call)
+  console.log("CALL", call);
   console.log("Current Peer", peers);
 });
 
