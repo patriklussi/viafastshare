@@ -45,33 +45,16 @@ socket.on("sendRoomArray", (roomList) => {
   }
 });
 
-
-
-
-
-
-
-
 nameOKBtn.addEventListener("click", () => {
   const enterName = document.querySelector("#enterName");
   let enterNameValue = enterName.value;
-  if(enterNameValue === null){
-    console.log("hello");
+  if (enterNameValue === null) {
+    console.log("enterd name value was null");
   }
   peerObj.name = enterNameValue;
   console.log(peerObj);
- 
+  document.getElementById("nameOverlay").style.display = "none";
 });
-
-
-
-
-
-
-
-
-
-
 
 roomNameButton.addEventListener("click", () => {
   const roomNameInput = document.querySelector("#roomNameInput");
@@ -81,14 +64,15 @@ roomNameButton.addEventListener("click", () => {
 
   socket.emit("sendArrayInfo");
 });
-socket.on("user-connected", (userId,peerObj) => {
+socket.on("user-connected", (userId, peerObj) => {
   users.push(userId);
   connectToAnotherUser(users);
   console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
   const li = document.createElement("li");
-  li.innerHTML = "User" + peerObj.name + "has connected to" + " " + showRoomName;
+  li.innerHTML =
+    "User" + peerObj.name + "has connected to" + " " + showRoomName;
   roomHolder.append(li);
 });
 
