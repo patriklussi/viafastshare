@@ -121,7 +121,7 @@ async function shareMedia() {
   stopButton.innerText = "Stop streaming";
   videoGrid.append(stopButton);
   stopButton.addEventListener("click", () => {
-      call.close();
+      myPeer.close();
   });
 
   console.log(peerList);
