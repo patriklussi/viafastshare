@@ -42,7 +42,6 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.addEventListener("click", () => {
       socket.emit("join-room", peerObj, room);
       connectToAnotherUser(users);
-     
     });
   }
 });
@@ -113,19 +112,23 @@ myPeer.on("connection", function (conn) {
 let streamTracks;
 
 async function shareMedia() {
- const peerList = JSON.parse(window.localStorage.getItem("peerList"));
- peersToLoop = peerList.filter(peers=>{
-  return peers !== userIdYes
-});
+  const peerList = JSON.parse(window.localStorage.getItem("peerList"));
+  peersToLoop = peerList.filter((peers) => {
+    return peers !== userIdYes;
+  });
 
-
+  let stopButton = document.createElement("button");
+  stopButton.innerText = "Stop streaming";
+  videoGrid.append(stopButton);
+  stopButton.addEventListener("click", () => {
+      call.close();
+  });
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
     console.log(stream.getTracks());
     peersToLoop.forEach((id) => {
       var call = myPeer.call(id, stream);
-      console.log("hejhej");
     });
 
     window.srcObject = stream;
@@ -134,7 +137,7 @@ async function shareMedia() {
 
 myPeer.on("call", (call) => {
   call.answer();
-  let video = document.createElement("video");
+  video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
   });
@@ -150,6 +153,7 @@ function addVideoStream(video, userVideoStream) {
   video.srcObject = userVideoStream;
   video.play();
   videoGrid.append(video);
+
   console.log("Current Peer", peers);
 }
 
