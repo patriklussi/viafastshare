@@ -41,6 +41,7 @@ socket.on("sendRoomArray", (roomList) => {
     showRoomName = room;
     roomName.addEventListener("click", () => {
       socket.emit("join-room", peerObj, room);
+      connectToAnotherUser(users);
     });
   }
 });
@@ -54,6 +55,7 @@ nameOKBtn.addEventListener("click", () => {
   peerObj.name = enterNameValue;
   console.log(peerObj);
   document.getElementById("nameOverlay").style.display = "none";
+  
 });
 
 roomNameButton.addEventListener("click", () => {
@@ -61,14 +63,16 @@ roomNameButton.addEventListener("click", () => {
   const room = roomNameInput.value;
   socket.emit("room-name", room);
   console.log("Userid", userIdYes);
-
+  socket.emit("join-room",peerObj,room);
   socket.emit("sendArrayInfo");
 });
+var peerTest;
 socket.on("user-connected", (peerList, userId, peerObj) => {
   users.push(userId);
-  connectToAnotherUser(users);
+ 
   console.log(users);
   console.log(peerList);
+  peerTest = peerList;
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
   const li = document.createElement("li");
