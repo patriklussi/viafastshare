@@ -25,6 +25,10 @@ app.get("/create-room", (req, res) => {
   res.render("createRoom.ejs", res);
 });
 
+app.get("/room",(req,res)=>{
+  res.render("room.ejs", res);
+})
+
 socket.on("connection", (socket) => {
   console.log("connected");
   socket.on("sendArrayInfo", () => {
@@ -49,6 +53,7 @@ socket.on("connection", (socket) => {
         .emit("user-connected", peerList, peerObj.id, peerObj);
     }
   });
+ 
 });
 
 server.listen(PORT, () => {

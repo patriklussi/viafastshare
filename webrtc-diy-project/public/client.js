@@ -42,6 +42,7 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.addEventListener("click", () => {
       socket.emit("join-room", peerObj, room);
       connectToAnotherUser(users);
+     
     });
   }
 });
@@ -70,7 +71,6 @@ socket.on("user-connected", (peerList, userId, peerObj) => {
   users.push(userId);
   window.localStorage.setItem("peerList", JSON.stringify(peerList));
   console.log(users);
-  console.log(peerList);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
   const li = document.createElement("li");
@@ -114,11 +114,16 @@ let streamTracks;
 
 async function shareMedia() {
  const peerList = JSON.parse(window.localStorage.getItem("peerList"));
+ peersToLoop = peerList.filter(peers=>{
+  return peers !== userIdYes
+});
+
+
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
     console.log(stream.getTracks());
-    peerList.forEach((id) => {
+    peersToLoop.forEach((id) => {
       var call = myPeer.call(id, stream);
       console.log("hejhej");
     });
