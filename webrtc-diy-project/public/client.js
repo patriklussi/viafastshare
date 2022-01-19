@@ -113,9 +113,12 @@ myPeer.on("connection", function (conn) {
 let streamTracks;
 
 async function shareMedia() {
+ const peerList = JSON.parse(window.localStorage.getItem("peerList"));
+
+  console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
     console.log(stream.getTracks());
-    connectedUserId.forEach((id) => {
+    peerList.forEach((id) => {
       var call = myPeer.call(id, stream);
       console.log("hejhej");
     });
