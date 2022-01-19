@@ -64,10 +64,11 @@ roomNameButton.addEventListener("click", () => {
 
   socket.emit("sendArrayInfo");
 });
-socket.on("user-connected", (userId, peerObj) => {
+socket.on("user-connected", (peerList, userId, peerObj) => {
   users.push(userId);
   connectToAnotherUser(users);
   console.log(users);
+  console.log(peerList);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
   const li = document.createElement("li");

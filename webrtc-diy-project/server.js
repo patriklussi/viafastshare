@@ -6,6 +6,7 @@ const socket = require("socket.io")(server);
 const PORT = process.env.PORT || 3000;
 
 roomList = [];
+peerList = [];
 
 app.use(express.static("public"));
 
@@ -21,7 +22,7 @@ app.get("/:room", (req, res) => {
 });
 */
 app.get("/create-room", (req, res) => {
-  res.render("createRoom.ejs",res);
+  res.render("createRoom.ejs", res);
 });
 
 socket.on("connection", (socket) => {
@@ -29,10 +30,6 @@ socket.on("connection", (socket) => {
   socket.on("sendArrayInfo", () => {
     socket.emit("sendRoomArray", roomList);
   });
-
-
-
-
 
   socket.on("room-name", (room) => {
     roomList.push(room);
@@ -42,8 +39,15 @@ socket.on("connection", (socket) => {
   socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
     console.log("UserID", peerObj);
-    socket.join(room);
-    socket.broadcast.to(room).emit("user-connected", peerObj.id,peerObj);
+    if (peerList.includes(peerObj.id)) {
+      console.log("users is in room");
+    } else {
+      socket.join(room);
+      peerList.push(peerObj.id);
+      socket.broadcast
+        .to(room)
+        .emit("user-connected", peerList, peerObj.id, peerObj);
+    }
   });
 });
 
