@@ -121,7 +121,7 @@ async function shareMedia() {
   stopButton.innerText = "Stop streaming";
   videoGrid.append(stopButton);
   stopButton.addEventListener("click", () => {
-      myPeer.close();
+    
   });
 
   console.log(peerList);
@@ -149,7 +149,7 @@ myPeer.on("call", (call) => {
   console.log("Current Peer", peers);
 });
 
-function addVideoStream(video, userVideoStream) {
+function addVideoStram(video, userVideoStream) {
   video.srcObject = userVideoStream;
   video.play();
   videoGrid.append(video);
@@ -158,7 +158,7 @@ function addVideoStream(video, userVideoStream) {
 }
 
 /*
-function addVideoStream(video, stream) {
+function addVideoStream(video, setream) {
   video.srcObject = stream;
   window.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
