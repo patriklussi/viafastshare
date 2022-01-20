@@ -1,5 +1,6 @@
 const express = require("express");
 const { copyFileSync } = require("fs");
+const path = require("path");
 const app = express();
 const server = require("http").createServer(app);
 const socket = require("socket.io")(server);
@@ -8,26 +9,31 @@ const PORT = process.env.PORT || 3000;
 roomList = [];
 peerList = [];
 
-app.use(express.static("public"));
+//app.use(express.static("public"));
+app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 
-app.set("view engine", "ejs");
+//app.set("view engine", "ejs");
 
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "public", "index.html"));
+});
+/*
 app.get("/", (req, res) => {
   res.render("createRoom.ejs");
-});
+});*/
 
 /*
 app.get("/:room", (req, res) => {
   res.render("room.ejs", { roomId: req.params.room });
 });
-*/
+
 app.get("/create-room", (req, res) => {
   res.render("createRoom.ejs", res);
 });
 
-app.get("/room",(req,res)=>{
+app.get("/room", (req, res) => {
   res.render("room.ejs", res);
-})
+});*/
 
 socket.on("connection", (socket) => {
   console.log("connected");
@@ -53,7 +59,6 @@ socket.on("connection", (socket) => {
         .emit("user-connected", peerList, peerObj.id, peerObj);
     }
   });
- 
 });
 
 server.listen(PORT, () => {
