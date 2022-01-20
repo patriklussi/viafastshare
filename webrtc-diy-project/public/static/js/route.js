@@ -1,4 +1,4 @@
-//import CreateRoom from "./views/createRoom.js";
+import CreateRoom from "./views/createRoom.js";
 import Landing from "./views/landing.js";
 //import Room from "./views/room.js";
 
@@ -10,8 +10,8 @@ const navigateTo = (url) => {
 const router = async () => {
   const routes = [
     { path: "/", view: Landing },
-    //{ path: "/createRoom", view: CreateRoom },
-    //{ path: "/room", view: Room },
+    { path: "/createRoom", view: CreateRoom },
+    // { path: "/room", view: Room },
   ];
 
   const potentialMatches = routes.map((route) => {

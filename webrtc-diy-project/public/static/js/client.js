@@ -4,6 +4,7 @@ const roomNameButton = document.querySelector("#roomNameButton");
 const videoGrid = document.getElementById("videoGrid");
 const roomHolder = document.querySelector("#roomHolder");
 const buttonBox = document.querySelector("#buttonBox");
+var nameOKBtn = document.getElementById("nameOKBtn");
 
 const socket = io();
 const peers = {};
@@ -45,8 +46,8 @@ socket.on("sendRoomArray", (roomList) => {
     });
   }
 });
-
-nameOKBtn.addEventListener("click", () => {
+/*
+function nameOKBtn() {
   const enterName = document.querySelector("#enterName");
   let enterNameValue = enterName.value;
   if (enterNameValue === null) {
@@ -55,16 +56,34 @@ nameOKBtn.addEventListener("click", () => {
   peerObj.name = enterNameValue;
   console.log(peerObj);
   document.getElementById("nameOverlay").style.display = "none";
-});
+}*/
+if (nameOKBtn) {
+  nameOKBtn.addEventListener("click", () => {
+    const enterName = document.querySelector("#enterName");
+    let enterNameValue = enterName.value;
+    if (enterNameValue === null) {
+      console.log("enterd name value was null");
+    }
+    peerObj.name = enterNameValue;
+    console.log(peerObj);
+    document.getElementById("nameOverlay").style.display = "none";
+  });
+} else {
+  console.log(nameOKBtn + " could not get eventlistener.");
+}
 
-roomNameButton.addEventListener("click", () => {
-  const roomNameInput = document.querySelector("#roomNameInput");
-  const room = roomNameInput.value;
-  socket.emit("room-name", room);
-  console.log("Userid", userIdYes);
-  socket.emit("join-room", peerObj, room);
-  socket.emit("sendArrayInfo");
-});
+if (roomNameButton) {
+  roomNameButton.addEventListener("click", () => {
+    const roomNameInput = document.querySelector("#roomNameInput");
+    const room = roomNameInput.value;
+    socket.emit("room-name", room);
+    console.log("Userid", userIdYes);
+    socket.emit("join-room", peerObj, room);
+    socket.emit("sendArrayInfo");
+  });
+} else {
+  console.log(nameOKBtn + " could not get eventlistener.");
+}
 
 socket.on("user-connected", (peerList, userId, peerObj) => {
   users.push(userId);
@@ -78,7 +97,7 @@ socket.on("user-connected", (peerList, userId, peerObj) => {
   roomHolder.append(li);
 });
 
-constraints = {
+let constraints = {
   video: {
     cursor: "always" | "motion" | "never",
     displaySurface: "application" | "browser" | "monitor" | "window",
@@ -120,9 +139,7 @@ async function shareMedia() {
   let stopButton = document.createElement("button");
   stopButton.innerText = "Stop streaming";
   videoGrid.append(stopButton);
-  stopButton.addEventListener("click", () => {
-    
-  });
+  stopButton.addEventListener("click", () => {});
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {

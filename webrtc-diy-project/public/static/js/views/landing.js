@@ -8,13 +8,15 @@ export default class extends abstractView {
 
   async getHtml() {
     return `
-    <h1>Welcome back, Dom</h1>
-            <p>
-                Fugiat voluptate et nisi Lorem cillum anim sit do eiusmod occaecat irure do. Reprehenderit anim fugiat sint exercitation consequat. Sit anim laborum sit amet Lorem adipisicing ullamco duis. Anim in do magna ea pariatur et.
-            </p>
-            <p>
-                <a href="/posts" data-link>View recent posts</a>.
-            </p>
+    <article id="nameOverlay" class="overlay">
+      <h1>Welcome to this share application</h1>
+      <div class="overlay-content">
+        <h3> Please enter your name </h3>
+          <input type="text" id="enterName" />
+          <button id="nameOKBtn">Ok!</button>
+          <a href="/createRoom" data-link id="nameOKBtn"> to create room</a>
+      </div>
+    </article>
     `;
   }
 }
