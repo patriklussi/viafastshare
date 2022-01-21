@@ -5,5 +5,17 @@ export default class extends abstractView {
     super();
     this.setTitle("Create Room");
   }
-  async getHtml() {}
+  async getHtml() {
+    return ` 
+      <label for="input">Add room name</label>
+      <input id="roomNameInput" type="text" />
+      <button id="roomNameButton">Create</button>
+
+      <p id="displayRoomName"></p>
+
+      <article id="buttonBox"></article>
+      <ul id="roomHolder"></ul>
+
+    `;
+  }
 }

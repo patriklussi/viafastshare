@@ -13,8 +13,7 @@ export default class extends abstractView {
       <div class="overlay-content">
         <h3> Please enter your name </h3>
           <input type="text" id="enterName" />
-          <button id="nameOKBtn">Ok!</button>
-          <a href="/createRoom" data-link id="nameOKBtn"> to create room</a>
+          <button id="nameOKBtn" data-link >Ok!</button>
       </div>
     </article>
     `;

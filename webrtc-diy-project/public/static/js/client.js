@@ -34,7 +34,6 @@ socket.on("sendRoomArray", (roomList) => {
   console.log("RoomList", roomList);
   for (let room of roomList) {
     const roomName = document.createElement("p");
-
     roomName.innerHTML = room;
 
     displayRoomName.append(roomName);
@@ -46,19 +45,26 @@ socket.on("sendRoomArray", (roomList) => {
     });
   }
 });
-/*
-function nameOKBtn() {
-  const enterName = document.querySelector("#enterName");
-  let enterNameValue = enterName.value;
-  if (enterNameValue === null) {
-    console.log("enterd name value was null");
-  }
-  peerObj.name = enterNameValue;
-  console.log(peerObj);
-  document.getElementById("nameOverlay").style.display = "none";
-}*/
-if (nameOKBtn) {
-  nameOKBtn.addEventListener("click", () => {
+
+// DON'T WORK:
+// if (nameOKBtn) {
+//   nameOKBtn.addEventListener("click", () => {
+//     const enterName = document.querySelector("#enterName");
+//     let enterNameValue = enterName.value;
+//     if (enterNameValue === null) {
+//       console.log("enterd name value was null");
+//     }
+//     peerObj.name = enterNameValue;
+//     console.log(peerObj);
+//     document.getElementById("nameOverlay").style.display = "none";
+//   });
+// } else {
+//   console.log(nameOKBtn + " could not get eventlistener.");
+// }
+
+// FIX:
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
     let enterNameValue = enterName.value;
     if (enterNameValue === null) {
@@ -66,24 +72,20 @@ if (nameOKBtn) {
     }
     peerObj.name = enterNameValue;
     console.log(peerObj);
-    document.getElementById("nameOverlay").style.display = "none";
-  });
-} else {
-  console.log(nameOKBtn + " could not get eventlistener.");
-}
+    window.location.href = "/createRoom";
+  }
+});
 
-if (roomNameButton) {
-  roomNameButton.addEventListener("click", () => {
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
     const room = roomNameInput.value;
     socket.emit("room-name", room);
     console.log("Userid", userIdYes);
     socket.emit("join-room", peerObj, room);
     socket.emit("sendArrayInfo");
-  });
-} else {
-  console.log(nameOKBtn + " could not get eventlistener.");
-}
+  }
+});
 
 socket.on("user-connected", (peerList, userId, peerObj) => {
   users.push(userId);
