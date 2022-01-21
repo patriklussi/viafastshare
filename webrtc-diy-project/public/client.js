@@ -126,7 +126,7 @@ async function shareMedia() {
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
-    console.log(stream.getTracks());
+    console.log(stream);
     peersToLoop.forEach((id) => {
       var call = myPeer.call(id, stream);
     });
@@ -149,7 +149,7 @@ myPeer.on("call", (call) => {
   console.log("Current Peer", peers);
 });
 
-function addVideoStram(video, userVideoStream) {
+function addVideoStream(video, userVideoStream) {
   video.srcObject = userVideoStream;
   video.play();
   videoGrid.append(video);
