@@ -13,9 +13,23 @@ export default class extends abstractView {
 
       <p id="displayRoomName"></p>
 
+      <style>
+      #video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 300px);
+        grid-auto-rows: 300px;
+      }
+      video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
+
+
       <article id="buttonBox"></article>
       <ul id="roomHolder"></ul>
-      <video id="videoGrid"> </video>
+      <div id="videoGrid"> </div>
 
     `;
   }
