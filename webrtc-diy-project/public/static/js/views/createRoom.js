@@ -15,6 +15,7 @@ export default class extends abstractView {
 
       <article id="buttonBox"></article>
       <ul id="roomHolder"></ul>
+      <video id="videoGrid"> </video>
 
     `;
   }
