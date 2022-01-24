@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 roomList = [];
 peerList = [];
+nameList = [];
 
 //app.use(express.static("public"));
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
@@ -48,6 +49,7 @@ socket.on("connection", (socket) => {
 
   socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
+    nameList.push(peerObj.name);
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
       console.log("users is in room");
@@ -56,14 +58,14 @@ socket.on("connection", (socket) => {
       peerList.push(peerObj.id);
       socket.broadcast
         .to(room)
-        .emit("user-connected", peerList, peerObj.id, peerObj);
+        .emit("user-connected", peerList, peerObj.id, nameList);
     }
   });
 
-  socket.on("leave-room",(room,userId)=>{
+  socket.on("leave-room", (room, userId) => {
     console.log("hello");
     socket.leave(room);
-    socket.broadcast.to(room).emit("user-disconnected",userId);
+    socket.broadcast.to(room).emit("user-disconnected", userId);
   });
 });
 

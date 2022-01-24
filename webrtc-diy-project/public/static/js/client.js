@@ -1,5 +1,3 @@
-
-
 const connectToUser = document.querySelector("#roomButton");
 
 const roomNameButton = document.querySelector("#roomNameButton");
@@ -98,17 +96,13 @@ document.addEventListener("click", (event) => {
   }
 });
 
-socket.on("user-connected", (peerList, userId, peerObj) => {
-  const roomHolder = document.querySelector("#roomHolder");
+socket.on("user-connected", (peerList, userId, nameList) => {
   users.push(userId);
   window.localStorage.setItem("peerList", JSON.stringify(peerList));
   console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
-  const li = document.createElement("li");
-  li.innerHTML =
-    "User" + peerObj.name + "has connected to" + " " + showRoomName;
-  roomHolder.append(li);
+  console.log(nameList);
 });
 
 let constraints = {
@@ -120,9 +114,8 @@ let constraints = {
 var connectedUserId;
 
 function connectToAnotherUser(users) {
-  
-   const roomTitle = document.querySelector("#roomTitle");
-    roomTitle.append(showRoomName);
+  const roomTitle = document.querySelector("#roomTitle");
+  roomTitle.append(showRoomName);
 
   /*
     const ShareButton = document.querySelector("#shareButton");
