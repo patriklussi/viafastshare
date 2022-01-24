@@ -1,5 +1,5 @@
 const connectToUser = document.querySelector("#roomButton");
-
+const app = document.querySelector("#app");
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
@@ -113,13 +113,19 @@ let constraints = {
 var connectedUserId;
 
 function connectToAnotherUser(users) {
+
+
   /*
     const ShareButton = document.querySelector("#shareButton");
-    
+  
   var conn = myPeer.connect(userId);
   */
-  const roomTitle = document.querySelector("#roomTitle");
-  console.log(roomTitle);
+  
+ const roomT = document.querySelector("#roomTitle");
+ console.log(roomT);
+
+
+  console.log("Room name",showRoomName);
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
       shareMedia();
