@@ -1,9 +1,6 @@
 const connectToUser = document.querySelector("#roomButton");
 
 const roomNameButton = document.querySelector("#roomNameButton");
-
-
-
 var nameOKBtn = document.getElementById("nameOKBtn");
 
 const socket = io();
@@ -26,30 +23,41 @@ myPeer.on("open", function (id) {
 
 var showRoomName;
 
-
-
-
-window.onload = function() {
+window.onload = function () {
   socket.emit("sendArrayInfo");
 };
 
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#roomNameButton")) {
+    const roomNameInput = document.querySelector("#roomNameInput");
 
-
-
+    const room = roomNameInput.value;
+    console.log("ROOM", room);
+    socket.emit("room-name", room);
+    console.log("Userid", userIdYes);
+    socket.emit("join-room", peerObj, room);
+    socket.emit("sendArrayInfo");
+  }
+});
 
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
   console.log("RoomList", roomList);
+  // displayRoomName.innerHTML = "";
+
   for (let room of roomList) {
-    const roomName = document.createElement("p");
+    const roomName = document.createElement("a");
+    roomName.setAttribute("href", "/room");
+    roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
 
     displayRoomName.append(roomName);
 
     showRoomName = room;
+
     roomName.addEventListener("click", () => {
       socket.emit("join-room", peerObj, room);
-     connectToAnotherUser(users);
+      connectToAnotherUser(users);
     });
   }
 });
@@ -75,28 +83,11 @@ document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
     console.log(enterName.value);
-    
+
     let enterNameValue = enterName.value;
     console.log(enterNameValue);
     peerObj.name = enterNameValue;
     console.log(peerObj);
- 
-  }
-});
-
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#roomNameButton")) {
-    const roomNameInput = document.querySelector("#roomNameInput");
- 
-    console.log(displayRoomName);
-    console.log(roomNameInput);
-    console.log(roomNameInput.value);
-    const room = roomNameInput.value;
-    console.log("ROOM", room);
-    socket.emit("room-name", room);
-    console.log("Userid", userIdYes);
-    socket.emit("join-room", peerObj, room);
-    socket.emit("sendArrayInfo");
   }
 });
 
@@ -120,17 +111,19 @@ let constraints = {
   },
 };
 var connectedUserId;
+
 function connectToAnotherUser(users) {
   /*
+    const ShareButton = document.querySelector("#shareButton");
+    
   var conn = myPeer.connect(userId);
   */
-  const buttonBox = document.querySelector("#buttonBox");
-  connectedUserId = users;
-  let button = document.createElement("button");
-  button.innerText = "Share screen";
-  buttonBox.append(button);
-  button.addEventListener("click", () => {
-    shareMedia(connectedUserId);
+  const roomTitle = document.querySelector("#roomTitle");
+  console.log(roomTitle);
+  document.addEventListener("click", (event) => {
+    if (event.target.matches("#shareButton")) {
+      shareMedia();
+    }
   });
 }
 
@@ -152,11 +145,10 @@ async function shareMedia() {
   let peersToLoop = peerList.filter((peers) => {
     return peers !== userIdYes;
   });
-
-  let stopButton = document.createElement("button");
-  stopButton.innerText = "Stop streaming";
-  videoGrid.append(stopButton);
-  stopButton.addEventListener("click", () => {});
+  const stopButton = document.querySelector("#stopShareButton");
+  stopButton.addEventListener("click", () => {
+    console.log("stop");
+  });
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
@@ -169,11 +161,17 @@ async function shareMedia() {
   });
 }
 
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#disconnectButton")) {
+    console.log("disconnect");
+  }
+});
+
 myPeer.on("call", (call) => {
   call.answer();
   console.log("Call answered");
   call.on("stream", (userVideoStream) => {
-    addVideoStream( userVideoStream);
+    addVideoStream(userVideoStream);
   });
   call.on("close", () => {
     video.remove();
@@ -183,7 +181,7 @@ myPeer.on("call", (call) => {
   console.log("Current Peer", peers);
 });
 
-function addVideoStream( userVideoStream) {
+function addVideoStream(userVideoStream) {
   let video = document.createElement("video");
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;

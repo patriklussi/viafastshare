@@ -13,7 +13,8 @@ export default class extends abstractView {
      
         <h3> Please enter your name </h3>
           <input type="text" id="enterName" />
-          <button id="nameOKBtn"  ><a href="/createRoom" data-link>add name </a> </button>
+          <button id="nameOKBtn"  >Add your name</button>
+          <a href="/createRoom" data-link>Connect </a> 
    
     `;
   }

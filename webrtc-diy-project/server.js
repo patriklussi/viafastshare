@@ -37,13 +37,14 @@ app.get("/room", (req, res) => {
 
 socket.on("connection", (socket) => {
   console.log("connected");
+  
   socket.on("sendArrayInfo", () => {
     socket.emit("sendRoomArray", roomList);
   });
 
   socket.on("room-name", (room) => {
     roomList.push(room);
-    socket.emit("addRoom", room, roomList);
+ 
   });
 
   socket.on("join-room", (peerObj, room) => {

@@ -8,11 +8,11 @@ export default class extends abstractView {
 
   async getHtml() {
     return `
-    <h1> Place holder for room name</h1>
+    <h1 id="roomTitle"> </h1>
     <div id="videoGrid"> </div>
-    <button> Start sharing </button>
-    <button> Stop sharing </button>
-    <button> Disconnect </button>
+    <button id="shareButton"> Start sharing </button>
+    <button id="stopShareButton"> Stop sharing </button>
+    <button id="disconnectButton"> Disconnect </button>
     
     `;
   }
