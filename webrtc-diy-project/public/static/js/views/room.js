@@ -10,6 +10,7 @@ export default class extends abstractView {
     return `
     <div id="wrap"> 
     <h1 id="roomTitle"> </h1>
+    <h2 id="usersInRoom"> </h2>
     <div id="videoGrid"> </div>
     <button id="shareButton"> Start sharing </button>
     <button id="stopShareButton"> Stop sharing </button>

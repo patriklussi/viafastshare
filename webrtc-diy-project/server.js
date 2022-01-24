@@ -46,10 +46,14 @@ socket.on("connection", (socket) => {
   socket.on("room-name", (room) => {
     roomList.push(room);
   });
+  socket.on("name-send",(name)=>{
+    nameList.push(name);
+    console.log(nameList);
+  })
 
   socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
-    nameList.push(peerObj.name);
+
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
       console.log("users is in room");
@@ -58,7 +62,8 @@ socket.on("connection", (socket) => {
       peerList.push(peerObj.id);
       socket.broadcast
         .to(room)
-        .emit("user-connected", peerList, peerObj.id, nameList);
+        .emit("user-connected", peerList, peerObj.id);
+        socket.emit("name",nameList);
     }
   });
 

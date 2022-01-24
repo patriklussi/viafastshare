@@ -35,8 +35,20 @@ document.addEventListener("click", (event) => {
     console.log("ROOM", room);
     socket.emit("room-name", room);
     console.log("Userid", userIdYes);
-    socket.emit("join-room", peerObj, room);
+    //  socket.emit("join-room",  room);
     socket.emit("sendArrayInfo");
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#nameOKBtn")) {
+    const enterName = document.querySelector("#enterName");
+    console.log(enterName.value);
+
+    let enterNameValue = enterName.value;
+    console.log(enterNameValue);
+    peerObj.name = enterNameValue;
+    socket.emit("name-send", peerObj.name);
   }
 });
 
@@ -84,25 +96,13 @@ socket.on("sendRoomArray", (roomList) => {
 // }
 
 // FIX:
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#nameOKBtn")) {
-    const enterName = document.querySelector("#enterName");
-    console.log(enterName.value);
 
-    let enterNameValue = enterName.value;
-    console.log(enterNameValue);
-    peerObj.name = enterNameValue;
-    console.log(peerObj);
-  }
-});
-
-socket.on("user-connected", (peerList, userId, nameList) => {
+socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
   window.localStorage.setItem("peerList", JSON.stringify(peerList));
   console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
-  console.log(nameList);
 });
 
 let constraints = {
@@ -116,6 +116,7 @@ var connectedUserId;
 function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
   roomTitle.append(showRoomName);
+  const usersInRoom = document.querySelector("#usersInRoom");
 
   /*
     const ShareButton = document.querySelector("#shareButton");
@@ -130,7 +131,10 @@ function connectToAnotherUser(users) {
     }
   });
 }
-
+socket.on("name", (nameList) => {
+  console.log(nameList);
+  usersInRoom.append(nameList);
+});
 /*
 myPeer.on("connection", function (conn) {
   let button = document.createElement("button");
