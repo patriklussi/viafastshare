@@ -37,14 +37,13 @@ app.get("/room", (req, res) => {
 
 socket.on("connection", (socket) => {
   console.log("connected");
-  
+
   socket.on("sendArrayInfo", () => {
     socket.emit("sendRoomArray", roomList);
   });
 
   socket.on("room-name", (room) => {
     roomList.push(room);
- 
   });
 
   socket.on("join-room", (peerObj, room) => {
@@ -59,6 +58,12 @@ socket.on("connection", (socket) => {
         .to(room)
         .emit("user-connected", peerList, peerObj.id, peerObj);
     }
+  });
+
+  socket.on("leave-room",(room,userId)=>{
+    console.log("hello");
+    socket.leave(room);
+    socket.broadcast.to(room).emit("user-disconnected",userId);
   });
 });
 

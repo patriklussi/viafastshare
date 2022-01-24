@@ -1,5 +1,5 @@
 const connectToUser = document.querySelector("#roomButton");
-const app = document.querySelector("#app");
+
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
@@ -56,6 +56,8 @@ socket.on("sendRoomArray", (roomList) => {
     showRoomName = room;
 
     roomName.addEventListener("click", () => {
+      
+    
       socket.emit("join-room", peerObj, room);
       connectToAnotherUser(users);
     });
@@ -113,19 +115,19 @@ let constraints = {
 var connectedUserId;
 
 function connectToAnotherUser(users) {
+  const app = document.querySelector("#app");
+  console.log(app);
+  const title = document.createElement("h1");
 
-
+ 
+  
   /*
     const ShareButton = document.querySelector("#shareButton");
   
   var conn = myPeer.connect(userId);
   */
-  
- const roomT = document.querySelector("#roomTitle");
- console.log(roomT);
 
-
-  console.log("Room name",showRoomName);
+  console.log("Room name", showRoomName);
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
       shareMedia();
@@ -169,8 +171,13 @@ async function shareMedia() {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#disconnectButton")) {
-    console.log("disconnect");
+    socket.emit("leave-room",showRoomName,userIdYes);
   }
+});
+
+socket.on("user-disconnected",(userId)=>{
+  if (peers[userId]) peers[userId].close();
+  console.log("User",userId,"has left the room");
 });
 
 myPeer.on("call", (call) => {
