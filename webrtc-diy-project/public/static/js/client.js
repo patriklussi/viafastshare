@@ -1,4 +1,4 @@
-import room from "./views/room";
+
 
 const connectToUser = document.querySelector("#roomButton");
 
@@ -120,8 +120,9 @@ let constraints = {
 var connectedUserId;
 
 function connectToAnotherUser(users) {
-
-  // const roomTitle = document.querySelector("#roomTitle");
+  
+   const roomTitle = document.querySelector("#roomTitle");
+    roomTitle.append(showRoomName);
 
   /*
     const ShareButton = document.querySelector("#shareButton");
