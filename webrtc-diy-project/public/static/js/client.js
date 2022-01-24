@@ -1,3 +1,5 @@
+import room from "./views/room";
+
 const connectToUser = document.querySelector("#roomButton");
 
 const roomNameButton = document.querySelector("#roomNameButton");
@@ -48,6 +50,7 @@ socket.on("sendRoomArray", (roomList) => {
   for (let room of roomList) {
     const roomName = document.createElement("a");
     roomName.setAttribute("href", "/room");
+    roomName.classList.add("testButton");
     roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
 
@@ -56,10 +59,12 @@ socket.on("sendRoomArray", (roomList) => {
     showRoomName = room;
 
     roomName.addEventListener("click", () => {
-      
-    
-      socket.emit("join-room", peerObj, room);
-      connectToAnotherUser(users);
+      document.addEventListener("click", (e) => {
+        if (e.target.matches(".testButton")) {
+          socket.emit("join-room", peerObj, room);
+          connectToAnotherUser(users);
+        }
+      });
     });
   }
 });
@@ -115,12 +120,9 @@ let constraints = {
 var connectedUserId;
 
 function connectToAnotherUser(users) {
-  const app = document.querySelector("#app");
-  console.log(app);
-  const title = document.createElement("h1");
 
- 
-  
+  // const roomTitle = document.querySelector("#roomTitle");
+
   /*
     const ShareButton = document.querySelector("#shareButton");
   
@@ -171,13 +173,13 @@ async function shareMedia() {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#disconnectButton")) {
-    socket.emit("leave-room",showRoomName,userIdYes);
+    socket.emit("leave-room", showRoomName, userIdYes);
   }
 });
 
-socket.on("user-disconnected",(userId)=>{
+socket.on("user-disconnected", (userId) => {
   if (peers[userId]) peers[userId].close();
-  console.log("User",userId,"has left the room");
+  console.log("User", userId, "has left the room");
 });
 
 myPeer.on("call", (call) => {
