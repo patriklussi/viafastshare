@@ -7,14 +7,23 @@ export default class extends abstractView {
   }
   async getHtml() {
     return ` 
-      <label for="input">Add room name</label>
-      <input id="roomNameInput" type="text" />
-      <button id="roomNameButton">Create</button>
-      <button id="refresh"> Refresh rooms list </button>
 
+    <aside class="createRoom"> 
+      
+      <article class="createRoom__form"> 
+      <h3 for="input">Add room name</h3>
+      <input class="landing__input" id="roomNameInput" type="text"/>
+      <button class="button" id="roomNameButton">Create</button>
+    </article>
+      <br>
+      <button class="button" id="refresh"> Refresh rooms list </button>
+      <br>
       <p id="displayRoomName"></p>
-
-      <style>
+      <ul id="roomHolder"></ul>
+    </aside>
+    
+    
+       <style>
       #video-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, 300px);
@@ -26,11 +35,6 @@ export default class extends abstractView {
         object-fit: cover;
       }
     </style>
-
-
-     
-      <ul id="roomHolder"></ul>
-    
 
     `;
   }
