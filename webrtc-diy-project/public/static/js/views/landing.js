@@ -24,7 +24,7 @@ export default class extends abstractView {
     </style>
         <h3> Please enter your name </h3>
           <input type="text" id="enterName" />
-          <button id="nameOKBtn"  >Add your name</button>
+          <button id="nameOKBtn" class="button" >Add your name</button>
           <a id="connectCondition" href="/createRoom" data-link>Connect </a> 
    
     `;

@@ -47,10 +47,10 @@ socket.on("connection", (socket) => {
     roomList.push(room);
     socket.emit("trigger");
   });
-  socket.on("name-send",(name)=>{
+  socket.on("name-send", (name) => {
     nameList.push(name);
     console.log(nameList);
-  })
+  });
 
   socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
@@ -61,12 +61,13 @@ socket.on("connection", (socket) => {
     } else {
       socket.join(room);
       peerList.push(peerObj.id);
-      socket.broadcast
-        .to(room)
-        .emit("user-connected", peerList, peerObj.id);
-        socket.emit("name",nameList);
+      socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
+      socket.emit("name", nameList);
     }
   });
+  /*socket.on("disconnect", (reason, userId) => {
+    socket.broadcast.emit("user-disconnected", userId);
+  });*/
 
   socket.on("leave-room", (room, userId) => {
     console.log("hello");

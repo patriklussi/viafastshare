@@ -23,10 +23,6 @@ myPeer.on("open", function (id) {
 
 var showRoomName;
 
-
-
-
-
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
@@ -40,28 +36,24 @@ document.addEventListener("click", (event) => {
   }
 });
 
-
-document.addEventListener("click",(event)=>{
-if(event.target.matches("#refresh")){
-  console.log("dpes this work");
-  socket.emit("sendArrayInfo");
-}
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#refresh")) {
+    console.log("dpes this work");
+    socket.emit("sendArrayInfo");
+  }
 });
-  
-
-
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
     console.log(enterName.value);
     const test = document.querySelector("#connectCondition");
-  
+
     let enterNameValue = enterName.value;
-    if(enterNameValue != ""){
-      console.log("not empty")
-     test.style.display = "block";
-      nameHolder.innerHTML = "Du är inloggad som"+ " "+ enterNameValue;
+    if (enterNameValue != "") {
+      console.log("not empty");
+      test.style.display = "block";
+      nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
       console.log("empty");
     }
@@ -70,10 +62,6 @@ document.addEventListener("click", (event) => {
     socket.emit("name-send", peerObj.name);
   }
 });
-
-
-
-
 
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
@@ -86,7 +74,7 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.classList.add("testButton");
     roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
-    
+
     displayRoomName.append(roomName);
 
     showRoomName = room;
@@ -101,7 +89,6 @@ socket.on("sendRoomArray", (roomList) => {
     });
   }
 });
-
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
@@ -123,8 +110,6 @@ function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
   roomTitle.append(showRoomName);
   const usersInRoom = document.querySelector("#usersInRoom");
-
- 
 
   console.log("Room name", showRoomName);
   document.addEventListener("click", (event) => {
@@ -179,7 +164,8 @@ document.addEventListener("click", (event) => {
 });
 
 socket.on("user-disconnected", (userId) => {
-  if (peers[userId]) peers[userId].close();
+  window.call.close();
+  //if (peers[userId]) peers[userId].close();
   console.log("User", userId, "has left the room");
 });
 
@@ -190,6 +176,7 @@ myPeer.on("call", (call) => {
     addVideoStream(userVideoStream);
   });
   call.on("close", () => {
+    console.log("Closing!");
     video.remove();
   });
   peers[connectedUserId] = call;
