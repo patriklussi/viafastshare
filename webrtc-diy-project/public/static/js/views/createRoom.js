@@ -10,6 +10,7 @@ export default class extends abstractView {
       <label for="input">Add room name</label>
       <input id="roomNameInput" type="text" />
       <button id="roomNameButton">Create</button>
+      <button id="refresh"> Refresh rooms list </button>
 
       <p id="displayRoomName"></p>
 
@@ -27,7 +28,7 @@ export default class extends abstractView {
     </style>
 
 
-      <article id="buttonBox"></article>
+     
       <ul id="roomHolder"></ul>
     
 

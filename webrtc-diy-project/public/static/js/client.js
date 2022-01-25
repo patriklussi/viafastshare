@@ -1,5 +1,5 @@
 const connectToUser = document.querySelector("#roomButton");
-
+const nameHolder = document.querySelector("#nameHolder");
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
@@ -23,9 +23,9 @@ myPeer.on("open", function (id) {
 
 var showRoomName;
 
-window.onload = function () {
-  socket.emit("sendArrayInfo");
-};
+
+
+
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
@@ -40,22 +40,45 @@ document.addEventListener("click", (event) => {
   }
 });
 
+
+document.addEventListener("click",(event)=>{
+if(event.target.matches("#refresh")){
+  console.log("dpes this work");
+  socket.emit("sendArrayInfo");
+}
+});
+  
+
+
+
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
     console.log(enterName.value);
-
+    const test = document.querySelector("#connectCondition");
+  
     let enterNameValue = enterName.value;
+    if(enterNameValue != ""){
+      console.log("not empty")
+     test.style.display = "block";
+      nameHolder.innerHTML = "Du är inloggad som"+ " "+ enterNameValue;
+    } else {
+      console.log("empty");
+    }
     console.log(enterNameValue);
     peerObj.name = enterNameValue;
     socket.emit("name-send", peerObj.name);
   }
 });
 
+
+
+
+
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
   console.log("RoomList", roomList);
-  // displayRoomName.innerHTML = "";
+  displayRoomName.innerHTML = "";
 
   for (let room of roomList) {
     const roomName = document.createElement("a");
@@ -63,7 +86,7 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.classList.add("testButton");
     roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
-
+    
     displayRoomName.append(roomName);
 
     showRoomName = room;
@@ -79,23 +102,6 @@ socket.on("sendRoomArray", (roomList) => {
   }
 });
 
-// DON'T WORK:
-// if (nameOKBtn) {
-//   nameOKBtn.addEventListener("click", () => {
-//     const enterName = document.querySelector("#enterName");
-//     let enterNameValue = enterName.value;
-//     if (enterNameValue === null) {
-//       console.log("enterd name value was null");
-//     }
-//     peerObj.name = enterNameValue;
-//     console.log(peerObj);
-//     document.getElementById("nameOverlay").style.display = "none";
-//   });
-// } else {
-//   console.log(nameOKBtn + " could not get eventlistener.");
-// }
-
-// FIX:
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
@@ -118,11 +124,7 @@ function connectToAnotherUser(users) {
   roomTitle.append(showRoomName);
   const usersInRoom = document.querySelector("#usersInRoom");
 
-  /*
-    const ShareButton = document.querySelector("#shareButton");
-  
-  var conn = myPeer.connect(userId);
-  */
+ 
 
   console.log("Room name", showRoomName);
   document.addEventListener("click", (event) => {
@@ -172,6 +174,7 @@ async function shareMedia() {
 document.addEventListener("click", (event) => {
   if (event.target.matches("#disconnectButton")) {
     socket.emit("leave-room", showRoomName, userIdYes);
+    console.log("disconnect");
   }
 });
 
