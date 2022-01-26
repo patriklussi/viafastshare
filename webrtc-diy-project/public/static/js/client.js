@@ -26,9 +26,9 @@ var showRoomName;
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
-    
+
     const room = roomNameInput.value;
-    let roomArray =  []
+    let roomArray = [];
     console.log(room);
     console.log("ROOM", room);
     socket.emit("room-name", room);
@@ -36,6 +36,7 @@ document.addEventListener("click", (event) => {
     //  socket.emit("join-room",  room);
     socket.emit("sendArrayInfo");
   }
+  roomNameInput.value = "";
 });
 
 document.addEventListener("click", (event) => {
@@ -63,12 +64,8 @@ document.addEventListener("click", (event) => {
     peerObj.name = enterNameValue;
     socket.emit("name-send", peerObj.name);
   }
+  enterName.value = "";
 });
-
-
-
-
-
 
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
@@ -78,7 +75,7 @@ socket.on("sendRoomArray", (roomList) => {
   for (let room of roomList) {
     const roomName = document.createElement("a");
     roomName.setAttribute("href", "/room");
-    roomName.classList.add("testButton");
+    roomName.classList.add("createRoom__list--item");
     roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
 
@@ -87,7 +84,7 @@ socket.on("sendRoomArray", (roomList) => {
     showRoomName = room;
     roomName.addEventListener("click", () => {
       document.addEventListener("click", (e) => {
-        if (e.target.matches(".testButton")) {
+        if (e.target.matches(".createRoom__list--item")) {
           socket.emit("join-room", peerObj, room);
           socket.emit("clear");
           connectToAnotherUser(users);
@@ -99,16 +96,14 @@ socket.on("sendRoomArray", (roomList) => {
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
-  console.log("PeerList",peerList);
+  console.log("PeerList", peerList);
   console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
 });
 
-socket.on("pushToLs",(peerList)=>{
+socket.on("pushToLs", (peerList) => {
   window.localStorage.setItem(showRoomName, JSON.stringify(peerList));
- 
-  
 });
 
 let constraints = {

@@ -8,8 +8,8 @@ export default class extends abstractView {
 
   async getHtml() {
     return `
-   
-    <section class="landing"> 
+   <main class="landing">
+    <section class="landing__card"> 
       <h1>Welcome to this share application</h1>
       <article class="landing__form">
         <h3> Please enter your name </h3>
@@ -19,7 +19,7 @@ export default class extends abstractView {
           <a id="connectCondition" href="/createRoom" data-link>Connect </a> 
         </article>
     </section>
-   
+   </main>
     `;
   }
 }

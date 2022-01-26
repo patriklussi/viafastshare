@@ -7,23 +7,25 @@ export default class extends abstractView {
   }
   async getHtml() {
     return ` 
+    <main class="createRoom">
+      <aside class="createRoom__aside"> 
+      <h3>Rooms</h3>
+          <li class="createRoom__list" id="displayRoomName"></li>
+        <p id="roomHolder"></p>
 
-    <aside class="createRoom"> 
+        <button class="button--light" id="refresh"> Refresh rooms list </button>
+      </aside>
       
       <article class="createRoom__form"> 
-      <h3 for="input">Add room name</h3>
-      <input class="landing__input" id="roomNameInput" type="text"/>
-      <button class="button" id="roomNameButton">Create</button>
-      <p id="alert"></p>
+        <h3 for="input">Create new room</h3>
+        <input class="createRoom__input" id="roomNameInput" type="text"/>
+        <button class="button--light" id="roomNameButton">Create</button>
+        <p id="alert"></p>
+
     </article>
-      <br>
-      <button class="button" id="refresh"> Refresh rooms list </button>
-      <br>
-      <p id="displayRoomName"></p>
-      <ul id="roomHolder"></ul>
-    </aside>
     
     
+    </main>    
        <style>
       #video-grid {
         display: grid;
