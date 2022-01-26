@@ -44,7 +44,7 @@ socket.on("connection", (socket) => {
 
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
-      console.log("users is in room");
+    
     } else {
       socket.join(room);
       peerList.push(peerObj.id);

@@ -65,7 +65,7 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
-
+var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
   console.log("RoomList", roomList);
@@ -84,6 +84,8 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.addEventListener("click", () => {
       document.addEventListener("click", (e) => {
         if (e.target.matches(".createRoom__list--item")) {
+          console.log("THIS IS MY ROOM",room);
+          ClickedRoomName = room;
           socket.emit("join-room", peerObj, room);
           socket.emit("clear");
           connectToAnotherUser(users);
@@ -92,6 +94,8 @@ socket.on("sendRoomArray", (roomList) => {
     });
   }
 });
+
+
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
@@ -115,7 +119,7 @@ var connectedUserId;
 
 function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
-  roomTitle.append(showRoomName);
+  roomTitle.append(ClickedRoomName);
   const usersInRoom = document.querySelector("#usersInRoom");
 
   console.log("Room name", showRoomName);
