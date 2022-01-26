@@ -44,8 +44,12 @@ socket.on("connection", (socket) => {
   });
 
   socket.on("room-name", (room) => {
-    roomList.push(room);
-    socket.emit("trigger");
+    if (roomList.includes(room)) {
+      socket.emit("alert-room", room);
+    } else {
+      roomList.push(room);
+      socket.emit("trigger");
+    }
   });
   socket.on("name-send", (name) => {
     nameList.push(name);

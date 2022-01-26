@@ -78,7 +78,6 @@ socket.on("sendRoomArray", (roomList) => {
     displayRoomName.append(roomName);
 
     showRoomName = room;
-
     roomName.addEventListener("click", () => {
       document.addEventListener("click", (e) => {
         if (e.target.matches(".testButton")) {
@@ -121,6 +120,14 @@ function connectToAnotherUser(users) {
 socket.on("name", (nameList) => {
   console.log(nameList);
   usersInRoom.append(nameList);
+});
+
+socket.on("alert-room", (roomName) => {
+  const alert = document.querySelector("#alert");
+  alert.innerHTML = " Room " + roomName + " already exists!";
+  setTimeout(() => {
+    alert.innerHTML = " ";
+  }, 3000);
 });
 /*
 myPeer.on("connection", function (conn) {

@@ -9,7 +9,7 @@ body {
   text-align: center;
   color: #fff;
   min-height: 667px;
-  width: 375px;
+  min-width: 375px;
   margin: 0 auto;
   background-color: #d1c4bb;
   height: 100vh;
@@ -17,28 +17,23 @@ body {
 }
 
 a {
-  color: #fff;
-  background-color: #3c3b39;
-  width: 14rem;
-  height: 2rem;
-  border-radius: 4px;
-  text-decoration: none;
 }
 .app {
   height: 100%;
   display: flex;
+  justify-content: center;
 }
 
 .landing {
   margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
+  align-self: center;
   height: 60%;
-  width: 100%;
+  width: 30%;
   border: solid #907065 5px;
   border-radius: 4px;
   background-color: #ae887b;
-  align-items: center;
   justify-content: space-evenly;
 }
 
@@ -82,4 +77,11 @@ a {
 
 #connectCondition {
   display: none;
+  color: #fff;
+  background-color: #3c3b39;
+  width: 14rem;
+  height: 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  padding: 0.4rem;
 }
