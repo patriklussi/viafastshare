@@ -13,7 +13,7 @@ body {
   margin: 0 auto;
   background-color: #d0d1d1;
   height: 100vh;
-  overflow: hidden;
+  overflow: visible;
 }
 a {
   color: white;

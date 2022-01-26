@@ -26,7 +26,6 @@ var showRoomName;
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
-
     const room = roomNameInput.value;
     let roomArray = [];
     console.log(room);
@@ -35,8 +34,8 @@ document.addEventListener("click", (event) => {
     console.log("Userid", userIdYes);
     //  socket.emit("join-room",  room);
     socket.emit("sendArrayInfo");
+    roomNameInput.value = "";
   }
-  roomNameInput.value = "";
 });
 
 document.addEventListener("click", (event) => {
@@ -63,8 +62,8 @@ document.addEventListener("click", (event) => {
     console.log(enterNameValue);
     peerObj.name = enterNameValue;
     socket.emit("name-send", peerObj.name);
+    enterName.value = "";
   }
-  enterName.value = "";
 });
 
 socket.on("sendRoomArray", (roomList) => {
