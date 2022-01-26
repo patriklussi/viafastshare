@@ -26,8 +26,10 @@ var showRoomName;
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
-
+    
     const room = roomNameInput.value;
+    let roomArray =  []
+    console.log(room);
     console.log("ROOM", room);
     socket.emit("room-name", room);
     console.log("Userid", userIdYes);
@@ -63,6 +65,11 @@ document.addEventListener("click", (event) => {
   }
 });
 
+
+
+
+
+
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
   console.log("RoomList", roomList);
@@ -82,6 +89,7 @@ socket.on("sendRoomArray", (roomList) => {
       document.addEventListener("click", (e) => {
         if (e.target.matches(".testButton")) {
           socket.emit("join-room", peerObj, room);
+          socket.emit("clear");
           connectToAnotherUser(users);
         }
       });
@@ -91,10 +99,16 @@ socket.on("sendRoomArray", (roomList) => {
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
-  window.localStorage.setItem("peerList", JSON.stringify(peerList));
+  console.log("PeerList",peerList);
   console.log(users);
   console.log("user " + userId + " has connected");
   console.log("Current Peer", peers);
+});
+
+socket.on("pushToLs",(peerList)=>{
+  window.localStorage.setItem(showRoomName, JSON.stringify(peerList));
+ 
+  
 });
 
 let constraints = {
@@ -143,7 +157,7 @@ myPeer.on("connection", function (conn) {
 let streamTracks;
 
 async function shareMedia() {
-  const peerList = JSON.parse(window.localStorage.getItem("peerList"));
+  const peerList = JSON.parse(window.localStorage.getItem(showRoomName));
   let peersToLoop = peerList.filter((peers) => {
     return peers !== userIdYes;
   });

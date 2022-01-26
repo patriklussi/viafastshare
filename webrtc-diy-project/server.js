@@ -10,31 +10,11 @@ roomList = [];
 peerList = [];
 nameList = [];
 
-//app.use(express.static("public"));
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
-
-//app.set("view engine", "ejs");
 
 app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "public", "index.html"));
 });
-/*
-app.get("/", (req, res) => {
-  res.render("createRoom.ejs");
-});*/
-
-/*
-app.get("/:room", (req, res) => {
-  res.render("room.ejs", { roomId: req.params.room });
-});
-
-app.get("/create-room", (req, res) => {
-  res.render("createRoom.ejs", res);
-});
-
-app.get("/room", (req, res) => {
-  res.render("room.ejs", res);
-});*/
 
 socket.on("connection", (socket) => {
   console.log("connected");
@@ -49,12 +29,15 @@ socket.on("connection", (socket) => {
     } else {
       roomList.push(room);
       socket.emit("trigger");
+      peerList = [];
     }
   });
   socket.on("name-send", (name) => {
     nameList.push(name);
     console.log(nameList);
   });
+
+  socket.on("clear", () => {});
 
   socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
@@ -67,6 +50,7 @@ socket.on("connection", (socket) => {
       peerList.push(peerObj.id);
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
       socket.emit("name", nameList);
+      socket.emit("pushToLs", peerList);
     }
   });
   /*socket.on("disconnect", (reason, userId) => {
