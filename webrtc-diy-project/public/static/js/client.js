@@ -50,13 +50,16 @@ document.addEventListener("click", (event) => {
     const enterName = document.querySelector("#enterName");
     console.log(enterName.value);
     const test = document.querySelector("#connectCondition");
+    const nameBtn = document.querySelector("#nameOKBtn");
 
     let enterNameValue = enterName.value;
     if (enterNameValue != "") {
       console.log("not empty");
       test.style.display = "block";
+      nameBtn.style.display = "none";
       nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
+      alertName();
       console.log("empty");
     }
     console.log(enterNameValue);
@@ -84,7 +87,7 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.addEventListener("click", () => {
       document.addEventListener("click", (e) => {
         if (e.target.matches(".createRoom__list--item")) {
-          console.log("THIS IS MY ROOM",room);
+          console.log("THIS IS MY ROOM", room);
           ClickedRoomName = room;
           socket.emit("join-room", peerObj, room);
           socket.emit("clear");
@@ -94,8 +97,6 @@ socket.on("sendRoomArray", (roomList) => {
     });
   }
 });
-
-
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
@@ -141,6 +142,14 @@ socket.on("alert-room", (roomName) => {
     alert.innerHTML = " ";
   }, 3000);
 });
+
+function alertName() {
+  const alertName = document.querySelector("#alertName");
+  alertName.innerHTML = "Please enter a name to continue";
+  setTimeout(() => {
+    alertName.innerHTML = " ";
+  }, 3000);
+}
 /*
 myPeer.on("connection", function (conn) {
   let button = document.createElement("button");
@@ -212,7 +221,14 @@ function addVideoStream(userVideoStream) {
 
   console.log("Current Peer", peers);
 }
+/*
+function openAside() {
+  document.getElementById("#roomAside").style.width = "250px";
+}
 
+function closeAside() {
+  document.getElementById("#roomAside").style.width = "0";
+}*/
 /*
 function addVideoStream(video, setream) {
   video.srcObject = stream;

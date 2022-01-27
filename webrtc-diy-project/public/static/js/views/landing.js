@@ -14,7 +14,8 @@ export default class extends abstractView {
       <article class="landing__form">
         <h3> Please enter your name </h3>
           <input class="landing__input" type="text" id="enterName" />
-          <button class="button" id="nameOKBtn">Add your name</button>
+          <button class="button" id="nameOKBtn" >Add your name</button>
+          <p id="alertName"></p>
           <br>
           <a id="connectCondition" href="/createRoom" data-link>Connect </a> 
         </article>
