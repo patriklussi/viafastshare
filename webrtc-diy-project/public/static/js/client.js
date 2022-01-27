@@ -35,7 +35,7 @@ document.addEventListener("click", (event) => {
     //  socket.emit("join-room",  room);
     socket.emit("sendArrayInfo");
     roomNameInput.value = "";
-    window.localStorage.setItem(room,JSON.stringify(test))
+    window.localStorage.setItem(room, JSON.stringify(test));
   }
 });
 
@@ -109,11 +109,11 @@ socket.on("user-connected", (peerList, userId, peerName) => {
 });
 
 socket.on("pushToLs", (peerList) => {
- let temp = JSON.parse(window.localStorage.getItem(ClickedRoomName));
- console.log(temp);
- console.log(peerList);
- temp = peerList;
- window.localStorage.setItem(ClickedRoomName,JSON.stringify(temp));
+  let temp = JSON.parse(window.localStorage.getItem(ClickedRoomName));
+  console.log(temp);
+  console.log(peerList);
+  temp = peerList;
+  window.localStorage.setItem(ClickedRoomName, JSON.stringify(temp));
 });
 
 let constraints = {
@@ -227,14 +227,23 @@ function addVideoStream(userVideoStream) {
 
   console.log("Current Peer", peers);
 }
-/*
-function openAside() {
-  document.getElementById("#roomAside").style.width = "250px";
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#navBtn")) {
+    let toggleNav = document.getElementById("navBtn");
+    toggle(toggleNav);
+  }
+});
+
+function toggle(toggleNav) {
+  if (toggleNav.innerHTML == "close") {
+    toggleNav.innerHTML = "open";
+    document.getElementById("roomAside").style.width = "250px";
+  } else {
+    toggleNav.innerHTML = "close";
+    document.getElementById("roomAside").style.width = "0px";
+  }
 }
 
-function closeAside() {
-  document.getElementById("#roomAside").style.width = "0";
-}*/
 /*
 function addVideoStream(video, setream) {
   video.srcObject = stream;
