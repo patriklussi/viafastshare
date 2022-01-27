@@ -138,7 +138,8 @@ function connectToAnotherUser(users) {
 }
 socket.on("name", (nameList) => {
   console.log(nameList);
-  usersInRoom.append(nameList);
+  //usersInRoom.append(nameList);
+  console.log(usersInRoom);
 });
 
 socket.on("alert-room", (roomName) => {
@@ -235,12 +236,16 @@ document.addEventListener("click", (event) => {
 });
 
 function toggle(toggleNav) {
-  if (toggleNav.innerHTML == "close") {
-    toggleNav.innerHTML = "open";
+  if (toggleNav.innerHTML == "Open") {
+    toggleNav.innerHTML = "Close";
     document.getElementById("roomAside").style.width = "250px";
+    document.getElementById("navBtn").style.alignSelf = "flex-end";
+    document.getElementById("disconnectButton").style.display = "block";
   } else {
-    toggleNav.innerHTML = "close";
-    document.getElementById("roomAside").style.width = "0px";
+    toggleNav.innerHTML = "Open";
+    document.getElementById("roomAside").style.width = "80px";
+    document.getElementById("navBtn").style.alignSelf = "center";
+    document.getElementById("disconnectButton").style.display = "none";
   }
 }
 

@@ -9,11 +9,11 @@ export default class extends abstractView {
     return ` 
     <main class="createRoom">
       <aside class="createRoom__aside"> 
-      <h3>Rooms</h3>
+      <h3 class="nav__header">Rooms</h3>
           <li class="createRoom__list" id="displayRoomName"></li>
         <p id="roomHolder"></p>
 
-        <button class="button--light" id="refresh"> Refresh rooms list </button>
+        <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
       </aside>
       
       <article class="createRoom__form"> 
@@ -22,23 +22,8 @@ export default class extends abstractView {
         <button class="button--light" id="roomNameButton">Create</button>
         <p id="alert"></p>
 
-    </article>
-    
-    
-    </main>    
-       <style>
-      #video-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 300px);
-        grid-auto-rows: 300px;
-      }
-      video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    </style>
-
+      </article>
+    </main>
     `;
   }
 }

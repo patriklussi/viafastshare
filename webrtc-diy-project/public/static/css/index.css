@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 body {
@@ -13,16 +13,21 @@ body {
   margin: 0 auto;
   background-color: #d0d1d1;
   height: 100vh;
-  overflow: visible;
+  overflow: hidden;
+}
+.app {
+  height: 100%;
+  width: 100%;
 }
 a {
   color: white;
   text-decoration: none;
 }
 
-.app {
-  height: 100%;
-  width: 100%;
+h3 {
+  color: #404549;
+  border-bottom-style: solid;
+  border-width: 2px;
 }
 
 .landing {
@@ -84,7 +89,7 @@ a {
 }
 .room__aside {
   transition: 0.5s;
-  width: 0;
+  align-items: flex-start;
 }
 .createRoom__list,
 .room__list {
@@ -95,6 +100,7 @@ a {
 }
 .createRoom__list--item {
   margin: 0.5rem;
+  align-self: start;
 }
 .createRoom__form {
   width: 100%;
@@ -105,10 +111,35 @@ a {
   align-items: center;
 }
 
+.room__options {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+.room__video {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.nav__header {
+  border-bottom-style: solid;
+  color: #fff;
+  align-self: flex-start;
+  font-size: 1.5rem;
+  border-width: 2px;
+}
+.nav__button {
+  font-size: larger;
+  padding-bottom: 1.5rem;
+  align-self: flex-end;
+}
 .button {
   border-style: none;
   text-decoration: none;
   cursor: pointer;
+  font-weight: bold;
   background-color: #3c3b39;
   width: 14rem;
   height: 2rem;
@@ -126,6 +157,20 @@ a {
   border-radius: 4px;
   color: #3c3b39;
 }
+.button--small {
+  width: 10rem;
+  margin-top: 1rem;
+}
+#video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  grid-auto-rows: 300px;
+}
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 #connectCondition {
   display: none;
@@ -137,3 +182,5 @@ a {
   text-decoration: none;
   padding: 0.4rem;
 }
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap");
