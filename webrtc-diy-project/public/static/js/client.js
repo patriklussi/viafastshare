@@ -22,7 +22,7 @@ myPeer.on("open", function (id) {
 });
 
 var showRoomName;
-
+let test = [];
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
@@ -35,6 +35,7 @@ document.addEventListener("click", (event) => {
     //  socket.emit("join-room",  room);
     socket.emit("sendArrayInfo");
     roomNameInput.value = "";
+    window.localStorage.setItem(room,JSON.stringify(test))
   }
 });
 
@@ -65,6 +66,7 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
+
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
@@ -106,7 +108,11 @@ socket.on("user-connected", (peerList, userId, peerName) => {
 });
 
 socket.on("pushToLs", (peerList) => {
-  window.localStorage.setItem(showRoomName, JSON.stringify(peerList));
+ let temp = JSON.parse(window.localStorage.getItem(ClickedRoomName));
+ console.log(temp);
+ console.log(peerList);
+ temp = peerList;
+ window.localStorage.setItem(ClickedRoomName,JSON.stringify(temp));
 });
 
 let constraints = {
