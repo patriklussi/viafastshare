@@ -22,7 +22,7 @@ myPeer.on("open", function (id) {
 });
 
 var showRoomName;
-let test = [];
+let emptyArray = [];
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     const roomNameInput = document.querySelector("#roomNameInput");
@@ -35,7 +35,7 @@ document.addEventListener("click", (event) => {
     //  socket.emit("join-room",  room);
     socket.emit("sendArrayInfo");
     roomNameInput.value = "";
-    window.localStorage.setItem(room, JSON.stringify(test));
+    window.localStorage.setItem(room, JSON.stringify(emptyArray));
   }
 });
 
@@ -49,6 +49,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
+
     console.log(enterName.value);
     const test = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
@@ -58,7 +59,7 @@ document.addEventListener("click", (event) => {
       console.log("not empty");
       test.style.display = "block";
       nameBtn.style.display = "none";
-      nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
+      //  nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
       alertName();
       console.log("empty");
@@ -75,7 +76,8 @@ socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
   console.log("RoomList", roomList);
   displayRoomName.innerHTML = "";
-
+ 
+  console.log(nameHolder);
   for (let room of roomList) {
     const roomName = document.createElement("a");
     roomName.setAttribute("href", "/room");
@@ -86,16 +88,16 @@ socket.on("sendRoomArray", (roomList) => {
     displayRoomName.append(roomName);
 
     showRoomName = room;
-    roomName.addEventListener("click", () => {
-      document.addEventListener("click", (e) => {
-        if (e.target.matches(".createRoom__list--item")) {
-          console.log("THIS IS MY ROOM", room);
-          ClickedRoomName = room;
-          socket.emit("join-room", peerObj, room);
-          socket.emit("clear");
-          connectToAnotherUser(users);
-        }
-      });
+
+    document.addEventListener("click", (e) => {
+      if (e.target.matches(".createRoom__list--item")) {
+        console.log("THIS IS MY ROOM", room);
+        ClickedRoomName = room;
+        socket.emit("join-room", peerObj, room);
+        socket.emit("clear");
+
+        connectToAnotherUser(users);
+      }
     });
   }
 });
@@ -126,34 +128,30 @@ var connectedUserId;
 
 function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
-  roomTitle.append(ClickedRoomName);
-  const usersInRoom = document.querySelector("#usersInRoom");
 
+  roomTitle.innerHTML = ClickedRoomName;
+ 
+  const usersInRoom = document.querySelector("#usersInRoom");
 
   const shareButton = document.querySelector("#shareButton");
   console.log(shareButton);
-
-
 
   console.log("Room name", showRoomName);
 
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
-      
-      
-  if (shareButton.innerText == "Start sharing") {
-    shareMedia();
-    shareButton.innerHTML = "Stop sharing";
-  } else {
-    shareButton.innerHTML = "Start sharing";
-  }
-      
+      if (shareButton.innerText == "Start sharing") {
+        shareMedia();
+        shareButton.innerHTML = "Stop sharing";
+      } else {
+        shareButton.innerHTML = "Start sharing";
+      }
     }
   });
 }
 socket.on("name", (nameList) => {
   console.log(nameList);
-  //usersInRoom.append(nameList);
+  usersInRoom.append(nameList);
   console.log(usersInRoom);
 });
 
@@ -191,8 +189,6 @@ async function shareMedia(shareButton, stopButton) {
   let peersToLoop = peerList.filter((peers) => {
     return peers !== userIdYes;
   });
-
-  
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {

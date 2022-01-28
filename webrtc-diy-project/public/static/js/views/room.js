@@ -16,7 +16,9 @@ export default class extends abstractView {
         <h2 id="usersInRoom"> </h2>
         <p id="roomHolder"></p>
         <button class="button--light button--small" id="disconnectButton"> Leave room </button>
+        <h2 id="nameHolder"></h2>
       </aside>
+  
       <section class="room__video">
         <div id="videoGrid" class="video"> </div>
         <article class="room__options">  

@@ -14,8 +14,9 @@ export default class extends abstractView {
         <p id="roomHolder"></p>
 
         <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
+        <h2 id="nameHolder"></h2>
       </aside>
-      
+
       <article class="createRoom__form"> 
         <h3 for="input">Create new room</h3>
         <input class="createRoom__input" id="roomNameInput" type="text"/>

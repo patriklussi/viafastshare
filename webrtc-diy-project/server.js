@@ -32,16 +32,18 @@ socket.on("connection", (socket) => {
       peerList = [];
     }
   });
+  /*
   socket.on("name-send", (name) => {
     nameList.push(name);
     console.log(nameList);
   });
+  */
 
   socket.on("clear", () => {});
 
   socket.on("join-room", (peerObj, room) => {
     console.log("Room", room);
-
+    nameList.push(peerObj.name)
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
     
@@ -51,6 +53,7 @@ socket.on("connection", (socket) => {
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList);
+      nameList = [];
     }
   });
   /*socket.on("disconnect", (reason, userId) => {
