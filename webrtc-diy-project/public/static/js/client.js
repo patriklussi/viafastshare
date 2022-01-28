@@ -3,7 +3,6 @@ const nameHolder = document.querySelector("#nameHolder");
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
-
 const socket = io();
 const peers = {};
 const users = [];
@@ -129,18 +128,26 @@ function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
   roomTitle.append(ClickedRoomName);
   const usersInRoom = document.querySelector("#usersInRoom");
-  const stopButton = document.querySelector("#stopShareButton");
-  
-  console.log(stopButton);
+
+
+  const shareButton = document.querySelector("#shareButton");
+  console.log(shareButton);
+
+
+
   console.log("Room name", showRoomName);
-  stopButton.style.display = "none";
+
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
-      const shareButton = document.querySelector("#shareButton");
-      shareButton.style.display = "none";
-     stopButton.style.display = "block";
-      shareMedia(shareButton,stopButton);
-  
+      
+      
+  if (shareButton.innerText == "Start sharing") {
+    shareMedia();
+    shareButton.innerHTML = "Stop sharing";
+  } else {
+    shareButton.innerHTML = "Start sharing";
+  }
+      
     }
   });
 }
@@ -179,18 +186,13 @@ myPeer.on("connection", function (conn) {
 let streamTracks;
 var stopButtonVar;
 
-async function shareMedia(shareButton,stopButton) {
+async function shareMedia(shareButton, stopButton) {
   const peerList = JSON.parse(window.localStorage.getItem(showRoomName));
   let peersToLoop = peerList.filter((peers) => {
     return peers !== userIdYes;
   });
 
- 
-  stopButton.addEventListener("click", () => {
-    stopButton.style.display = "none";
-    shareButton.style.display = "block";
- 
-  });
+  
 
   console.log(peerList);
   navigator.mediaDevices.getDisplayMedia(constraints).then((stream) => {
