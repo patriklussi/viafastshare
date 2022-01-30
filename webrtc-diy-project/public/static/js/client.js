@@ -54,12 +54,15 @@ document.addEventListener("click", (event) => {
     console.log(enterName.value);
     const test = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
+    const info = document.querySelector("#registerInfo");
 
     let enterNameValue = enterName.value;
     if (enterNameValue != "") {
       console.log("not empty");
       test.style.display = "block";
       nameBtn.style.display = "none";
+      enterName.style.display = "none";
+      info.innerHTML = "You're entering as " + enterNameValue;
       //  nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
       alertName();
@@ -77,7 +80,7 @@ socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
   console.log("RoomList", roomList);
   displayRoomName.innerHTML = "";
- 
+
   console.log(nameHolder);
   for (let room of roomList) {
     const roomName = document.createElement("a");
@@ -131,7 +134,7 @@ function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
 
   roomTitle.innerHTML = ClickedRoomName;
- 
+
   const usersInRoom = document.querySelector("#usersInRoom");
 
   const shareButton = document.querySelector("#shareButton");
@@ -271,11 +274,15 @@ function toggle(toggleNav) {
     document.getElementById("roomAside").style.width = "250px";
     document.getElementById("navBtn").style.alignSelf = "flex-end";
     document.getElementById("disconnectButton").style.display = "block";
+    document.getElementById("roomTitle").style.display = "block";
+    document.getElementById("usersInRoom").style.display = "none";
   } else {
     toggleNav.innerHTML = "Open";
     document.getElementById("roomAside").style.width = "80px";
     document.getElementById("navBtn").style.alignSelf = "center";
     document.getElementById("disconnectButton").style.display = "none";
+    document.getElementById("roomTitle").style.display = "none";
+    document.getElementById("usersInRoom").style.display = "none";
   }
 }
 

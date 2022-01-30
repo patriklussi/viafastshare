@@ -23,7 +23,9 @@ a {
   color: white;
   text-decoration: none;
 }
-
+h1 {
+  font-size: 3rem;
+}
 h3 {
   color: #404549;
   border-bottom-style: solid;
@@ -33,36 +35,35 @@ h3 {
 .landing {
   height: 100%;
   display: flex;
-  flex-direction: column;
-  margin-top: 6rem;
+  flex-direction: row;
 }
 
 .landing__card {
-  padding: 1rem;
-  align-self: center;
-  height: 40%;
-  width: 30%;
-  border: solid #404549 5px;
-  border-radius: 4px;
-  background-color: #606b74;
-  justify-content: space-evenly;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 40%;
+  background-color: #404549;
+  justify-content: center;
 }
 
 .landing__form {
-  height: 60%;
-  margin-top: 1rem;
+  height: 100%;
+  width: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 1rem;
+  justify-content: center;
+  margin-right: 1rem;
 }
 
 .landing__input {
-  width: 14rem;
+  width: 20rem;
   height: 2rem;
   margin: 1rem;
   border-style: none;
   border-radius: 4px;
+  box-shadow: 1px 2px 2px #5d6062;
 }
 
 .createRoom,
@@ -78,6 +79,7 @@ h3 {
   border-style: none;
   background-color: #fff;
   border-radius: 4px;
+  box-shadow: 1px 2px 2px #5d6062;
 }
 .createRoom__aside,
 .room__aside {
@@ -152,24 +154,30 @@ h3 {
   text-decoration: none;
   cursor: pointer;
   background-color: #fff;
+  font-weight: bolder;
   width: 14rem;
   height: 2rem;
   border-radius: 4px;
   color: #3c3b39;
+  box-shadow: 1px 2px 2px #5d6062;
 }
 .button--small {
   width: 10rem;
   margin-top: 1rem;
+}
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 #video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, 300px);
   grid-auto-rows: 300px;
 }
-.video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+#alertName {
+  color: #373535;
 }
 
 #connectCondition {

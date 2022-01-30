@@ -19,7 +19,7 @@ export default class extends abstractView {
 
       <article class="createRoom__form"> 
         <h3 for="input">Create new room</h3>
-        <input class="createRoom__input" id="roomNameInput" type="text"/>
+        <input autocomplete="off" class="createRoom__input" id="roomNameInput" type="text"/>
         <button class="button--light" id="roomNameButton">Create</button>
         <p id="alert"></p>
 
