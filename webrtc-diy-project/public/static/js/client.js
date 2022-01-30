@@ -4,7 +4,8 @@ const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
 const socket = io();
-const peers = {};
+const ingoingMediaConnections = new Map();
+const outgoingMediaConnections = new Map();
 const users = [];
 const peerObj = {};
 
@@ -107,7 +108,7 @@ socket.on("user-connected", (peerList, userId, peerName) => {
   console.log("PeerList", peerList);
   console.log(users);
   console.log("user " + userId + " has connected");
-  console.log("Current Peer", peers);
+  console.log("Current mediaConnections", ingoingMediaConnections);
 });
 
 socket.on("pushToLs", (peerList) => {
@@ -124,7 +125,7 @@ let constraints = {
     displaySurface: "application" | "browser" | "monitor" | "window",
   },
 };
-var connectedUserId;
+
 
 function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
@@ -145,6 +146,7 @@ function connectToAnotherUser(users) {
         shareButton.innerHTML = "Stop sharing";
       } else {
         shareButton.innerHTML = "Start sharing";
+        stopShare();
       }
     }
   });
@@ -195,26 +197,43 @@ async function shareMedia(shareButton, stopButton) {
     console.log(stream.getTracks());
     peersToLoop.forEach((id) => {
       var call = myPeer.call(id, stream);
+      outgoingMediaConnections.set(id,call);
     });
 
     window.srcObject = stream;
   });
 }
 
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#disconnectButton")) {
-    socket.emit("leave-room", showRoomName, userIdYes);
+function stopShare(){
+  socket.emit("leave-room", showRoomName, userIdYes);
+  outgoingMediaConnections.forEach((connection)=>{
+    console.log(connection);
+    if(connection.open){
+      connection.close();
+    }
+  })
+  outgoingMediaConnections.clear();
     console.log("disconnect");
-  }
-});
+}
+
 
 socket.on("user-disconnected", (userId) => {
-  window.call.close();
+  console.log("Disconnect mediaconnection",ingoingMediaConnections);
+ // mediaConnections[userId].close();
   //if (peers[userId]) peers[userId].close();
-  console.log("User", userId, "has left the room");
+  if(ingoingMediaConnections.has(userId)){
+    console.log("Deleting connection from ",userId);
+    ingoingMediaConnections.get(userId).close();
+    ingoingMediaConnections.delete(userId);
+  } else {
+    console.log("has no connection from", userId);
+  }
+
+  
 });
 
 myPeer.on("call", (call) => {
+  ingoingMediaConnections.set(call.peer,call);
   call.answer();
   console.log("Call answered");
   call.on("stream", (userVideoStream) => {
@@ -222,11 +241,12 @@ myPeer.on("call", (call) => {
   });
   call.on("close", () => {
     console.log("Closing!");
-    video.remove();
+  //  video.remove();
   });
-  peers[connectedUserId] = call;
+  console.log(call.peer);
+ // mediaConnections[call.peer] = call;
   console.log("CALL", call);
-  console.log("Current Peer", peers);
+ // console.log("Current Peer", mediaConnections);
 });
 
 function addVideoStream(userVideoStream) {
@@ -236,7 +256,7 @@ function addVideoStream(userVideoStream) {
   video.play();
   videoGrid.append(video);
 
-  console.log("Current Peer", peers);
+//  console.log("Current mediaConnections", mediaConnections);
 }
 document.addEventListener("click", (event) => {
   if (event.target.matches("#navBtn")) {
