@@ -2,7 +2,7 @@
 
 
 const connectToUser = document.querySelector("#roomButton");
-const nameHolder = document.querySelector("#nameHolder");
+
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
@@ -55,11 +55,11 @@ document.addEventListener("click", (event) => {
     const enterName = document.querySelector("#enterName");
 
     console.log(enterName.value);
-    window.sessionStorage.setItem("key",JSON.stringify(enterName.value));
+    window.sessionStorage.setItem("names",JSON.stringify(enterName.value));
     const test = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
     const info = document.querySelector("#registerInfo");
-
+    
     let enterNameValue = enterName.value;
     if (enterNameValue != "") {
       console.log("not empty");
@@ -67,6 +67,7 @@ document.addEventListener("click", (event) => {
       nameBtn.style.display = "none";
       enterName.style.display = "none";
       info.innerHTML = "You're entering as " + enterNameValue;
+      socket.emit("display-name");
       //  nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
       alertName();
@@ -74,11 +75,16 @@ document.addEventListener("click", (event) => {
     }
     console.log(enterNameValue);
     peerObj.name = enterNameValue;
-    socket.emit("name-send", peerObj.name);
+  //  socket.emit("name-send", peerObj.name);
     enterName.value = "";
   }
 });
 
+socket.on("name-display",()=>{
+  let name = JSON.parse(window.sessionStorage.getItem("names"));
+  const nameHolder = document.querySelector("#nameHolder");
+  
+});
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
@@ -102,7 +108,10 @@ socket.on("sendRoomArray", (roomList) => {
     document.addEventListener("click", (e) => {
       if (e.target.matches(".createRoom__list--item")) {
         console.log("THIS IS MY ROOM", room);
+        let sessionName  = JSON.parse(window.sessionStorage.getItem("names"));
+        console.log(sessionName);
         ClickedRoomName = room;
+        socket.emit("send-name",sessionName);
         socket.emit("join-room", peerObj, room);
         socket.emit("clear");
         
@@ -111,6 +120,11 @@ socket.on("sendRoomArray", (roomList) => {
     });
   }
 });
+
+
+
+
+
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
@@ -134,6 +148,16 @@ let constraints = {
     displaySurface: "application" | "browser" | "monitor" | "window",
   },
 };
+
+
+socket.on("name-list",(nameList)=>{
+  const usersInRoom = document.querySelector("#usersInRoom");
+  console.log(usersInRoom);
+  nameList.forEach((name)=>{
+    usersInRoom.append(name);
+  })
+});
+
 
 function connectToAnotherUser(users) {
  
@@ -160,11 +184,13 @@ function connectToAnotherUser(users) {
     }
   });
 }
+/*
 socket.on("name", (nameList) => {
   console.log(nameList);
   usersInRoom.append(nameList);
   console.log(usersInRoom);
 });
+*/
 
 socket.on("alert-room", (roomName) => {
   const alert = document.querySelector("#alert");

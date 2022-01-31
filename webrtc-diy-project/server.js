@@ -23,6 +23,12 @@ socket.on("connection", (socket) => {
     socket.emit("sendRoomArray", roomList);
   });
 
+  socket.on("send-name",(sessionName)=>{
+      nameList.push(sessionName);
+      socket.emit("name-list",nameList);
+      nameList = [];
+  });
+
   socket.on("room-name", (room) => {
     if (roomList.includes(room)) {
       socket.emit("alert-room", room);
@@ -31,6 +37,10 @@ socket.on("connection", (socket) => {
       socket.emit("trigger");
       peerList = [];
     }
+  });
+
+  socket.on("display-name",()=>{
+    socket.emit("name-display");
   });
   /*
   socket.on("name-send", (name) => {
@@ -43,7 +53,7 @@ socket.on("connection", (socket) => {
 
   socket.on("join-room", (peerObj, room) => {
   
-    nameList.push(peerObj.name)
+   
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
       console.log("nononono")
@@ -54,7 +64,7 @@ socket.on("connection", (socket) => {
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList);
-      nameList = [];
+    
     }
   });
  
