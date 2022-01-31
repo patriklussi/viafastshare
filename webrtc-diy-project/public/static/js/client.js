@@ -1,3 +1,6 @@
+
+
+
 const connectToUser = document.querySelector("#roomButton");
 const nameHolder = document.querySelector("#nameHolder");
 const roomNameButton = document.querySelector("#roomNameButton");
@@ -129,7 +132,6 @@ let constraints = {
   },
 };
 
-
 function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
 
@@ -200,67 +202,88 @@ async function shareMedia(shareButton, stopButton) {
     console.log(stream.getTracks());
     peersToLoop.forEach((id) => {
       var call = myPeer.call(id, stream);
-      outgoingMediaConnections.set(id,call);
+      outgoingMediaConnections.set(id, call);
     });
 
     window.srcObject = stream;
   });
 }
 
-function stopShare(){
-  socket.emit("leave-room", showRoomName, userIdYes);
-  outgoingMediaConnections.forEach((connection)=>{
+function stopShare() {
+  socket.emit("stop-call", showRoomName, userIdYes);
+  console.log("Stop sharing");
+  outgoingMediaConnections.forEach((connection) => {
     console.log(connection);
-    if(connection.open){
+    if (connection.open) {
       connection.close();
+      console.log("it does  work");
+    } else {
+      console.log("it does not work");
     }
-  })
+  });
   outgoingMediaConnections.clear();
-    console.log("disconnect");
+  console.log("disconnect");
 }
 
-
-socket.on("user-disconnected", (userId) => {
-  console.log("Disconnect mediaconnection",ingoingMediaConnections);
- // mediaConnections[userId].close();
+socket.on("disconnect-mediaconnection", (userId) => {
+  console.log("Disconnect mediaconnection", ingoingMediaConnections);
+  // mediaConnections[userId].close();
   //if (peers[userId]) peers[userId].close();
-  if(ingoingMediaConnections.has(userId)){
-    console.log("Deleting connection from ",userId);
+  if (ingoingMediaConnections.has(userId)) {
+    console.log("Deleting connection from ", userId);
     ingoingMediaConnections.get(userId).close();
     ingoingMediaConnections.delete(userId);
   } else {
     console.log("has no connection from", userId);
   }
-
-  
 });
 
 myPeer.on("call", (call) => {
-  ingoingMediaConnections.set(call.peer,call);
+  let video = document.createElement("video");
+  ingoingMediaConnections.set(call.peer, call);
+  console.log("VIDEO", video);
   call.answer();
   console.log("Call answered");
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream);
+    addVideoStream(userVideoStream, video);
   });
   call.on("close", () => {
     console.log("Closing!");
-  //  video.remove();
+    video.remove();
   });
   console.log(call.peer);
- // mediaConnections[call.peer] = call;
+  // mediaConnections[call.peer] = call;
   console.log("CALL", call);
- // console.log("Current Peer", mediaConnections);
+  // console.log("Current Peer", mediaConnections);
 });
 
-function addVideoStream(userVideoStream) {
-  let video = document.createElement("video");
+
+
+function addVideoStream(userVideoStream, video) {
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
   video.play();
   videoGrid.append(video);
 
-//  console.log("Current mediaConnections", mediaConnections);
+  //  console.log("Current mediaConnections", mediaConnections);
 }
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#disconnectButton")) {
+    socket.emit("leave-room", ClickedRoomName, userIdYes);
+    let ls = window.localStorage.getItem(ClickedRoomName);
+    let temp = JSON.parse(ls);
+    let newList = temp.filter((peers)=>{
+      return peers !== userIdYes;
+
+    });
+    window.localStorage.setItem(ClickedRoomName,JSON.stringify(newList));
+  }
+});
+
+socket.on("user-disconnected",(userId)=>{
+console.log("User", userId,"has disconnected");
+});
 document.addEventListener("click", (event) => {
   if (event.target.matches("#navBtn")) {
     let toggleNav = document.getElementById("navBtn");
@@ -285,27 +308,3 @@ function toggle(toggleNav) {
     document.getElementById("usersInRoom").style.display = "none";
   }
 }
-
-/*
-function addVideoStream(video, setream) {
-  video.srcObject = stream;
-  window.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    video.play();
-  });
-  videoGrid.append(video);
-}
-
-/*
-function connectToNewUser(userId, stream) {
-  const call = myPeer.call(userId, stream);
-  const video = document.createElement("video");
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream);
-  });
-  call.on("close", () => {
-    video.remove();
-  });
-  peers[userId] = call;
-}
-*/
