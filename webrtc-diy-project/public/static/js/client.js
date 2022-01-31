@@ -55,6 +55,7 @@ document.addEventListener("click", (event) => {
     const enterName = document.querySelector("#enterName");
 
     console.log(enterName.value);
+    window.sessionStorage.setItem("key",JSON.stringify(enterName.value));
     const test = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
     const info = document.querySelector("#registerInfo");
@@ -69,7 +70,7 @@ document.addEventListener("click", (event) => {
       //  nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
       alertName();
-      console.log("empty");
+    
     }
     console.log(enterNameValue);
     peerObj.name = enterNameValue;
