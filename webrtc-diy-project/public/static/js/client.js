@@ -111,7 +111,7 @@ socket.on("sendRoomArray", (roomList) => {
         let sessionName  = JSON.parse(window.sessionStorage.getItem("names"));
         console.log(sessionName);
         ClickedRoomName = room;
-        socket.emit("send-name",sessionName);
+        socket.emit("send-name",sessionName,room);
         socket.emit("join-room", peerObj, room);
         socket.emit("clear");
         
@@ -153,8 +153,8 @@ let counter = 1;
 
 socket.on("name-list",(nameList)=>{
   const usersInRoom = document.querySelector("#usersInRoom");
-  counter = counter + 1;
-  console.log(counter);
+  usersInRoom.append(nameList);
+  console.log("OOOGA BOOOGA MOTHER FUCKER");
 });
 
 

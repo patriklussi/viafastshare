@@ -23,10 +23,10 @@ socket.on("connection", (socket) => {
     socket.emit("sendRoomArray", roomList);
   });
 
-  socket.on("send-name",(sessionName)=>{
+  socket.on("send-name",(sessionName,room)=>{
       nameList.push(sessionName);
-    //  socket.broadcast.to(room).emit("name-list",nameList);
-      socket.in(socket.room).emit('name-list', nameList);
+    // socket.broadcast.to(room).emit("name-list",nameList);
+      socket.to(room).emit('name-list', nameList);
       nameList = [];
   });
 
