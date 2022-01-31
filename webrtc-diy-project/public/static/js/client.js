@@ -86,15 +86,17 @@ socket.on("sendRoomArray", (roomList) => {
 
   console.log(nameHolder);
   for (let room of roomList) {
+    console.log(room);
     const roomName = document.createElement("a");
     roomName.setAttribute("href", "/room");
     roomName.classList.add("createRoom__list--item");
     roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
-
+    
     displayRoomName.append(roomName);
 
     showRoomName = room;
+   
 
     document.addEventListener("click", (e) => {
       if (e.target.matches(".createRoom__list--item")) {
@@ -102,7 +104,7 @@ socket.on("sendRoomArray", (roomList) => {
         ClickedRoomName = room;
         socket.emit("join-room", peerObj, room);
         socket.emit("clear");
-
+        
         connectToAnotherUser(users);
       }
     });
@@ -133,6 +135,7 @@ let constraints = {
 };
 
 function connectToAnotherUser(users) {
+ 
   const roomTitle = document.querySelector("#roomTitle");
 
   roomTitle.innerHTML = ClickedRoomName;
