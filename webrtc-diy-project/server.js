@@ -42,12 +42,13 @@ socket.on("connection", (socket) => {
   socket.on("clear", () => {});
 
   socket.on("join-room", (peerObj, room) => {
-    console.log("Room", room);
+  
     nameList.push(peerObj.name)
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
-    
+      console.log("nononono")
     } else {
+      console.log("joined room",peerObj.id, room);
       socket.join(room);
       peerList.push(peerObj.id);
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
@@ -56,18 +57,17 @@ socket.on("connection", (socket) => {
       nameList = [];
     }
   });
-  /*socket.on("disconnect", (reason, userId) => {
-    socket.broadcast.emit("user-disconnected", userId);
-  });*/
+ 
 
   socket.on("stop-call", (room, userId) => {
     console.log("hello");
-  // socket.leave(room);
     socket.broadcast.to(room).emit("disconnect-mediaconnection", userId);
   });
   socket.on("leave-room",(room,userId)=>{
+    console.log("left room",userId)
     socket.leave(room);
     socket.broadcast.to(room).emit("user-disconnected", userId);
+    peerList =[];
 
   });
 });

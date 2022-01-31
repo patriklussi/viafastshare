@@ -136,7 +136,7 @@ function connectToAnotherUser(users) {
   const roomTitle = document.querySelector("#roomTitle");
 
   roomTitle.innerHTML = ClickedRoomName;
-
+  console.log(ClickedRoomName);
   const usersInRoom = document.querySelector("#usersInRoom");
 
   const shareButton = document.querySelector("#shareButton");
@@ -177,19 +177,7 @@ function alertName() {
     alertName.innerHTML = " ";
   }, 3000);
 }
-/*
-myPeer.on("connection", function (conn) {
-  let button = document.createElement("button");
-  button.innerText = "Share screen";
-  buttonBox.append(button);
-  button.addEventListener("click", () => {
-    shareMedia();
-  });
-});
-*/
 
-let streamTracks;
-var stopButtonVar;
 
 async function shareMedia(shareButton, stopButton) {
   const peerList = JSON.parse(window.localStorage.getItem(showRoomName));
@@ -227,8 +215,6 @@ function stopShare() {
 
 socket.on("disconnect-mediaconnection", (userId) => {
   console.log("Disconnect mediaconnection", ingoingMediaConnections);
-  // mediaConnections[userId].close();
-  //if (peers[userId]) peers[userId].close();
   if (ingoingMediaConnections.has(userId)) {
     console.log("Deleting connection from ", userId);
     ingoingMediaConnections.get(userId).close();
