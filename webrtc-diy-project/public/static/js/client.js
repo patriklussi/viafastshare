@@ -149,13 +149,12 @@ let constraints = {
   },
 };
 
+let counter = 1;
 
 socket.on("name-list",(nameList)=>{
   const usersInRoom = document.querySelector("#usersInRoom");
-  console.log(usersInRoom);
-  nameList.forEach((name)=>{
-    usersInRoom.append(name);
-  })
+  counter = counter + 1;
+  console.log(counter);
 });
 
 
@@ -165,7 +164,7 @@ function connectToAnotherUser(users) {
 
   roomTitle.innerHTML = ClickedRoomName;
   console.log(ClickedRoomName);
-  const usersInRoom = document.querySelector("#usersInRoom");
+ 
 
   const shareButton = document.querySelector("#shareButton");
   console.log(shareButton);

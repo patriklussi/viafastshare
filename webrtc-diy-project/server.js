@@ -25,7 +25,8 @@ socket.on("connection", (socket) => {
 
   socket.on("send-name",(sessionName)=>{
       nameList.push(sessionName);
-      socket.emit("name-list",nameList);
+    //  socket.broadcast.to(room).emit("name-list",nameList);
+      socket.in(socket.room).emit('name-list', nameList);
       nameList = [];
   });
 
