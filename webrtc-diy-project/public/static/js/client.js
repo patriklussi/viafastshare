@@ -49,7 +49,7 @@ document.addEventListener("click", (event) => {
     socket.emit("sendArrayInfo");
   }
 });
-
+ let emptyArrayTwo = [];
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
@@ -109,6 +109,7 @@ socket.on("sendRoomArray", (roomList) => {
       if (e.target.matches(".createRoom__list--item")) {
         console.log("THIS IS MY ROOM", room);
         let sessionName  = JSON.parse(window.sessionStorage.getItem("names"));
+        window.sessionStorage.setItem(room,JSON.stringify(emptyArrayTwo));
         console.log(sessionName);
         ClickedRoomName = room;
         socket.emit("send-name",sessionName,room);
@@ -151,10 +152,11 @@ let constraints = {
 
 let counter = 1;
 
-socket.on("name-list",(nameList)=>{
-  const usersInRoom = document.querySelector("#usersInRoom");
-  usersInRoom.append(nameList);
-  console.log("OOOGA BOOOGA MOTHER FUCKER");
+socket.on("name-list",(nameList,room)=>{
+  let temp = JSON.parse(window.sessionStorage.getItem(room));
+  console.log("TMELRÅ^Q",temp);
+
+  
 });
 
 
