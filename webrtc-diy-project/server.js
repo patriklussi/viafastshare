@@ -12,6 +12,8 @@ roomList = [];
 peerList = [];
 nameList = [];
 
+roomCompleteList = new Array(roomList.values(), nameList.values());
+
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 
 app.get("/*", (req, res) => {
@@ -25,18 +27,15 @@ io.on("connection", (socket) => {
     socket.emit("sendRoomArray", roomList);
   });
 
-  socket.on("send-name",(sessionName,room)=>{
-    if(nameList.includes(sessionName)){
-    
+  socket.on("send-name", (sessionName, room) => {
+    if (nameList.includes(sessionName)) {
     } else {
       nameList.push(sessionName);
     }
-    
+
     // socket.broadcast.to(room).emit("name-list",nameList);
-     // socket.to(room).emit('name-list', nameList);
-   io.emit("name-list",nameList,room);
-  
-    
+    // socket.to(room).emit('name-list', nameList);
+    io.emit("name-list", nameList, room);
   });
 
   socket.on("room-name", (room) => {
@@ -44,12 +43,12 @@ io.on("connection", (socket) => {
       socket.emit("alert-room", room);
     } else {
       roomList.push(room);
-      socket.emit("trigger");
+      //socket.emit("trigger"); -------- ta bort?
       peerList = [];
     }
   });
 
-  socket.on("display-name",()=>{
+  socket.on("display-name", () => {
     socket.emit("name-display");
   });
   /*
@@ -62,37 +61,34 @@ io.on("connection", (socket) => {
   socket.on("clear", () => {});
 
   socket.on("join-room", (peerObj, room) => {
-  
-   
     console.log("UserID", peerObj);
     if (peerList.includes(peerObj.id)) {
-      console.log("nononono")
+      console.log("nononono");
     } else {
-      console.log("joined room",peerObj.id, room);
+      console.log("joined room", peerObj.id, room);
+      console.log("nya arrayn ", roomCompleteList);
       socket.join(room);
       peerList.push(peerObj.id);
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
-      socket.emit("room-display",room);
+      socket.emit("room-display", room);
       socket.emit("name", nameList);
-      socket.emit("pushToLs", peerList,room);
-    
+      socket.emit("pushToLs", peerList, room);
     }
   });
- socket.on("test",(room)=>{
- console.log("clickedROom",room);
- socket.emit("call-function",room);
- });
+  socket.on("test", (room) => {
+    console.log("clickedROom", room);
+    socket.emit("call-function", room);
+  });
 
   socket.on("stop-call", (room, userId) => {
     console.log("hello");
     socket.broadcast.to(room).emit("disconnect-mediaconnection", userId);
   });
-  socket.on("leave-room",(room,userId)=>{
-    console.log("left room",userId)
+  socket.on("leave-room", (room, userId) => {
+    console.log("left room", userId);
     socket.leave(room);
     socket.broadcast.to(room).emit("user-disconnected", userId);
-    peerList =[];
-
+    peerList = [];
   });
 });
 
