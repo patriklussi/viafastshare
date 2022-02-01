@@ -116,21 +116,28 @@ socket.on("sendRoomArray", (roomList) => {
     });
     /*
     */
+    roomName.addEventListener("click",()=>{
     document.addEventListener("click", (e) => {
       if (e.target.matches(".createRoom__list--item")) {
         console.log("Clicked on this room",room);
-        
+        console.log("CLICKED ROOM",room)
         let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
         ClickedRoomName = room;
         socket.emit("send-name", sessionName, room);
         socket.emit("join-room", peerObj, room);
         socket.emit("clear");
-        connectToAnotherUser(users);
+        socket.emit("test",room);
+       // connectToAnotherUser(users);
         
       }
     });
+  });
     
   }
+});
+
+socket.on("call-function",(room)=>{
+connectToAnotherUser(users,room);
 });
 
 socket.on("user-connected", (peerList, userId, peerName) => {
@@ -146,12 +153,12 @@ roomTitle.innerHTML=room;
 });
 
 
-socket.on("pushToLs", (peerList) => {
-  let temp = JSON.parse(window.localStorage.getItem(ClickedRoomName));
+socket.on("pushToLs", (peerList,room) => {
+  let temp = JSON.parse(window.localStorage.getItem(room));
   console.log(temp);
   console.log(peerList);
   temp = peerList;
-  window.localStorage.setItem(ClickedRoomName, JSON.stringify(temp));
+  window.localStorage.setItem(room, JSON.stringify(temp));
 });
 
 let constraints = {
@@ -172,14 +179,14 @@ socket.on("message", (yes) => {
   console.log(yes);
 });
 
-function connectToAnotherUser(users) {
+function connectToAnotherUser(users,room) {
   const shareButton = document.querySelector("#shareButton");
   console.log(shareButton);
-  console.log("Room name", showRoomName);
+  console.log("Room name", room);
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
       if (shareButton.innerText == "Start sharing") {
-        shareMedia();
+        shareMedia(room);
         shareButton.innerHTML = "Stop sharing";
       } else {
         shareButton.innerHTML = "Start sharing";
@@ -212,8 +219,8 @@ function alertName() {
   }, 3000);
 }
 
-async function shareMedia(shareButton, stopButton) {
-  const peerList = JSON.parse(window.localStorage.getItem(showRoomName));
+async function shareMedia(room) {
+  const peerList = JSON.parse(window.localStorage.getItem(room));
   let peersToLoop = peerList.filter((peers) => {
     return peers !== userIdYes;
   });

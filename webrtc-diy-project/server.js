@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
       socket.emit("room-display",room);
       socket.emit("name", nameList);
-      socket.emit("pushToLs", peerList);
+      socket.emit("pushToLs", peerList,room);
     
     }
   });
