@@ -1,9 +1,10 @@
 const express = require("express");
 const { copyFileSync } = require("fs");
 const path = require("path");
+const { isObject } = require("util");
 const app = express();
 const server = require("http").createServer(app);
-const socket = require("socket.io")(server);
+const io = require("socket.io")(server);
 const PORT = process.env.PORT || 3000;
 
 roomList = [];
@@ -16,7 +17,7 @@ app.get("/*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "public", "index.html"));
 });
 
-socket.on("connection", (socket) => {
+io.on("connection", (socket) => {
   console.log("connected");
 
   socket.on("sendArrayInfo", () => {
@@ -24,12 +25,17 @@ socket.on("connection", (socket) => {
   });
 
   socket.on("send-name",(sessionName,room)=>{
+    if(nameList.includes(sessionName)){
+    
+    } else {
       nameList.push(sessionName);
+    }
+    
     // socket.broadcast.to(room).emit("name-list",nameList);
      // socket.to(room).emit('name-list', nameList);
-     socket.emit("name-list",nameList,room);
-
-      nameList = [];
+   io.emit("name-list",nameList,room);
+  
+    
   });
 
   socket.on("room-name", (room) => {

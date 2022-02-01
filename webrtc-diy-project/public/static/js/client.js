@@ -1,6 +1,3 @@
-
-
-
 const connectToUser = document.querySelector("#roomButton");
 
 const roomNameButton = document.querySelector("#roomNameButton");
@@ -49,17 +46,17 @@ document.addEventListener("click", (event) => {
     socket.emit("sendArrayInfo");
   }
 });
- let emptyArrayTwo = [];
+let emptyArrayTwo = [];
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
 
     console.log(enterName.value);
-    window.sessionStorage.setItem("names",JSON.stringify(enterName.value));
+    window.sessionStorage.setItem("names", JSON.stringify(enterName.value));
     const test = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
     const info = document.querySelector("#registerInfo");
-    
+
     let enterNameValue = enterName.value;
     if (enterNameValue != "") {
       console.log("not empty");
@@ -71,20 +68,20 @@ document.addEventListener("click", (event) => {
       //  nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
       alertName();
-    
     }
     console.log(enterNameValue);
     peerObj.name = enterNameValue;
-  //  socket.emit("name-send", peerObj.name);
+    //  socket.emit("name-send", peerObj.name);
     enterName.value = "";
   }
 });
 
-socket.on("name-display",()=>{
+socket.on("name-display", () => {
   let name = JSON.parse(window.sessionStorage.getItem("names"));
   const nameHolder = document.querySelector("#nameHolder");
-  
 });
+
+
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
@@ -99,33 +96,27 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.classList.add("createRoom__list--item");
     roomName.setAttribute("data-link", "  ");
     roomName.innerHTML = room;
-    
+
     displayRoomName.append(roomName);
 
     showRoomName = room;
-   
 
     document.addEventListener("click", (e) => {
       if (e.target.matches(".createRoom__list--item")) {
         console.log("THIS IS MY ROOM", room);
-        let sessionName  = JSON.parse(window.sessionStorage.getItem("names"));
-        window.sessionStorage.setItem(room,JSON.stringify(emptyArrayTwo));
+        let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
+        
         console.log(sessionName);
         ClickedRoomName = room;
-        socket.emit("send-name",sessionName,room);
+        socket.emit("send-name", sessionName, room);
         socket.emit("join-room", peerObj, room);
         socket.emit("clear");
-        
+
         connectToAnotherUser(users);
       }
     });
   }
 });
-
-
-
-
-
 
 socket.on("user-connected", (peerList, userId, peerName) => {
   users.push(userId);
@@ -150,23 +141,21 @@ let constraints = {
   },
 };
 
-let counter = 1;
-
-socket.on("name-list",(nameList,room)=>{
-  let temp = JSON.parse(window.sessionStorage.getItem(room));
-  console.log("TMELRÅ^Q",temp);
-
-  
+socket.on("name-list", (nameList, room) => {
+  const usersInRoom = document.querySelector("#usersInRoom");
+  usersInRoom.innerHTML = nameList;
+  console.log("NAMELIST", nameList);
 });
 
+socket.on("message", (yes) => {
+  console.log(yes);
+});
 
 function connectToAnotherUser(users) {
- 
   const roomTitle = document.querySelector("#roomTitle");
 
   roomTitle.innerHTML = ClickedRoomName;
   console.log(ClickedRoomName);
- 
 
   const shareButton = document.querySelector("#shareButton");
   console.log(shareButton);
@@ -209,7 +198,6 @@ function alertName() {
   }, 3000);
 }
 
-
 async function shareMedia(shareButton, stopButton) {
   const peerList = JSON.parse(window.localStorage.getItem(showRoomName));
   let peersToLoop = peerList.filter((peers) => {
@@ -223,7 +211,7 @@ async function shareMedia(shareButton, stopButton) {
       var call = myPeer.call(id, stream);
       outgoingMediaConnections.set(id, call);
     });
-
+    //window.stream = stream;
     window.srcObject = stream;
   });
 }
@@ -231,6 +219,9 @@ async function shareMedia(shareButton, stopButton) {
 function stopShare() {
   socket.emit("stop-call", showRoomName, userIdYes);
   console.log("Stop sharing");
+  window.srcObject.getTracks().forEach(function (track) {
+    track.stop();
+  });
   outgoingMediaConnections.forEach((connection) => {
     console.log(connection);
     if (connection.open) {
@@ -242,6 +233,7 @@ function stopShare() {
   });
   outgoingMediaConnections.clear();
   console.log("disconnect");
+  console.log(window.stream);
 }
 
 socket.on("disconnect-mediaconnection", (userId) => {
@@ -264,7 +256,7 @@ myPeer.on("call", (call) => {
   call.on("stream", (userVideoStream) => {
     addVideoStream(userVideoStream, video);
   });
-  call.on("close", () => {
+  call.on("close", (userVideoStream) => {
     console.log("Closing!");
     video.remove();
   });
@@ -273,8 +265,6 @@ myPeer.on("call", (call) => {
   console.log("CALL", call);
   // console.log("Current Peer", mediaConnections);
 });
-
-
 
 function addVideoStream(userVideoStream, video) {
   const videoGrid = document.getElementById("videoGrid");
@@ -290,16 +280,15 @@ document.addEventListener("click", (event) => {
     socket.emit("leave-room", ClickedRoomName, userIdYes);
     let ls = window.localStorage.getItem(ClickedRoomName);
     let temp = JSON.parse(ls);
-    let newList = temp.filter((peers)=>{
+    let newList = temp.filter((peers) => {
       return peers !== userIdYes;
-
     });
-    window.localStorage.setItem(ClickedRoomName,JSON.stringify(newList));
+    window.localStorage.setItem(ClickedRoomName, JSON.stringify(newList));
   }
 });
 
-socket.on("user-disconnected",(userId)=>{
-console.log("User", userId,"has disconnected");
+socket.on("user-disconnected", (userId) => {
+  console.log("User", userId, "has disconnected");
 });
 document.addEventListener("click", (event) => {
   if (event.target.matches("#navBtn")) {
