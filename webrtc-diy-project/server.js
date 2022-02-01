@@ -1,5 +1,6 @@
 const express = require("express");
 const { copyFileSync } = require("fs");
+const { SocketAddress } = require("net");
 const path = require("path");
 const { isObject } = require("util");
 const app = express();
@@ -71,12 +72,16 @@ io.on("connection", (socket) => {
       socket.join(room);
       peerList.push(peerObj.id);
       socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
+      socket.emit("room-display",room);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList);
     
     }
   });
- 
+ socket.on("test",(room)=>{
+ console.log("clickedROom",room);
+ socket.emit("call-function",room);
+ });
 
   socket.on("stop-call", (room, userId) => {
     console.log("hello");

@@ -1,3 +1,5 @@
+
+
 const connectToUser = document.querySelector("#roomButton");
 
 const roomNameButton = document.querySelector("#roomNameButton");
@@ -85,12 +87,12 @@ socket.on("name-display", () => {
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
-  console.log("RoomList", roomList);
+
   displayRoomName.innerHTML = "";
 
-  console.log(nameHolder);
+
   for (let room of roomList) {
-    console.log(room);
+    console.log("roomooooooooooooooooooooooo",room);
     const roomName = document.createElement("a");
     roomName.setAttribute("href", "/room");
     roomName.classList.add("createRoom__list--item");
@@ -98,23 +100,36 @@ socket.on("sendRoomArray", (roomList) => {
     roomName.innerHTML = room;
 
     displayRoomName.append(roomName);
-
+    
     showRoomName = room;
-
+    /*
+    roomName.addEventListener("click",()=>{
+     console.log(room);
+     console.log("Clicked on this room",room);
+     
+     let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
+     ClickedRoomName = room;
+     socket.emit("send-name", sessionName, room);
+     socket.emit("join-room", peerObj, room);
+     socket.emit("clear");
+     connectToAnotherUser(users);
+    });
+    /*
+    */
     document.addEventListener("click", (e) => {
       if (e.target.matches(".createRoom__list--item")) {
-        console.log("THIS IS MY ROOM", room);
-        let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
+        console.log("Clicked on this room",room);
         
-        console.log(sessionName);
+        let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
         ClickedRoomName = room;
         socket.emit("send-name", sessionName, room);
         socket.emit("join-room", peerObj, room);
         socket.emit("clear");
-
         connectToAnotherUser(users);
+        
       }
     });
+    
   }
 });
 
@@ -125,6 +140,11 @@ socket.on("user-connected", (peerList, userId, peerName) => {
   console.log("user " + userId + " has connected");
   console.log("Current mediaConnections", ingoingMediaConnections);
 });
+socket.on("room-display",(room)=>{
+let roomTitle = document.querySelector("#roomTitle");
+roomTitle.innerHTML=room;
+});
+
 
 socket.on("pushToLs", (peerList) => {
   let temp = JSON.parse(window.localStorage.getItem(ClickedRoomName));
@@ -142,6 +162,7 @@ let constraints = {
 };
 
 socket.on("name-list", (nameList, room) => {
+
   const usersInRoom = document.querySelector("#usersInRoom");
   usersInRoom.innerHTML = nameList;
   console.log("NAMELIST", nameList);
@@ -152,16 +173,9 @@ socket.on("message", (yes) => {
 });
 
 function connectToAnotherUser(users) {
-  const roomTitle = document.querySelector("#roomTitle");
-
-  roomTitle.innerHTML = ClickedRoomName;
-  console.log(ClickedRoomName);
-
   const shareButton = document.querySelector("#shareButton");
   console.log(shareButton);
-
   console.log("Room name", showRoomName);
-
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
       if (shareButton.innerText == "Start sharing") {
