@@ -13,7 +13,7 @@ peerList = [];
 nameList = [];
 
 roomCompleteList = new Array(roomList.values(), nameList.values());
-let roomMap = new Map();
+
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 
 app.get("/*", (req, res) => {
@@ -28,21 +28,22 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-name", (sessionName, room) => {
-  //  nameList = [];
+ //   nameList = [];
+    console.log("RUM",room);
     if (nameList.includes(sessionName)) {
     } else {
-     let cock =  roomMap.get(room,nameList);
-     console.log(cock);
-      nameList.push(sessionName);
-      roomMap.set(room,nameList);
-      console.log(roomMap);
-      console.log(cock);
-     // nameList =[];
+      if(nameList.includes(sessionName)){
+      
+      } else {
+        nameList.push(sessionName);
+       // nameList =[];
+       io.emit("name-list",room,sendVar);
+      }
+    
     }
     
     // socket.broadcast.to(room).emit("name-list",nameList);
     // socket.to(room).emit('name-list', nameList);
-    io.emit("name-list",room);
 
   });
 

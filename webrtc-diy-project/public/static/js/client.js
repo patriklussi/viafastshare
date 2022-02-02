@@ -109,9 +109,9 @@ socket.on("sendRoomArray", (roomList) => {
     });
     /*
     */
-    roomName.addEventListener("click", () => {
-      document.addEventListener("click", (e) => {
-        if (e.target.matches(".createRoom__list--item")) {
+     roomName.addEventListener("click", () => {
+   //   document.addEventListener("click", (e) => {
+     //   if (e.target.matches(".createRoom__list--item")) {
           console.log("Clicked on this room", room);
           console.log("CLICKED ROOM", room);
           let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
@@ -120,10 +120,10 @@ socket.on("sendRoomArray", (roomList) => {
           socket.emit("join-room", peerObj, room);
           socket.emit("clear");
           socket.emit("test", room);
+        });
           // connectToAnotherUser(users);
-        }
-      });
-    });
+      //  }
+    //  });
   }
 });
 
@@ -160,10 +160,16 @@ let constraints = {
 };
 
 
-socket.on("name-list", (nameList, room) => {
+socket.on("name-list", (room,sendVar) => {
+  const array = [];
+  array.push(sendVar);
+  console.log("DAIJUDFNUAJ",array);
+  console.log(sendVar);
   const usersInRoom = document.querySelector("#usersInRoom");
-  usersInRoom.innerHTML = nameList;
-  console.log("NAMELIST", nameList);
+  usersInRoom.innerHTML = "";
+  //usersInRoom.innerHTML="";
+  usersInRoom.append(sendVar);
+ 
 
 });
 
