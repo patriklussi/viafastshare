@@ -36,7 +36,8 @@ io.on("connection", (socket) => {
     }
     // socket.broadcast.to(room).emit("name-list",nameList);
     // socket.to(room).emit('name-list', nameList);
-    io.emit("name-list", nameList, room);
+    io.emit("name-list",room);
+    socket.emit("name-list",room);
   });
 
   socket.on("room-name", (room) => {
@@ -74,6 +75,7 @@ io.on("connection", (socket) => {
       socket.emit("room-display", room);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList, room);
+     // peerList = []; 
     }
   });
   socket.on("test", (room) => {
