@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
       } else {
         nameList.push(sessionName);
        // nameList =[];
-       io.emit("name-list",room,sendVar);
+       io.emit("name-list",room);
       }
     
     }
@@ -77,12 +77,13 @@ io.on("connection", (socket) => {
       console.log("joined room", peerObj.id, room);
       console.log("nya arrayn ", roomCompleteList);
       socket.join(room);
-      peerList.push(peerObj.id);
-      socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
+      console.log("PEER OBJECT",peerObj);
+      peerList.push(peerObj);
+      socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id,room);
       socket.emit("room-display", room);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList, room);
-     // peerList = []; 
+    
     }
   });
   socket.on("test", (room) => {
@@ -98,7 +99,10 @@ io.on("connection", (socket) => {
     console.log("left room", userId);
     socket.leave(room);
     socket.broadcast.to(room).emit("user-disconnected", userId);
-    peerList = [];
+    peerList = peerList.filter((peers) => {
+      return peers.id !== userId;
+    });
+    console.log(peerList);
   });
 });
 
