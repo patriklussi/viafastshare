@@ -13,7 +13,7 @@ peerList = [];
 nameList = [];
 
 roomCompleteList = new Array(roomList.values(), nameList.values());
-
+//const roomMap = new Map();
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 
 app.get("/*", (req, res) => {
@@ -31,8 +31,9 @@ io.on("connection", (socket) => {
     if (nameList.includes(sessionName)) {
     } else {
       nameList.push(sessionName);
+     // roomMap.set(room,nameList);
+   
     }
-
     // socket.broadcast.to(room).emit("name-list",nameList);
     // socket.to(room).emit('name-list', nameList);
     io.emit("name-list", nameList, room);
@@ -68,8 +69,8 @@ io.on("connection", (socket) => {
       console.log("joined room", peerObj.id, room);
       console.log("nya arrayn ", roomCompleteList);
       socket.join(room);
-      peerList.push(peerObj.id);
-      socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id);
+      peerList.push(peerObj);
+      socket.broadcast.to(room).emit("user-connected", peerList, peerObj);
       socket.emit("room-display", room);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList, room);
