@@ -7,13 +7,14 @@ export default class extends abstractView {
   }
   async getHtml() {
     return ` 
-    <main class="createRoom">
+    <main id="mainCreateRoom" class="createRoom">
       <aside class="createRoom__aside"> 
       <h3 class="nav__header">Rooms</h3>
           <li class="createRoom__list" id="displayRoomName"></li>
         <p id="roomHolder"></p>
 
         <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
+        <p id="roomAlertP"></p>
         <h2 id="nameHolder"></h2>
       </aside>
 

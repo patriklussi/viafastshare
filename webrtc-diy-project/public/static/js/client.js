@@ -62,7 +62,7 @@ document.addEventListener("click", (event) => {
       nameBtn.style.display = "none";
       enterName.style.display = "none";
       info.innerHTML = "You're entering as " + enterNameValue;
-      peerObj.name = enterNameValue;
+      
       socket.emit("display-name");
       //  nameHolder.innerHTML = "Du är inloggad som" + " " + enterNameValue;
     } else {
@@ -74,9 +74,21 @@ document.addEventListener("click", (event) => {
   }
 });
 
+setInterval(() => {
+  displayUserName();
+}, 100);
+
+
+function displayUserName(){
+  const nameHolder = document.querySelector("#nameHolder");
+  let localName = JSON.parse(window.sessionStorage.getItem("names"));
+  nameHolder.innerHTML = localName;
+}
+
+
 socket.on("name-display", () => {
   let name = JSON.parse(window.sessionStorage.getItem("names"));
-  const nameHolder = document.querySelector("#nameHolder");
+
 });
 
 var ClickedRoomName;
@@ -84,49 +96,38 @@ socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
 
   displayRoomName.innerHTML = "";
-
-  for (let room of roomList) {
-    console.log("roomooooooooooooooooooooooo", room);
-    const roomName = document.createElement("a");
-    roomName.setAttribute("href", "/room");
-    roomName.classList.add("createRoom__list--item");
-    roomName.setAttribute("data-link", "  ");
-    roomName.innerHTML = room;
-
-    displayRoomName.append(roomName);
-
-    showRoomName = room;
-    /*
-    roomName.addEventListener("click",()=>{
-     console.log(room);
-     console.log("Clicked on this room",room);
+  if(roomList.length === 0){
+    console.log("There is no rooms");
+    alertRoomList()
+  } else {
+    for (let room of roomList) {
+      console.log("roomooooooooooooooooooooooo", room);
+      const roomName = document.createElement("a");
+      roomName.setAttribute("href", "/room");
+      roomName.classList.add("createRoom__list--item");
+      roomName.setAttribute("data-link", "  ");
+      roomName.innerHTML = room;
+  
+      displayRoomName.append(roomName);
+  
+      showRoomName = room;
+      roomName.addEventListener("click", () => {
+        console.log("Clicked on this room", room);
+        console.log("CLICKED ROOM", room);
+        let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
+        ClickedRoomName = room;
+        peerObj.name = sessionName;
+        socket.emit("send-name", sessionName, room);
+        socket.emit("join-room", peerObj, room);
+        socket.emit("clear");
+        socket.emit("test", room);
+      });
      
-     let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
-     ClickedRoomName = room;
-     socket.emit("send-name", sessionName, room);
-     socket.emit("join-room", peerObj, room);
-     socket.emit("clear");
-     connectToAnotherUser(users);
-    });
-    /*
-    */
-    roomName.addEventListener("click", () => {
-      //   document.addEventListener("click", (e) => {
-      //   if (e.target.matches(".createRoom__list--item")) {
-      console.log("Clicked on this room", room);
-      console.log("CLICKED ROOM", room);
-      let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
-      ClickedRoomName = room;
-      socket.emit("send-name", sessionName, room);
-      socket.emit("join-room", peerObj, room);
-      socket.emit("clear");
-      socket.emit("test", room);
-    });
-    // connectToAnotherUser(users);
-    //  }
-    //  });
+    }
   }
+  
 });
+
 
 socket.on("call-function", (room) => {
   connectToAnotherUser(users, room);
@@ -208,6 +209,18 @@ socket.on("alert-room", (roomName) => {
     alert.innerHTML = " ";
   }, 3000);
 });
+
+
+function alertRoomList(){
+  const roomListAlert = document.querySelector("#roomAlertP");
+  roomListAlert.innerHTML = "There are no rooms yet ";
+  setTimeout(() => {
+    roomListAlert.innerHTML = " ";
+  }, 3000);
+
+
+}
+
 
 function alertName() {
   const alertName = document.querySelector("#alertName");
