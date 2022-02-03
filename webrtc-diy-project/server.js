@@ -28,23 +28,20 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-name", (sessionName, room) => {
- //   nameList = [];
-    console.log("RUM",room);
+    //   nameList = [];
+    console.log("RUM", room);
     if (nameList.includes(sessionName)) {
     } else {
-      if(nameList.includes(sessionName)){
-      
+      if (nameList.includes(sessionName)) {
       } else {
         nameList.push(sessionName);
-       // nameList =[];
-       io.emit("name-list",room);
+        // nameList =[];
+        io.emit("name-list", room);
       }
-    
     }
-    
+
     // socket.broadcast.to(room).emit("name-list",nameList);
     // socket.to(room).emit('name-list', nameList);
-
   });
 
   socket.on("room-name", (room) => {
@@ -77,13 +74,14 @@ io.on("connection", (socket) => {
       console.log("joined room", peerObj.id, room);
       console.log("nya arrayn ", roomCompleteList);
       socket.join(room);
-      console.log("PEER OBJECT",peerObj);
+      console.log("PEER OBJECT", peerObj);
       peerList.push(peerObj);
-      socket.broadcast.to(room).emit("user-connected", peerList, peerObj.id,room);
+      socket.broadcast
+        .to(room)
+        .emit("user-connected", peerList, peerObj.id, room);
       socket.emit("room-display", room);
       socket.emit("name", nameList);
       socket.emit("pushToLs", peerList, room);
-    
     }
   });
   socket.on("test", (room) => {
@@ -95,10 +93,16 @@ io.on("connection", (socket) => {
     console.log("hello");
     socket.broadcast.to(room).emit("disconnect-mediaconnection", userId);
   });
+  socket.on("delete-room", (room) => {
+    roomList = roomList.filter((roomName) => {
+      return roomName !== room;
+    });
+    console.log("removed room:", roomList);
+  });
   socket.on("leave-room", (room, userId) => {
     console.log("left room", userId);
     socket.leave(room);
-    socket.broadcast.to(room).emit("user-disconnected", userId);
+    socket.broadcast.to(room).emit("user-disconnected", userId, room);
     peerList = peerList.filter((peers) => {
       return peers.id !== userId;
     });
