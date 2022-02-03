@@ -22,11 +22,19 @@ myPeer.on("open", function (id) {
   peerObj.id = userIdYes;
   console.log(peerObj);
 });
+/*
+const roomNameInput = document.querySelector("#roomNameInput");
+roomNameInput.addEventListener("keyup", (event) => {
+  if (event.keyCode === 13) {
+    console.log("testing enter press on input");
+    event.preventDefault();
+    //document.getElementById("#roomNameButton").click();
+  }
+});*/
 
 let emptyArray = [];
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
-    const roomNameInput = document.querySelector("#roomNameInput");
     const room = roomNameInput.value;
     console.log("New room created with name: ", room);
     socket.emit("room-name", room);
@@ -73,10 +81,6 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
-
-setInterval(() => {
-  displayUserName();
-}, 100);
 
 function displayUserName() {
   const nameHolder = document.querySelector("#nameHolder");
