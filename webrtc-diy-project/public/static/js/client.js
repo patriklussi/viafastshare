@@ -29,6 +29,24 @@ roomNameInput.addEventListener("keyup", (event) => {
     //document.getElementById("#roomNameButton").click();
   }
 });*/
+document.addEventListener("keyup", (event) => {
+  if (event.target.matches("#roomNameInput")) {
+    if (event.key === "Enter") {
+      console.log("testar enter press on input");
+      event.preventDefault();
+      document.querySelector("#roomNameButton").click();
+    }
+  }
+});
+document.addEventListener("keyup", (event) => {
+  if (event.target.matches("#enterName")) {
+    if (event.key === "Enter") {
+      console.log("testar enter press on input");
+      event.preventDefault();
+      document.querySelector("#nameOKBtn").click();
+    }
+  }
+});
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
