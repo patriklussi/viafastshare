@@ -65,6 +65,16 @@ document.addEventListener("click", (event) => {
   }
 });
 
+document.addEventListener("keyup", (event) => {
+  if (event.target.matches("#connectCondition")) {
+    if (event.key === "Enter") {
+      console.log("testar enter press on button");
+      event.preventDefault();
+      document.querySelector("#connectCondition").click();
+    }
+  }
+});
+
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
