@@ -76,6 +76,7 @@ io.on("connection", (socket) => {
     console.log("removed room:", roomList);
   });
   socket.on("leave-room", (room, userId) => {
+ 
     console.log(userId, "left room");
     socket.leave(room);
     socket.broadcast.to(room).emit("user-disconnected", userId, room);

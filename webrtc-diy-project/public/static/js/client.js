@@ -274,11 +274,15 @@ socket.on("disconnect-mediaconnection", (userId) => {
 
 myPeer.on("call", (call) => {
   let video = document.createElement("video");
+  video.setAttribute("id","videoTag");
+  let fsButton = document.createElement("button");
+  fsButton.innerHTML = "Toggle fullscreen";
+  fsButton.setAttribute("id","fsButton");
   ingoingMediaConnections.set(call.peer, call);
   call.answer();
   console.log("Call answered");
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video);
+    addVideoStream(userVideoStream, video,fsButton);
   });
   call.on("close", () => {
     console.log("Closing!");
@@ -286,11 +290,13 @@ myPeer.on("call", (call) => {
   });
 });
 
-function addVideoStream(userVideoStream, video) {
+function addVideoStream(userVideoStream, video,fsButton) {
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
+  video.setAttribute("controls", "false");
   video.play();
   videoGrid.append(video);
+  videoGrid.append(fsButton);
 }
 
 document.addEventListener("click", (event) => {
@@ -343,3 +349,18 @@ function toggle(toggleNav) {
     document.getElementById("usersInRoom").style.display = "none";
   }
 }
+
+
+
+
+document.addEventListener("click",(event)=>{
+  var elem = document.getElementById("videoTag");
+  if(event.target.matches("#fsButton")){
+    if(elem.requestFullscreen){
+      elem.requestFullscreen();
+    } 
+    
+  }
+});
+
+
