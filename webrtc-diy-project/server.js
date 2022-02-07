@@ -30,8 +30,20 @@ io.on("connection", (socket) => {
     } else {
       roomList.push(room);
       peerList = [];
-    }
+    
+    } 
+
   });
+  
+
+  socket.onAny((eventName, ...args) => {
+    console.log("Hello is this working");
+    socket.emit("updateName");
+   
+  });
+  
+
+
 
   socket.on("join-room", (peerObj, room) => {
     console.log("UserID", peerObj);
@@ -40,11 +52,13 @@ io.on("connection", (socket) => {
       console.log("joined room: ", peerObj.id, room);
       socket.join(room);
       peerList.push(peerObj);
+      socket.emit("pushToLs", peerList, room);
+      socket.emit("updateNameDisplay",room);
       socket.broadcast
         .to(room)
         .emit("user-connected", peerList, peerObj.id, room);
       socket.emit("room-display", room);
-      socket.emit("pushToLs", peerList, room);
+  
     }
   });
   socket.on("call", (room) => {
