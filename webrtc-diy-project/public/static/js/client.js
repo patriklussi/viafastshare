@@ -293,7 +293,7 @@ myPeer.on("call", (call) => {
 function addVideoStream(userVideoStream, video, fsButton) {
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
-  video.setAttribute("controls", "false");
+
   video.play();
   videoGrid.append(video);
   videoGrid.append(fsButton);
