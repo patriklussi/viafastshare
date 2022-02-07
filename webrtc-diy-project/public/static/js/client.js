@@ -98,10 +98,9 @@ document.addEventListener("click", (event) => {
   }
 });
 
-
 function displayUserName() {
   const nameHolder = document.querySelector("#nameHolder");
-  nameHolder.innerHTML = ""; 
+  nameHolder.innerHTML = "";
   let localName = JSON.parse(window.sessionStorage.getItem("names"));
   nameHolder.innerHTML = localName;
 }
@@ -109,7 +108,7 @@ function displayUserName() {
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
- // displayUserName();
+  // displayUserName();
   displayRoomName.innerHTML = "";
   if (roomList.length === 0) {
     alertRoomList();
@@ -160,12 +159,12 @@ socket.on("pushToLs", (peerList, room) => {
   let temp = JSON.parse(window.localStorage.getItem(room));
   temp = peerList;
   window.localStorage.setItem(room, JSON.stringify(temp));
- // updateUsers(room);
+  // updateUsers(room);
   console.log("after");
 });
 
-socket.on("updateNameDisplay",(room)=>{
-updateUsers(room);
+socket.on("updateNameDisplay", (room) => {
+  updateUsers(room);
 });
 
 let constraints = {
@@ -176,17 +175,17 @@ let constraints = {
 };
 
 function updateUsers(room) {
-  console.log("ROOM NAME",room);
+  console.log("ROOM NAME", room);
   let peers = JSON.parse(window.localStorage.getItem(room));
   const usersInRoom = document.querySelector("#usersInRoom");
-  console.log("PEERS",peers);
-   usersInRoom.innerHTML = "";
+  console.log("PEERS", peers);
+  usersInRoom.innerHTML = "";
   for (let peer of peers) {
     usersInRoom.append(peer.name);
   }
 }
 
-socket.on("updateName",()=>{
+socket.on("updateName", () => {
   console.log("hello");
   displayUserName();
 });
@@ -274,15 +273,16 @@ socket.on("disconnect-mediaconnection", (userId) => {
 
 myPeer.on("call", (call) => {
   let video = document.createElement("video");
-  video.setAttribute("id","videoTag");
+  video.setAttribute("id", "videoTag");
   let fsButton = document.createElement("button");
   fsButton.innerHTML = "Toggle fullscreen";
-  fsButton.setAttribute("id","fsButton");
+  fsButton.setAttribute("id", "fsButton");
+  fsButton.classList.add("button--light");
   ingoingMediaConnections.set(call.peer, call);
   call.answer();
   console.log("Call answered");
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video,fsButton);
+    addVideoStream(userVideoStream, video, fsButton);
   });
   call.on("close", () => {
     console.log("Closing!");
@@ -290,7 +290,7 @@ myPeer.on("call", (call) => {
   });
 });
 
-function addVideoStream(userVideoStream, video,fsButton) {
+function addVideoStream(userVideoStream, video, fsButton) {
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
   video.setAttribute("controls", "false");
@@ -350,17 +350,11 @@ function toggle(toggleNav) {
   }
 }
 
-
-
-
-document.addEventListener("click",(event)=>{
+document.addEventListener("click", (event) => {
   var elem = document.getElementById("videoTag");
-  if(event.target.matches("#fsButton")){
-    if(elem.requestFullscreen){
+  if (event.target.matches("#fsButton")) {
+    if (elem.requestFullscreen) {
       elem.requestFullscreen();
-    } 
-    
+    }
   }
 });
-
-
