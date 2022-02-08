@@ -1,0 +1,27 @@
+.overlay {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(49, 49, 49);
+  overflow-x: hidden;
+}
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  color: #f1f1f1;
+}
+
+#connectCondition{
+  display: none;
+}
+
+.test {
+  display: none;
+}
