@@ -9,7 +9,7 @@ roomList = [];
 peerList = [];
 nameList = [];
 
-roomCompleteList = new Array(roomList.values(), nameList.values());
+//roomCompleteList = new Array(roomList.values(), nameList.values());
 
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 

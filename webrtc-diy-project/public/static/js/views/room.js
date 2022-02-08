@@ -8,7 +8,7 @@ export default class extends abstractView {
 
   async getHtml() {
     return `
-    <main class="room">
+    <main id="mainRoom" class="room">
       
       <aside id="roomAside" class="room__aside"> 
       <p id="navBtn" class="nav__button">close</p>

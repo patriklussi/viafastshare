@@ -65,7 +65,7 @@ document.addEventListener("click", (event) => {
   }
 });
 
-document.addEventListener("keyup", (event) => {
+/*document.addEventListener("keyup", (event) => {
   if (event.target.matches("#connectCondition")) {
     if (event.key === "Enter") {
       console.log("testar enter press on button");
@@ -73,7 +73,7 @@ document.addEventListener("keyup", (event) => {
       document.querySelector("#connectCondition").click();
     }
   }
-});
+});*/
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
@@ -97,6 +97,23 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#connectCondition")) {
+    setTimeout(() => {
+      displayUserName();
+    }, 10);
+  }
+});
+
+window.onload = function () {
+  if (window.matches("#mainCreateRoom")) {
+    console.log("check to se if window matches main");
+    setTimeout(() => {
+      displayUserName();
+    }, 500);
+  }
+};
 
 function displayUserName() {
   const nameHolder = document.querySelector("#nameHolder");
@@ -339,7 +356,8 @@ function toggle(toggleNav) {
     document.getElementById("navBtn").style.alignSelf = "flex-end";
     document.getElementById("disconnectButton").style.display = "block";
     document.getElementById("roomTitle").style.display = "block";
-    document.getElementById("usersInRoom").style.display = "none";
+    document.getElementById("usersInRoom").style.display = "block";
+    document.getElementById("nameHolder").style.display = "block";
   } else {
     toggleNav.innerHTML = "Open";
     document.getElementById("roomAside").style.width = "80px";
@@ -347,6 +365,7 @@ function toggle(toggleNav) {
     document.getElementById("disconnectButton").style.display = "none";
     document.getElementById("roomTitle").style.display = "none";
     document.getElementById("usersInRoom").style.display = "none";
+    document.getElementById("nameHolder").style.display = "none";
   }
 }
 
