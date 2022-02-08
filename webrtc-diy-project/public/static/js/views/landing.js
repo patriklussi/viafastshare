@@ -8,7 +8,7 @@ export default class extends abstractView {
 
   async getHtml() {
     return `
-   <main class="landing">
+   <main  id="landing" class="landing">
     <aside class="landing__card"> 
       <h1>Welcome <br> to this share application!</h1>
     </aside>

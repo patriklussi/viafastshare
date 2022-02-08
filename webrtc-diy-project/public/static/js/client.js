@@ -77,7 +77,10 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
+ 
     const enterName = document.querySelector("#enterName");
+
+
 
     console.log("username " + enterName.value + " was created");
     window.sessionStorage.setItem("names", JSON.stringify(enterName.value));
@@ -106,14 +109,14 @@ document.addEventListener("click", (event) => {
   }
 });
 
+
+
 window.onload = function () {
-  if (window.matches("#mainCreateRoom")) {
-    console.log("check to se if window matches main");
     setTimeout(() => {
       displayUserName();
-    }, 500);
-  }
+    }, 10);
 };
+
 
 function displayUserName() {
   const nameHolder = document.querySelector("#nameHolder");
@@ -336,10 +339,16 @@ socket.on("user-disconnected", (userId, room) => {
   });
 
   window.localStorage.setItem(room, JSON.stringify(peerList));
+  let deleteBtn = document.querySelector("#disconnectButton");
   if (peerList.length === 1) {
-    let deleteBtn = document.querySelector("#disconnectButton");
+    console.log("EHJAWHJDhj")
     deleteBtn.innerHTML = "delete room";
-    socket.emit("delete-room", room);
+
+    deleteBtn.addEventListener("click",()=>{
+      socket.emit("delete-room", room);
+    })
+ 
+ 
   }
 });
 document.addEventListener("click", (event) => {
