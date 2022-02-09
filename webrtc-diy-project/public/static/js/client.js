@@ -77,13 +77,9 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
- 
     const enterName = document.querySelector("#enterName");
-
-
-
     console.log("username " + enterName.value + " was created");
-    window.sessionStorage.setItem("names", JSON.stringify(enterName.value));
+    window.sessionStorage.setItem("names",enterName.value);
     const connectBtn = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
     const info = document.querySelector("#registerInfo");
@@ -104,19 +100,20 @@ document.addEventListener("click", (event) => {
 document.addEventListener("click", (event) => {
   if (event.target.matches("#connectCondition")) {
     setTimeout(() => {
-      displayUserName();
+      //displayUserName();
     }, 10);
   }
 });
 
-
-
-window.onload = function () {
-    setTimeout(() => {
-      displayUserName();
-    }, 10);
+window.onload = function (event) {
+  setTimeout(() => {
+    //displayUserName();
+  }, 10);
 };
 
+// function getUserName() {
+//   return window.sessionStorage.getItem("names");
+// }
 
 function displayUserName() {
   const nameHolder = document.querySelector("#nameHolder");
@@ -341,14 +338,12 @@ socket.on("user-disconnected", (userId, room) => {
   window.localStorage.setItem(room, JSON.stringify(peerList));
   let deleteBtn = document.querySelector("#disconnectButton");
   if (peerList.length === 1) {
-    console.log("EHJAWHJDhj")
+    console.log("EHJAWHJDhj");
     deleteBtn.innerHTML = "delete room";
 
-    deleteBtn.addEventListener("click",()=>{
+    deleteBtn.addEventListener("click", () => {
       socket.emit("delete-room", room);
-    })
- 
- 
+    });
   }
 });
 document.addEventListener("click", (event) => {
