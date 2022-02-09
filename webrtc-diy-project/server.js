@@ -32,11 +32,12 @@ io.on("connection", (socket) => {
       peerList = [];
     }
   });
-
+  /*
   socket.onAny((eventName, ...args) => {
     console.log("Hello is this working");
     socket.emit("updateName");
   });
+  */
 
   socket.on("join-room", (peerObj, room) => {
     console.log("UserID", peerObj);

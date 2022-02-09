@@ -97,31 +97,6 @@ document.addEventListener("click", (event) => {
   }
 });
 
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#connectCondition")) {
-    setTimeout(() => {
-      //displayUserName();
-    }, 10);
-  }
-});
-
-window.onload = function (event) {
-  setTimeout(() => {
-    //displayUserName();
-  }, 10);
-};
-
-// function getUserName() {
-//   return window.sessionStorage.getItem("names");
-// }
-
-function displayUserName() {
-  const nameHolder = document.querySelector("#nameHolder");
-  nameHolder.innerHTML = "";
-  let localName = JSON.parse(window.sessionStorage.getItem("names"));
-  nameHolder.innerHTML = localName;
-}
-
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
@@ -142,7 +117,7 @@ socket.on("sendRoomArray", (roomList) => {
       showRoomName = room;
       roomName.addEventListener("click", () => {
         console.log("CLICKED ROOM", room);
-        let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
+        let sessionName = window.sessionStorage.getItem("names");
         ClickedRoomName = room;
         peerObj.name = sessionName;
         socket.emit("send-name", sessionName, room);
