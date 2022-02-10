@@ -5,6 +5,11 @@ export default class extends abstractView {
     super();
     this.setTitle("Create Room");
   }
+
+  getUserName() {
+    return window.sessionStorage.getItem("names");
+  }
+
   async getHtml() {
     return ` 
     <main id="mainCreateRoom" class="createRoom">
@@ -15,7 +20,7 @@ export default class extends abstractView {
 
         <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
         <p id="roomAlertP"></p>
-        <h2 id="nameHolder"></h2>
+        <h2 id="nameHolder">${this.getUserName()}</h2>
       </aside>
 
       <article class="createRoom__form"> 

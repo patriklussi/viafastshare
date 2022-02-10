@@ -1,7 +1,7 @@
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
-const socket = io();
+const socket = io("https://viafastshare.herokuapp.com/");
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
@@ -20,15 +20,7 @@ myPeer.on("open", function (id) {
   userIdYes = id;
   peerObj.id = userIdYes;
 });
-/*
-const roomNameInput = document.querySelector("#roomNameInput");
-roomNameInput.addEventListener("keyup", (event) => {
-  if (event.keyCode === 13) {
-    console.log("testing enter press on input");
-    event.preventDefault();
-    //document.getElementById("#roomNameButton").click();
-  }
-});*/
+
 document.addEventListener("keyup", (event) => {
   if (event.target.matches("#roomNameInput")) {
     if (event.key === "Enter") {
@@ -65,25 +57,12 @@ document.addEventListener("click", (event) => {
   }
 });
 
-/*document.addEventListener("keyup", (event) => {
-  if (event.target.matches("#connectCondition")) {
-    if (event.key === "Enter") {
-      console.log("testar enter press on button");
-      event.preventDefault();
-      document.querySelector("#connectCondition").click();
-    }
-  }
-});*/
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
- 
     const enterName = document.querySelector("#enterName");
-
-
-
     console.log("username " + enterName.value + " was created");
-    window.sessionStorage.setItem("names", JSON.stringify(enterName.value));
+    window.sessionStorage.setItem("names",enterName.value);
     const connectBtn = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
     const info = document.querySelector("#registerInfo");
@@ -100,30 +79,6 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
-
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#connectCondition")) {
-    setTimeout(() => {
-      displayUserName();
-    }, 10);
-  }
-});
-
-
-
-window.onload = function () {
-    setTimeout(() => {
-      displayUserName();
-    }, 10);
-};
-
-
-function displayUserName() {
-  const nameHolder = document.querySelector("#nameHolder");
-  nameHolder.innerHTML = "";
-  let localName = JSON.parse(window.sessionStorage.getItem("names"));
-  nameHolder.innerHTML = localName;
-}
 
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
@@ -145,7 +100,7 @@ socket.on("sendRoomArray", (roomList) => {
       showRoomName = room;
       roomName.addEventListener("click", () => {
         console.log("CLICKED ROOM", room);
-        let sessionName = JSON.parse(window.sessionStorage.getItem("names"));
+        let sessionName = window.sessionStorage.getItem("names");
         ClickedRoomName = room;
         peerObj.name = sessionName;
         socket.emit("send-name", sessionName, room);
@@ -341,14 +296,12 @@ socket.on("user-disconnected", (userId, room) => {
   window.localStorage.setItem(room, JSON.stringify(peerList));
   let deleteBtn = document.querySelector("#disconnectButton");
   if (peerList.length === 1) {
-    console.log("EHJAWHJDhj")
+    console.log("EHJAWHJDhj");
     deleteBtn.innerHTML = "delete room";
 
-    deleteBtn.addEventListener("click",()=>{
+    deleteBtn.addEventListener("click", () => {
       socket.emit("delete-room", room);
-    })
- 
- 
+    });
   }
 });
 document.addEventListener("click", (event) => {

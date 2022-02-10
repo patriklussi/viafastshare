@@ -4,6 +4,9 @@ export default class extends abstractView {
   constructor() {
     super();
     this.setTitle("Room");
+  } 
+  getUserName() {
+    return window.sessionStorage.getItem("names");
   }
 
   async getHtml() {
@@ -16,7 +19,7 @@ export default class extends abstractView {
         <h2 id="usersInRoom"> </h2>
         <p id="roomHolder"></p>
         <a class="button--light button--small"  id="disconnectButton"  href="/createRoom" data-link>Leave room </a> 
-        <h2 id="nameHolder"></h2>
+        <h2 id="nameHolder">${this.getUserName()}</h2>
       </aside>
   
       <section class="room__video">
