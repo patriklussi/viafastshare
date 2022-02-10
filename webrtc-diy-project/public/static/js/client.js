@@ -38,7 +38,7 @@ document.addEventListener("keyup", (event) => {
       document.querySelector("#nameOKBtn").click();
     }
   }
-});
+})
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
