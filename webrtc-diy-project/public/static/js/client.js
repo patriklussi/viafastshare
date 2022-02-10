@@ -1,7 +1,7 @@
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
-const socket = io();
+const socket = io("https://viafastshare.herokuapp.com/");
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
