@@ -20,15 +20,7 @@ myPeer.on("open", function (id) {
   userIdYes = id;
   peerObj.id = userIdYes;
 });
-/*
-const roomNameInput = document.querySelector("#roomNameInput");
-roomNameInput.addEventListener("keyup", (event) => {
-  if (event.keyCode === 13) {
-    console.log("testing enter press on input");
-    event.preventDefault();
-    //document.getElementById("#roomNameButton").click();
-  }
-});*/
+
 document.addEventListener("keyup", (event) => {
   if (event.target.matches("#roomNameInput")) {
     if (event.key === "Enter") {
@@ -65,15 +57,6 @@ document.addEventListener("click", (event) => {
   }
 });
 
-/*document.addEventListener("keyup", (event) => {
-  if (event.target.matches("#connectCondition")) {
-    if (event.key === "Enter") {
-      console.log("testar enter press on button");
-      event.preventDefault();
-      document.querySelector("#connectCondition").click();
-    }
-  }
-});*/
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
