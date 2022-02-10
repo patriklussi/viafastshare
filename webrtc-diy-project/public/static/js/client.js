@@ -122,8 +122,16 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("Current mediaConnections: ", ingoingMediaConnections);
   console.log("HELLO THERE");
   updateUsers(room);
+  pushToLocalStorage(peerList,room);
   console.log("before");
 });
+function pushToLocalStorage(peerList,room){
+  let temp = JSON.parse(window.localStorage.getItem(room));
+  temp = peerList;
+  window.localStorage.setItem(room, JSON.stringify(temp));
+  // updateUsers(room);
+  console.log("after");
+}
 
 socket.on("room-display", function (room) {
   let roomTitle = document.querySelector("#roomTitle");
@@ -131,11 +139,7 @@ socket.on("room-display", function (room) {
 });
 
 socket.on("pushToLs", (peerList, room) => {
-  let temp = JSON.parse(window.localStorage.getItem(room));
-  temp = peerList;
-  window.localStorage.setItem(room, JSON.stringify(temp));
-  // updateUsers(room);
-  console.log("after");
+pushToLocalStorage(peerList,room);
 });
 
 socket.on("updateNameDisplay", (room) => {
