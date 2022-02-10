@@ -10,7 +10,7 @@ let emptyArray = [];
 var showRoomName;
 
 var myPeer = new Peer(undefined, {
-  host: "https://viafastshare.herokuapp.com/",
+  host: '0.peerjs.com',
   port: "443",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
 });
