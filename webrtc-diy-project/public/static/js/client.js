@@ -1,7 +1,8 @@
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
 
-const socket = io("https://viafastshare.herokuapp.com/");
+//const socket = io("https://viafastshare.herokuapp.com/");
+const socket = io();
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
@@ -10,8 +11,10 @@ let emptyArray = [];
 var showRoomName;
 
 var myPeer = new Peer(undefined, {
-  host: '0.peerjs.com',
-  port: "443",
+  //host: "0.peerjs.com",
+  host: "/",
+  //port: "443",
+  port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
 });
 var userIdYes;
@@ -38,7 +41,7 @@ document.addEventListener("keyup", (event) => {
       document.querySelector("#nameOKBtn").click();
     }
   }
-})
+});
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
@@ -57,12 +60,11 @@ document.addEventListener("click", (event) => {
   }
 });
 
-
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
     console.log("username " + enterName.value + " was created");
-    window.sessionStorage.setItem("names",enterName.value);
+    window.sessionStorage.setItem("names", enterName.value);
     const connectBtn = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
     const info = document.querySelector("#registerInfo");
@@ -122,10 +124,10 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("Current mediaConnections: ", ingoingMediaConnections);
   console.log("HELLO THERE");
   updateUsers(room);
-  pushToLocalStorage(peerList,room);
+  pushToLocalStorage(peerList, room);
   console.log("before");
 });
-function pushToLocalStorage(peerList,room){
+function pushToLocalStorage(peerList, room) {
   let temp = JSON.parse(window.localStorage.getItem(room));
   temp = peerList;
   window.localStorage.setItem(room, JSON.stringify(temp));
@@ -139,7 +141,7 @@ socket.on("room-display", function (room) {
 });
 
 socket.on("pushToLs", (peerList, room) => {
-pushToLocalStorage(peerList,room);
+  pushToLocalStorage(peerList, room);
 });
 
 socket.on("updateNameDisplay", (room) => {
@@ -174,13 +176,21 @@ function connectToAnotherUser(room) {
 
   console.log("Room name: ", room);
   document.addEventListener("click", (event) => {
+    let alertYouAreSharing = document.createElement("p");
     if (event.target.matches("#shareButton")) {
       if (shareButton.innerText == "Start sharing") {
         shareMedia(room);
         shareButton.innerHTML = "Stop sharing";
-      } else {
+
+        alertYouAreSharing.innerHTML = "You are sharing your screen!";
+        document
+          .querySelector("#roomContorlOptions")
+          .append(alertYouAreSharing);
+      } else if (shareButton.innerText == "Stop sharing") {
         shareButton.innerHTML = "Start sharing";
         stopShare();
+        alertYouAreSharing.remove();
+        console.log(alertYouAreSharing);
       }
     }
   });
@@ -266,6 +276,7 @@ myPeer.on("call", (call) => {
   call.on("close", () => {
     console.log("Closing!");
     video.remove();
+    fsButton.remove();
   });
 });
 

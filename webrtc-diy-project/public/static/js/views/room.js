@@ -4,7 +4,7 @@ export default class extends abstractView {
   constructor() {
     super();
     this.setTitle("Room");
-  } 
+  }
   getUserName() {
     return window.sessionStorage.getItem("names");
   }
@@ -24,7 +24,7 @@ export default class extends abstractView {
   
       <section class="room__video">
         <div id="videoGrid" class="video"> </div>
-        <article class="room__options">  
+        <article id="roomContorlOptions" class="room__options">  
           <button id="shareButton" class="button--light" > Start sharing </button>
     
 
