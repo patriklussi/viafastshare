@@ -1,5 +1,10 @@
 const roomNameButton = document.querySelector("#roomNameButton");
 var nameOKBtn = document.getElementById("nameOKBtn");
+let deleteRoomBtn = document.createElement("a");
+deleteRoomBtn.setAttribute("id", "deleteButton");
+deleteRoomBtn.setAttribute("href", "/createRoom");
+deleteRoomBtn.classList.add("button--light");
+deleteRoomBtn.setAttribute("data-link", "  ");
 
 //const socket = io("https://viafastshare.herokuapp.com/");
 const socket = io();
@@ -123,6 +128,7 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("user " + userId + " has connected");
   console.log("Current mediaConnections: ", ingoingMediaConnections);
   console.log("HELLO THERE");
+  deleteRoomBtn.remove();
   updateUsers(room);
   pushToLocalStorage(peerList, room);
   console.log("before");
@@ -175,22 +181,18 @@ function connectToAnotherUser(room) {
   const shareButton = document.querySelector("#shareButton");
 
   console.log("Room name: ", room);
+
   document.addEventListener("click", (event) => {
-    let alertYouAreSharing = document.createElement("p");
     if (event.target.matches("#shareButton")) {
+      let alertYouAreSharing = document.querySelector("#alertShare");
       if (shareButton.innerText == "Start sharing") {
         shareMedia(room);
         shareButton.innerHTML = "Stop sharing";
-
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
-        document
-          .querySelector("#roomContorlOptions")
-          .append(alertYouAreSharing);
       } else if (shareButton.innerText == "Stop sharing") {
         shareButton.innerHTML = "Start sharing";
         stopShare();
-        alertYouAreSharing.remove();
-        console.log(alertYouAreSharing);
+        alertYouAreSharing.innerHTML = "";
       }
     }
   });
@@ -309,12 +311,15 @@ socket.on("user-disconnected", (userId, room) => {
   });
 
   window.localStorage.setItem(room, JSON.stringify(peerList));
-  let deleteBtn = document.querySelector("#disconnectButton");
+  //let deleteBtn = document.querySelector("#disconnectButton");
+
+  let roomAside = document.querySelector("#roomAside");
   if (peerList.length === 1) {
     console.log("EHJAWHJDhj");
-    deleteBtn.innerHTML = "delete room";
 
-    deleteBtn.addEventListener("click", () => {
+    deleteRoomBtn.innerHTML = "delete room";
+    roomAside.append(deleteRoomBtn);
+    deleteRoomBtn.addEventListener("click", () => {
       socket.emit("delete-room", room);
     });
   }

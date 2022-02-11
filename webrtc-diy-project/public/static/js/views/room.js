@@ -24,6 +24,7 @@ export default class extends abstractView {
   
       <section class="room__video">
         <div id="videoGrid" class="video"> </div>
+        <p id="alertShare" ></p>
         <article id="roomContorlOptions" class="room__options">  
           <button id="shareButton" class="button--light" > Start sharing </button>
     
