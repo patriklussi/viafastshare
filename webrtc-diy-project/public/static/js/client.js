@@ -319,6 +319,12 @@ function addVideoStream(userVideoStream, video, fsButton,callingPeer,caller) {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#disconnectButton")) {
+    if(window.srcObject != null){
+      window.srcObject.getTracks().forEach(function (track) {
+        stopShare();
+      });
+    }
+   
     socket.emit("leave-room", ClickedRoomName, userIdYes);
     let ls = window.localStorage.getItem(ClickedRoomName);
     let temp = JSON.parse(ls);
