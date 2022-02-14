@@ -275,6 +275,7 @@ socket.on("disconnect-mediaconnection", (userId) => {
 });
 
 myPeer.on("call", (call) => {
+  let caller = document.createElement("p");
   let video = document.createElement("video");
   video.setAttribute("id", "videoTag");
   let fsButton = document.createElement("button");
@@ -283,24 +284,37 @@ myPeer.on("call", (call) => {
   fsButton.classList.add("button--light");
   ingoingMediaConnections.set(call.peer, call);
   call.answer();
-  console.log("Call answered");
+  console.log("Call answered",call.peer);
+  let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, fsButton);
+    addVideoStream(userVideoStream, video, fsButton,callingPeer,caller);
   });
   call.on("close", () => {
     console.log("Closing!");
     video.remove();
+    caller.innerHTML = "";
     fsButton.remove();
   });
 });
 
-function addVideoStream(userVideoStream, video, fsButton) {
+function addVideoStream(userVideoStream, video, fsButton,callingPeer,caller) {
+ 
+  let roomAside = document.querySelector("#roomAside");
+  const peerList = JSON.parse(window.localStorage.getItem(ClickedRoomName));
+  for(let peers of peerList){
+    if(peers.id === callingPeer){
+      caller.innerHTML = peers.name + " is sharing" ;
+    }
+    
+  }
+  
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
-
+  
   video.play();
   videoGrid.append(video);
   videoGrid.append(fsButton);
+  roomAside.append(caller);
 }
 
 document.addEventListener("click", (event) => {
