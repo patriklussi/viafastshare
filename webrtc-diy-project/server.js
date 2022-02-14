@@ -7,9 +7,6 @@ const PORT = process.env.PORT || 3000;
 
 roomList = [];
 peerList = [];
-nameList = [];
-
-//roomCompleteList = new Array(roomList.values(), nameList.values());
 
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 

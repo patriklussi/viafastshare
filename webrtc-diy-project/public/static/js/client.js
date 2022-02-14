@@ -129,8 +129,8 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("Current mediaConnections: ", ingoingMediaConnections);
   console.log("HELLO THERE");
   deleteRoomBtn.remove();
-  updateUsers(room);
   pushToLocalStorage(peerList, room);
+  updateUsers(room);
   console.log("before");
 });
 function pushToLocalStorage(peerList, room) {
@@ -178,7 +178,19 @@ socket.on("updateName", () => {
 });
 
 function connectToAnotherUser(room) {
+  let peerList = JSON.parse(window.localStorage.getItem(room));
   const shareButton = document.querySelector("#shareButton");
+  let roomAside = document.querySelector("#roomAside");
+  if (peerList.length === 1) {
+    console.log("EHJAWHJDhj");
+
+    deleteRoomBtn.innerHTML = "delete room";
+    roomAside.append(deleteRoomBtn);
+    deleteRoomBtn.addEventListener("click", () => {
+      socket.emit("delete-room", room);
+    });
+  }
+
 
   console.log("Room name: ", room);
 
