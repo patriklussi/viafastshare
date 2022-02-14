@@ -372,6 +372,7 @@ function toggle(toggleNav) {
     document.getElementById("roomTitle").style.display = "block";
     document.getElementById("usersInRoom").style.display = "block";
     document.getElementById("nameHolder").style.display = "block";
+    deleteRoomBtn.style.display = "block";
   } else {
     toggleNav.innerHTML = "Open";
     document.getElementById("roomAside").style.width = "80px";
@@ -380,6 +381,7 @@ function toggle(toggleNav) {
     document.getElementById("roomTitle").style.display = "none";
     document.getElementById("usersInRoom").style.display = "none";
     document.getElementById("nameHolder").style.display = "none";
+    deleteRoomBtn.style.display = "none";
   }
 }
 
