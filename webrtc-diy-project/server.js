@@ -65,9 +65,17 @@ io.on("connection", (socket) => {
     });
     console.log("removed room:", roomList);
   });
-  socket.on("disconnect", (reason) => {
+  socket.on("disconnect", (ClickedRoomName, userIdYes) => {
+    socket.emit("user-disconnected");
+    for (let room of roomList) {
+      socket.leave(room);
+      socket.broadcast.to(room).emit("user-disconnected", room);
+    }
+    //socket.broadcast.to(room).emit("user-disconnected", userId, room);
     console.log("disconnected", socket.id);
+    console.log("Testar disconnect on refresh", ClickedRoomName, userIdYes);
   });
+
   socket.on("leave-room", (room, userId) => {
     console.log(userId, "left room");
     socket.leave(room);

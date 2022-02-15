@@ -273,6 +273,10 @@ socket.on("disconnect-mediaconnection", (userId) => {
   }
 });
 
+window.reload = function () {
+  socket.emit("disconnect", ClickedRoomName, userIdYes);
+};
+
 myPeer.on("call", (call) => {
   let caller = document.createElement("p");
   let video = document.createElement("video");
@@ -339,13 +343,12 @@ socket.on("user-disconnected", (userId, room) => {
     return peers.id !== userId;
   });
 
+  updateUsers(ClickedRoomName);
   window.localStorage.setItem(room, JSON.stringify(peerList));
   //let deleteBtn = document.querySelector("#disconnectButton");
 
   let roomAside = document.querySelector("#roomAside");
   if (peerList.length === 1) {
-    console.log("EHJAWHJDhj");
-
     deleteRoomBtn.innerHTML = "delete room";
     roomAside.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
