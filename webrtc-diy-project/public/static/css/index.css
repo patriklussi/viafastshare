@@ -99,6 +99,8 @@ h3 {
   flex-direction: column;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  min-height: 20%;
+  list-style: none;
 }
 .createRoom__list--item {
   margin: 0.5rem;
@@ -111,6 +113,19 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.createRoom__userContainer {
+  display: flex;
+  flex-direction: column;
+  height: 20%;
+  width: 100%;
+  justify-content: flex-end;
+}
+.createRoom__roomContainer {
+  height: 80%;
+  justify-content: space-between;
+}
+.createRoom__user {
 }
 
 .room__options {

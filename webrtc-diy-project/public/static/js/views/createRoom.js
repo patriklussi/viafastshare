@@ -15,13 +15,18 @@ export default class extends abstractView {
     <main id="mainCreateRoom" class="createRoom">
       <aside class="createRoom__aside"> 
       <h3 class="nav__header">Rooms</h3>
-          <li class="createRoom__list" id="displayRoomName"></li>
-        <p id="roomHolder"></p>
-
+      <section class="createRoom__roomContainer">
+          <ul class="createRoom__list" id="displayRoomName">
+            <li id="roomHolder"></li>
+          </ul>
         <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
         <p id="roomAlertP"></p>
-        <h2 id="nameHolder">${this.getUserName()}</h2>
-      </aside>
+      </section>  
+        <section class="createRoom__userContainer">
+          <img src="./assets/profile-icon.svg" alt="Icon" />
+          <h2 id="nameHolder" class="createRoom__user">${this.getUserName()}</h2>
+        </section>
+        </aside>
 
       <article class="createRoom__form"> 
         <h3 for="input">Create new room</h3>
