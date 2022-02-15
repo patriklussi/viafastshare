@@ -191,7 +191,6 @@ function connectToAnotherUser(room) {
     });
   }
 
-
   console.log("Room name: ", room);
 
   document.addEventListener("click", (event) => {
@@ -284,10 +283,10 @@ myPeer.on("call", (call) => {
   fsButton.classList.add("button--light");
   ingoingMediaConnections.set(call.peer, call);
   call.answer();
-  console.log("Call answered",call.peer);
+  console.log("Call answered", call.peer);
   let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, fsButton,callingPeer,caller);
+    addVideoStream(userVideoStream, video, fsButton, callingPeer, caller);
   });
   call.on("close", () => {
     console.log("Closing!");
@@ -297,20 +296,18 @@ myPeer.on("call", (call) => {
   });
 });
 
-function addVideoStream(userVideoStream, video, fsButton,callingPeer,caller) {
- 
+function addVideoStream(userVideoStream, video, fsButton, callingPeer, caller) {
   let roomAside = document.querySelector("#roomAside");
   const peerList = JSON.parse(window.localStorage.getItem(ClickedRoomName));
-  for(let peers of peerList){
-    if(peers.id === callingPeer){
-      caller.innerHTML = peers.name + " is sharing" ;
+  for (let peers of peerList) {
+    if (peers.id === callingPeer) {
+      caller.innerHTML = peers.name + " is sharing";
     }
-    
   }
-  
+
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
-  
+
   video.play();
   videoGrid.append(video);
   videoGrid.append(fsButton);
@@ -319,12 +316,12 @@ function addVideoStream(userVideoStream, video, fsButton,callingPeer,caller) {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#disconnectButton")) {
-    if(window.srcObject != null){
+    if (window.srcObject != null) {
       window.srcObject.getTracks().forEach(function (track) {
         stopShare();
       });
     }
-   
+
     socket.emit("leave-room", ClickedRoomName, userIdYes);
     let ls = window.localStorage.getItem(ClickedRoomName);
     let temp = JSON.parse(ls);

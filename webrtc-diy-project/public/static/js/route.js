@@ -32,14 +32,14 @@ const router = async () => {
   const view = new match.route.view();
   document.querySelector("#app").innerHTML = await view.getHtml();
 };
+
 window.addEventListener("popstate", router);
 
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.addEventListener("click", (e) => {
-    if (e.target.matches("[data-link]")) {
-      e.preventDefault();
-      navigateTo(e.target.href);
-    }
-  });
-  router();
+window.addEventListener("DOMContentLoaded", router);
+
+document.addEventListener("click", (e) => {
+  if (e.target.matches("[data-link]")) {
+    e.preventDefault();
+    navigateTo(e.target.href);
+  }
 });

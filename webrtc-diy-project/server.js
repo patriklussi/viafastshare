@@ -65,6 +65,9 @@ io.on("connection", (socket) => {
     });
     console.log("removed room:", roomList);
   });
+  socket.on("disconnect", (reason) => {
+    console.log("disconnected", socket.id);
+  });
   socket.on("leave-room", (room, userId) => {
     console.log(userId, "left room");
     socket.leave(room);
