@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 3000;
 
 roomList = [];
 peerList = [];
+anotherList = [];
+
 
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
 
@@ -37,6 +39,10 @@ io.on("connection", (socket) => {
     socket.emit("updateName");
   });
   */
+ socket.on("testing",(userId)=>{
+   anotherList.push(userId);
+  
+ })
 
   socket.on("join-room", (peerObj, room) => {
     console.log("UserID", peerObj);
@@ -45,6 +51,7 @@ io.on("connection", (socket) => {
       console.log("joined room: ", peerObj.id, room);
       console.log(peerList);
       socket.join(room);
+      peerObj.room = room;
       peerList.push(peerObj);
       console.log(peerList);
       socket.emit("pushToLs", peerList, room);
@@ -72,7 +79,8 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(peerList);
-      io.emit("sendTest",peerList);
+   
+      console.log(peerList);
     console.log("disconnected", socket.id);
     console.log("Testar disconnect on refresh");
   });
