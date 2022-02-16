@@ -3,7 +3,7 @@ var nameOKBtn = document.getElementById("nameOKBtn");
 let deleteRoomBtn = document.createElement("a");
 deleteRoomBtn.setAttribute("id", "deleteButton");
 deleteRoomBtn.setAttribute("href", "/createRoom");
-deleteRoomBtn.classList.add("button--light");
+deleteRoomBtn.classList.add("button--light", "button--small");
 deleteRoomBtn.setAttribute("data-link", "  ");
 
 //const socket = io("https://viafastshare.herokuapp.com/");
@@ -198,7 +198,7 @@ socket.on("updateName", () => {
 function connectToAnotherUser(room) {
   let peerList = JSON.parse(window.localStorage.getItem(room));
   const shareButton = document.querySelector("#shareButton");
-  let roomUsersList = document.querySelector("#roomUsers__list");
+  let roomUsersList = document.querySelector(".createRoom__roomContainer");
   if (peerList.length === 1) {
     console.log("EHJAWHJDhj");
 

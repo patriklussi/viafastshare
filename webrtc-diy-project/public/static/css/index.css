@@ -91,6 +91,7 @@ h3 {
   flex-direction: column;
   background-color: #404549;
   max-width: 300px;
+  width: 250px;
   padding: 2rem;
 }
 .room__aside {
@@ -197,6 +198,7 @@ h3 {
 .button--small {
   width: 10rem;
   margin-top: 1rem;
+  display: block;
 }
 video {
   width: 100%;
