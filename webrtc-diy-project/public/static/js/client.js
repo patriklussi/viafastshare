@@ -179,8 +179,17 @@ function updateUsers(room) {
   console.log("PEERS", peers);
   usersInRoom.innerHTML = "";
   for (let peer of peers) {
-    usersInRoom.append(peer.name);
-  }
+    if(peer.room === room){
+      console.log("OLD",peers);
+      peers = peers.filter((peer)=>{
+        return peer.room === room;
+      });
+      console.log("NEW",peers);
+      window.localStorage.setItem(peer.room, JSON.stringify(peers));
+      usersInRoom.append(peer.name);
+    }
+  
+  } 
 }
 
 socket.on("updateName", () => {

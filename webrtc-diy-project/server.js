@@ -43,8 +43,9 @@ io.on("connection", (socket) => {
     if (peerList.includes(peerObj.id)) {
     } else {
       console.log("joined room: ", peerObj.id, room);
-      console.log(peerList);
+   
       socket.join(room);
+      peerObj.room = room;
       peerList.push(peerObj);
       console.log(peerList);
       socket.emit("pushToLs", peerList, room);
