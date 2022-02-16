@@ -21,6 +21,8 @@ var myPeer = new Peer(undefined, {
   //port: "443",
   port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
+  
+
 });
 var userIdYes;
 myPeer.on("open", function (id) {
@@ -46,6 +48,14 @@ document.addEventListener("keyup", (event) => {
       document.querySelector("#nameOKBtn").click();
     }
   }
+});
+
+socket.on("test-message",(peerList,text)=>{
+  console.log(peerList,text);
+});
+
+socket.on("sendTest",(peerList)=>{
+console.log("Peerlist",peerList);
 });
 
 document.addEventListener("click", (event) => {
@@ -86,6 +96,7 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
+
 
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {

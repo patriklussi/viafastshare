@@ -16,6 +16,7 @@ app.get("/*", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("connected");
+  
 
   socket.on("sendArrayInfo", () => {
     socket.emit("sendRoomArray", roomList);
@@ -25,6 +26,7 @@ io.on("connection", (socket) => {
     if (roomList.includes(room)) {
       socket.emit("alert-room", room);
     } else {
+      console.log(peerList);
       roomList.push(room);
       peerList = [];
     }
@@ -41,8 +43,10 @@ io.on("connection", (socket) => {
     if (peerList.includes(peerObj.id)) {
     } else {
       console.log("joined room: ", peerObj.id, room);
+      console.log(peerList);
       socket.join(room);
       peerList.push(peerObj);
+      console.log(peerList);
       socket.emit("pushToLs", peerList, room);
       socket.emit("updateNameDisplay", room);
       socket.broadcast
@@ -65,16 +69,17 @@ io.on("connection", (socket) => {
     });
     console.log("removed room:", roomList);
   });
-  socket.on("disconnect", (ClickedRoomName, userIdYes) => {
-    socket.emit("user-disconnected");
-    for (let room of roomList) {
-      socket.leave(room);
-      socket.broadcast.to(room).emit("user-disconnected", room);
-    }
-    //socket.broadcast.to(room).emit("user-disconnected", userId, room);
+
+  socket.on("disconnect", () => {
+    console.log(peerList);
+      io.emit("sendTest",peerList);
     console.log("disconnected", socket.id);
-    console.log("Testar disconnect on refresh", ClickedRoomName, userIdYes);
+    console.log("Testar disconnect on refresh");
   });
+  
+
+    
+
 
   socket.on("leave-room", (room, userId) => {
     console.log(userId, "left room");
