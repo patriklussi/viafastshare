@@ -20,10 +20,9 @@ export default class extends abstractView {
             <li id="roomHolder"></li>
           </ul>
         <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
-        <p id="roomAlertP"></p>
+        <p id="roomAlertP" class="alert--light"></p>
       </section>  
         <section class="createRoom__userContainer">
-          <img src="./assets/profile-icon.svg" alt="Icon" />
           <h2 id="nameHolder" class="createRoom__user">${this.getUserName()}</h2>
         </section>
         </aside>
@@ -32,7 +31,7 @@ export default class extends abstractView {
         <h3 for="input">Create new room</h3>
         <input autocomplete="off" class="createRoom__input" id="roomNameInput" type="text"/>
         <button class="button--light" id="roomNameButton">Create</button>
-        <p id="alert"></p>
+        <p id="alert" class="alert--dark"></p>
 
       </article>
     </main>

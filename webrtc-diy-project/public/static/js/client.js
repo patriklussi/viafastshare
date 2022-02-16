@@ -21,8 +21,6 @@ var myPeer = new Peer(undefined, {
   //port: "443",
   port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
-  
-
 });
 var userIdYes;
 myPeer.on("open", function (id) {
@@ -50,12 +48,12 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
-socket.on("test-message",(peerList,text)=>{
-  console.log(peerList,text);
+socket.on("test-message", (peerList, text) => {
+  console.log(peerList, text);
 });
 
-socket.on("sendTest",(peerList)=>{
-console.log("Peerlist",peerList);
+socket.on("sendTest", (peerList) => {
+  console.log("Peerlist", peerList);
 });
 
 document.addEventListener("click", (event) => {
@@ -96,7 +94,6 @@ document.addEventListener("click", (event) => {
     enterName.value = "";
   }
 });
-
 
 var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
@@ -179,17 +176,18 @@ function updateUsers(room) {
   console.log("PEERS", peers);
   usersInRoom.innerHTML = "";
   for (let peer of peers) {
-    if(peer.room === room){
-      console.log("OLD",peers);
-      peers = peers.filter((peer)=>{
+    let userNameList = document.createElement("li");
+    if (peer.room === room) {
+      console.log("OLD", peers);
+      peers = peers.filter((peer) => {
         return peer.room === room;
       });
-      console.log("NEW",peers);
+      console.log("NEW", peers);
       window.localStorage.setItem(peer.room, JSON.stringify(peers));
-      usersInRoom.append(peer.name);
+      userNameList.innerHTML = peer.name;
+      usersInRoom.append(userNameList);
     }
-  
-  } 
+  }
 }
 
 socket.on("updateName", () => {
@@ -200,12 +198,12 @@ socket.on("updateName", () => {
 function connectToAnotherUser(room) {
   let peerList = JSON.parse(window.localStorage.getItem(room));
   const shareButton = document.querySelector("#shareButton");
-  let roomAside = document.querySelector("#roomAside");
+  let roomUsersList = document.querySelector("#roomUsers__list");
   if (peerList.length === 1) {
     console.log("EHJAWHJDhj");
 
     deleteRoomBtn.innerHTML = "delete room";
-    roomAside.append(deleteRoomBtn);
+    roomUsersList.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
       socket.emit("delete-room", room);
     });

@@ -16,7 +16,7 @@ export default class extends abstractView {
       <h3 id="registerInfo"> Please enter your name! </h3>
         <input autocomplete="off" class="landing__input" placeholder="Name" type="text" id="enterName" />
         <button class="button" id="nameOKBtn" >Add your name</button>
-        <p id="alertName"></p>
+        <p id="alertName" class="alert--dark"></p>
         <br>
         <a id="connectCondition" href="/createRoom" data-link>Connect </a> 
       </article>
