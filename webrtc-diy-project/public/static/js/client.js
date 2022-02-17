@@ -380,10 +380,8 @@ socket.on("user-disconnected", (userId, room) => {
     return peers.id !== userId;
   });
 
-  updateUsers(ClickedRoomName);
   window.localStorage.setItem(room, JSON.stringify(peerList));
   //let deleteBtn = document.querySelector("#disconnectButton");
-
   let roomAside = document.querySelector(".createRoom__roomContainer");
   if (peerList.length === 1) {
     deleteRoomBtn.innerHTML = "Delete room";
@@ -392,6 +390,7 @@ socket.on("user-disconnected", (userId, room) => {
       socket.emit("delete-room", room);
     });
   }
+  updateUsers(ClickedRoomName);
 });
 document.addEventListener("click", (event) => {
   if (event.target.matches("#navBtn")) {
