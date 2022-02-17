@@ -2,10 +2,15 @@ import CreateRoom from "./views/createRoom.js";
 import Landing from "./views/landing.js";
 import Room from "./views/room.js";
 
+const roomTitle = document.querySelector("#roomTitle");
+console.log("Room",roomTitle);
+
 const navigateTo = (url) => {
   history.pushState(null, null, url);
   router();
 };
+
+let name = window.sessionStorage.getItem("names");
 
 const router = async () => {
   const routes = [
@@ -36,6 +41,11 @@ const router = async () => {
 window.addEventListener("popstate", router);
 
 window.addEventListener("DOMContentLoaded", router);
+if(name === null){
+  navigateTo("/");
+} else if(roomTitle === null){
+  navigateTo("/createRoom");
+}
 
 document.addEventListener("click", (e) => {
   if (e.target.matches("[data-link]")) {
