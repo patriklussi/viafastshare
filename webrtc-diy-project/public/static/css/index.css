@@ -32,8 +32,7 @@ h1 {
 }
 h3 {
   color: #404549;
-  border-bottom-style: solid;
-  border-width: 2px;
+  margin-bottom: 0.3rem;
 }
 
 .landing {
@@ -59,6 +58,7 @@ h3 {
   align-items: center;
   justify-content: center;
   margin-right: 1rem;
+  margin-top: -2rem;
 }
 
 .landing__input {
@@ -111,6 +111,7 @@ h3 {
 .createRoom__list--item {
   margin: 0.5rem;
   align-self: start;
+  font-size: 1.2rem;
 }
 .createRoom__form {
   width: 100%;
@@ -120,13 +121,11 @@ h3 {
   justify-content: center;
   align-items: center;
 }
-.createRoom__userContainer,
-.roomUsers__container {
+.createRoom__userContainer {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-start;
   height: 20%;
   width: 100%;
-  justify-content: flex-end;
 }
 .createRoom__roomContainer,
 .roomUsers__container {
@@ -151,7 +150,6 @@ h3 {
   margin-top: 4rem;
 }
 .nav__header {
-  border-bottom-style: solid;
   color: #fff;
   align-self: flex-start;
   font-size: 1.5rem;
@@ -218,6 +216,14 @@ video {
   align-items: center;
 }
 
+#nameHolder {
+  align-self: end;
+  margin-left: 1rem;
+}
+
+#userIcon {
+  align-self: end;
+}
 #connectCondition {
   display: none;
   color: #fff;
@@ -227,6 +233,7 @@ video {
   border-radius: 4px;
   text-decoration: none;
   padding: 0.4rem;
+  font-weight: bold;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap");

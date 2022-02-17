@@ -317,7 +317,7 @@ myPeer.on("call", (call) => {
   let video = document.createElement("video");
   video.setAttribute("id", "videoTag");
   let fsButton = document.createElement("button");
-  fsButton.innerHTML = "Toggle fullscreen";
+  fsButton.innerHTML = "Fullscreen";
   fsButton.setAttribute("id", "fsButton");
   fsButton.classList.add("button--light");
   ingoingMediaConnections.set(call.peer, call);
@@ -408,6 +408,7 @@ function toggle(toggleNav) {
     document.getElementById("roomTitle").style.display = "block";
     document.getElementById("usersInRoom").style.display = "block";
     document.getElementById("nameHolder").style.display = "block";
+    document.getElementById("svgLine").style.display = "block";
     deleteRoomBtn.style.display = "flex";
   } else {
     toggleNav.innerHTML = "Open";
@@ -417,6 +418,8 @@ function toggle(toggleNav) {
     document.getElementById("roomTitle").style.display = "none";
     document.getElementById("usersInRoom").style.display = "none";
     document.getElementById("nameHolder").style.display = "none";
+    document.getElementById("svgLine").style.display = "none";
+
     deleteRoomBtn.style.display = "none";
   }
 }
