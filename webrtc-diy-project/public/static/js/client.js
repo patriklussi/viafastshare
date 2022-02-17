@@ -6,8 +6,8 @@ deleteRoomBtn.setAttribute("href", "/createRoom");
 deleteRoomBtn.classList.add("button--light", "button--small");
 deleteRoomBtn.setAttribute("data-link", "  ");
 
-//const socket = io("https://viafastshare.herokuapp.com/");
-const socket = io();
+const socket = io("https://viafastshare.herokuapp.com/");
+//const socket = io();
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
@@ -16,10 +16,10 @@ let emptyArray = [];
 var showRoomName;
 
 var myPeer = new Peer(undefined, {
-  //host: "0.peerjs.com",
-  host: "/",
-  //port: "443",
-  port: "3001",
+  host: "0.peerjs.com",
+  //host: "/",
+  port: "443",
+  //port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
 });
 var userIdYes;
