@@ -369,6 +369,7 @@ document.addEventListener("click", (event) => {
       return peers.id !== userIdYes;
     });
     window.localStorage.setItem(ClickedRoomName, JSON.stringify(newList));
+    updateUsers(ClickedRoomName);
   }
 });
 
