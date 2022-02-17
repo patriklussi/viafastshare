@@ -260,11 +260,27 @@ async function shareMedia(room) {
     peersToLoop.forEach((peer) => {
       var call = myPeer.call(peer.id, stream);
       outgoingMediaConnections.set(peer.id, call);
+      stream.getTracks().forEach(function (track) {
+        track.addEventListener("ended",()=>{
+          stopShare();
+        });
+      });
     });
     window.srcObject = stream;
   });
 }
 
+//window.srcObject.getVideoTracks()[0].addEventListener('ended', () => console.log('screensharing has ended'))
+/*
+window.srcObject.getTracks().forEach(function (track) {
+  track.addEventListener("ended",()=>{
+    console.log("stopped stream");
+  });
+
+});
+*/
+
+ 
 function stopShare() {
   socket.emit("stop-call", showRoomName, userIdYes);
   console.log("Stop sharing");
@@ -309,7 +325,9 @@ myPeer.on("call", (call) => {
   let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
     addVideoStream(userVideoStream, video, fsButton, callingPeer, caller);
+
   });
+ 
   call.on("close", () => {
     console.log("Closing!");
     video.remove();
