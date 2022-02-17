@@ -215,7 +215,7 @@ function connectToAnotherUser(room) {
     if (event.target.matches("#shareButton")) {
       let alertYouAreSharing = document.querySelector("#alertShare");
       if (shareButton.innerText == "Start sharing") {
-        shareMedia(room,alertYouAreSharing);
+        shareMedia(room, alertYouAreSharing);
         shareButton.innerHTML = "Stop sharing";
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
       } else if (shareButton.innerText == "Stop sharing") {
@@ -251,7 +251,7 @@ function alertName() {
   }, 3000);
 }
 
-async function shareMedia(room,alertYouAreSharing) {
+async function shareMedia(room, alertYouAreSharing) {
   const peerList = JSON.parse(window.localStorage.getItem(room));
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userIdYes;
@@ -261,9 +261,9 @@ async function shareMedia(room,alertYouAreSharing) {
       var call = myPeer.call(peer.id, stream);
       outgoingMediaConnections.set(peer.id, call);
       stream.getTracks().forEach(function (track) {
-        track.addEventListener("ended",()=>{
-          shareButton.innerText ="Start sharing";
-         alertYouAreSharing.innerHTML = "";
+        track.addEventListener("ended", () => {
+          shareButton.innerText = "Start sharing";
+          alertYouAreSharing.innerHTML = "";
           stopShare();
         });
       });
@@ -282,7 +282,6 @@ window.srcObject.getTracks().forEach(function (track) {
 });
 */
 
- 
 function stopShare() {
   socket.emit("stop-call", showRoomName, userIdYes);
   console.log("Stop sharing");
@@ -327,9 +326,8 @@ myPeer.on("call", (call) => {
   let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
     addVideoStream(userVideoStream, video, fsButton, callingPeer, caller);
-
   });
- 
+
   call.on("close", () => {
     console.log("Closing!");
     video.remove();
@@ -339,7 +337,7 @@ myPeer.on("call", (call) => {
 });
 
 function addVideoStream(userVideoStream, video, fsButton, callingPeer, caller) {
-  let roomAside = document.querySelector("#roomAside");
+  let roomAside = document.querySelector("#whoIsSharingContainer");
   const peerList = JSON.parse(window.localStorage.getItem(ClickedRoomName));
   for (let peers of peerList) {
     if (peers.id === callingPeer) {
@@ -385,9 +383,9 @@ socket.on("user-disconnected", (userId, room) => {
   window.localStorage.setItem(room, JSON.stringify(peerList));
   //let deleteBtn = document.querySelector("#disconnectButton");
 
-  let roomAside = document.querySelector("#roomAside");
+  let roomAside = document.querySelector(".createRoom__roomContainer");
   if (peerList.length === 1) {
-    deleteRoomBtn.innerHTML = "delete room";
+    deleteRoomBtn.innerHTML = "Delete room";
     roomAside.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
       socket.emit("delete-room", room);

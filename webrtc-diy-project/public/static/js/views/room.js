@@ -31,6 +31,7 @@ export default class extends abstractView {
       </aside>
   
       <section class="room__video">
+        <article id="whoIsSharingContainer" class="alert--dark"></article>
         <div id="videoGrid" class="video"> </div>
         <p id="alertShare" class="alert--dark" ></p>
         <article id="roomContorlOptions" class="room__options">  
