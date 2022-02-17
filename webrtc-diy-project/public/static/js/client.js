@@ -202,7 +202,7 @@ function connectToAnotherUser(room) {
   if (peerList.length === 1) {
     console.log("EHJAWHJDhj");
 
-    deleteRoomBtn.innerHTML = "delete room";
+    deleteRoomBtn.innerHTML = "Delete room";
     roomUsersList.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
       socket.emit("delete-room", room);
@@ -386,11 +386,11 @@ function toggle(toggleNav) {
     toggleNav.innerHTML = "Close";
     document.getElementById("roomAside").style.width = "250px";
     document.getElementById("navBtn").style.alignSelf = "flex-end";
-    document.getElementById("disconnectButton").style.display = "block";
+    document.getElementById("disconnectButton").style.display = "flex";
     document.getElementById("roomTitle").style.display = "block";
     document.getElementById("usersInRoom").style.display = "block";
     document.getElementById("nameHolder").style.display = "block";
-    deleteRoomBtn.style.display = "block";
+    deleteRoomBtn.style.display = "flex";
   } else {
     toggleNav.innerHTML = "Open";
     document.getElementById("roomAside").style.width = "80px";
