@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
       peerList.push(peerObj);
       console.log(peerList);
       socket.emit("pushToLs", peerList, room);
-      socket.emit("updateNameDisplay", room);
+      socket.emit("updateNameDisplay",peerList, room);
       socket.broadcast
         .to(room)
         .emit("user-connected", peerList, peerObj.id, room);
@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
   });
   socket.on("call", (room) => {
     console.log("clicked room: ", room);
-    socket.emit("call-function", room);
+    socket.emit("call-function", room,peerList);
   });
 
   socket.on("stop-call", (room, userId) => {
@@ -92,10 +92,13 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (room, userId) => {
     console.log(userId, "left room");
     socket.leave(room);
-    socket.broadcast.to(room).emit("user-disconnected", userId, room);
+    console.log("PEERLIST BEFORE",peerList);
     peerList = peerList.filter((peers) => {
       return peers.id !== userId;
     });
+    //socket.emit("updatesLeaverList",peerList,room);
+    console.log("PEERLIST AFTER",peerList);
+    socket.broadcast.to(room).emit("user-disconnected", userId, room,peerList);
   });
 });
 
