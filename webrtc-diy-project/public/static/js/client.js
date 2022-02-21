@@ -217,9 +217,12 @@ function connectToAnotherUser(room) {
       if (shareButton.innerText == "Start sharing") {
         shareMedia(room, alertYouAreSharing);
         shareButton.innerHTML = "Stop sharing";
+        shareButton.classList.replace("button--light", "button");
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
       } else if (shareButton.innerText == "Stop sharing") {
         shareButton.innerHTML = "Start sharing";
+        shareButton.classList.remove("button");
+        shareButton.classList.add("button--light");
         stopShare();
         alertYouAreSharing.innerHTML = "";
       }
@@ -285,6 +288,8 @@ window.srcObject.getTracks().forEach(function (track) {
 function stopShare() {
   socket.emit("stop-call", showRoomName, userIdYes);
   console.log("Stop sharing");
+  let shareButton = document.querySelector("#shareButton");
+  shareButton.classList.replace("button", "button--light");
   window.srcObject.getTracks().forEach(function (track) {
     track.stop();
   });
