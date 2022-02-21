@@ -136,7 +136,8 @@ socket.on("sendRoomArray", (roomList) => {
 });
 
 socket.on("call-function", (room,peerList) => {
-  connectToAnotherUser(room,peerList);
+  console.log("CONNECTOANOTHER USER PEERLIST",peerList);
+  connectToAnotherUser(room);
 });
 
 socket.on("user-connected", (peerList, userId, room) => {
@@ -178,9 +179,11 @@ let constraints = {
     displaySurface: "application" | "browser" | "monitor" | "window",
   },
 };
-
+var localPeerList = [];
 function updateUsers(peerList,room) {
   console.log("PEERLIST",peerList);
+  localPeerList = peerList;
+  console.log("LocalPeerList",localPeerList);
  // let peers = JSON.parse(window.localStorage.getItem(room));
   const usersInRoom = document.querySelector("#usersInRoom");
  // console.log("PEERS", peerList,"room",room);
@@ -199,11 +202,11 @@ socket.on("updateName", () => {
   displayUserName();
 });
 
-function connectToAnotherUser(room,peerList) {
+function connectToAnotherUser(room) {
  // let peerList = JSON.parse(window.localStorage.getItem(room));
   const shareButton = document.querySelector("#shareButton");
   let roomAside = document.querySelector("#roomAside");
-  if (peerList.length === 1) {
+  if (localPeerList.length === 1) {
     console.log("EHJAWHJDhj");
 
     deleteRoomBtn.innerHTML = "delete room";
@@ -219,7 +222,7 @@ function connectToAnotherUser(room,peerList) {
     if (event.target.matches("#shareButton")) {
       let alertYouAreSharing = document.querySelector("#alertShare");
       if (shareButton.innerText == "Start sharing") {
-        shareMedia(room,peerList);
+        shareMedia(room,localPeerList);
         shareButton.innerHTML = "Stop sharing";
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
       } else if (shareButton.innerText == "Stop sharing") {
@@ -255,7 +258,8 @@ function alertName() {
   }, 3000);
 }
 
-async function shareMedia(room,peerList) {
+function shareMedia(room,peerList) {
+  console.log("PEERLIST CURRENT",peerList);
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userIdYes;
   });
@@ -361,7 +365,6 @@ document.addEventListener("click", (event) => {
     });
     window.localStorage.setItem(ClickedRoomName, JSON.stringify(newList));
     */
-   
   }
 });
 

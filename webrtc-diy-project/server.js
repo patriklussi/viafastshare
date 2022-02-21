@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
     } else {
       console.log(peerList);
       roomList.push(room);
-      peerList = [];
+      
     }
   });
   /*
