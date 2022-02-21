@@ -39,7 +39,7 @@ export default class extends abstractView {
           <line x1="0.99104" y1="3.75003" x2="281.991" y2="1.7357" stroke="#404549" stroke-width="2.5"/>
         </svg>
 
-        <input autocomplete="off" class="createRoom__input" id="roomNameInput" type="text"/>
+        <input placeholder="Room name" autocomplete="off" class="createRoom__input" id="roomNameInput" type="text"/>
         <button class="button--light" id="roomNameButton">Create</button>
         <p id="alert" class="alert--dark"></p>
 
