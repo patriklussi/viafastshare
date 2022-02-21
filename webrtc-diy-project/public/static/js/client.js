@@ -58,12 +58,17 @@ socket.on("sendTest", (peerList) => {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
-    const room = roomNameInput.value;
-    console.log("New room created with name: ", room);
-    socket.emit("room-name", room);
-    socket.emit("sendArrayInfo");
-    roomNameInput.value = "";
-    window.localStorage.setItem(room, JSON.stringify(emptyArray));
+    if(roomNameInput.value !== ""){
+      const room = roomNameInput.value;
+      console.log("New room created with name: ", room);
+      socket.emit("room-name", room);
+      socket.emit("sendArrayInfo");
+      roomNameInput.value = "";
+      window.localStorage.setItem(room, JSON.stringify(emptyArray));
+    } else {
+      socket.emit("sendArrayInfo");
+    }
+ 
   }
 });
 
