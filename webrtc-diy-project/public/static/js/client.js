@@ -65,7 +65,9 @@ console.log("Peerlist",peerList);
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
+    let roomObj = {};
     const room = roomNameInput.value;
+    
     console.log("New room created with name: ", room);
     socket.emit("room-name", room);
     socket.emit("sendArrayInfo");
@@ -382,7 +384,7 @@ socket.on("user-disconnected", (userId, room,peerList) => {
   */  
   console.log("PEERLISTRJQAJDF",peerList);
   updateUsers(peerList,room);
-  window.localStorage.setItem(room, JSON.stringify(peerList));
+ // window.localStorage.setItem(room, JSON.stringify(peerList));
   //let deleteBtn = document.querySelector("#disconnectButton");
 
   let roomAside = document.querySelector("#roomAside");
@@ -390,7 +392,7 @@ socket.on("user-disconnected", (userId, room,peerList) => {
     deleteRoomBtn.innerHTML = "delete room";
     roomAside.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
-      socket.emit("delete-room", room);
+      socket.emit("delete-room", room,peerList,userIdYes);
     });
   }
 });

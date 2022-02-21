@@ -5,9 +5,9 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const PORT = process.env.PORT || 3000;
 
-roomList = [];
-peerList = [];
-anotherList = [];
+let roomList = [];
+let peerList = [];
+let anotherList = [];
 
 
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
       socket.emit("alert-room", room);
     } else {
       console.log(peerList);
+
       roomList.push(room);
       
     }
@@ -70,10 +71,16 @@ io.on("connection", (socket) => {
   socket.on("stop-call", (room, userId) => {
     socket.broadcast.to(room).emit("disconnect-mediaconnection", userId);
   });
-  socket.on("delete-room", (room) => {
+  socket.on("delete-room", (room,userId) => {
     roomList = roomList.filter((roomName) => {
       return roomName !== room;
     });
+
+    peerList = peerList.filter((peers) => {
+      return peers.id === userId;
+    });
+    console.log("NEW PEERLISTD 2",peerList); 
+
     console.log("removed room:", roomList);
   });
 
@@ -86,13 +93,14 @@ io.on("connection", (socket) => {
   });
   
 
-    
+   console.log(peerList);
 
 
   socket.on("leave-room", (room, userId) => {
     console.log(userId, "left room");
     socket.leave(room);
     console.log("PEERLIST BEFORE",peerList);
+    
     peerList = peerList.filter((peers) => {
       return peers.id !== userId;
     });
