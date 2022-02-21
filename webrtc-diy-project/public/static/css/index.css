@@ -196,6 +196,7 @@ h3 {
   box-shadow: 1px 2px 2px #5d6062;
   font-size: 1rem;
 }
+
 .button--small {
   width: 10rem;
   margin-top: 1rem;
@@ -275,6 +276,10 @@ video {
 
 #userIcon {
   align-self: end;
+}
+#deleteButton {
+  background: #6d6d6d;
+  color:white;
 }
 #connectCondition {
   display: none;
