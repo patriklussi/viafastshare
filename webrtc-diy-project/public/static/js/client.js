@@ -393,17 +393,27 @@ socket.on("user-disconnected", (userId, room) => {
   }
 });
 document.addEventListener("click", (event) => {
-  if (event.target.matches("#navBtn")) {
-    let toggleNav = document.getElementById("navBtn");
-    toggle(toggleNav);
+  if (event.target.matches("#menuBtn")) {
+    let menuButton = document.querySelector(".menu-btn");
+    let menuOpen = false;
+    menuButton.addEventListener("click", () => {
+      if (!menuOpen) {
+        menuButton.classList.add("open");
+        menuOpen = true;
+        toggle(menuOpen);
+      } else {
+        menuButton.classList.remove("open");
+        menuOpen = false;
+        toggle(menuOpen);
+      }
+    });
   }
 });
 
-function toggle(toggleNav) {
-  if (toggleNav.innerHTML == "Open") {
-    toggleNav.innerHTML = "Close";
+function toggle(menuOpen) {
+  if (menuOpen) {
     document.getElementById("roomAside").style.width = "250px";
-    document.getElementById("navBtn").style.alignSelf = "flex-end";
+
     document.getElementById("disconnectButton").style.display = "flex";
     document.getElementById("roomTitle").style.display = "block";
     document.getElementById("usersInRoom").style.display = "block";
@@ -411,9 +421,7 @@ function toggle(toggleNav) {
     document.getElementById("svgLine").style.display = "block";
     deleteRoomBtn.style.display = "flex";
   } else {
-    toggleNav.innerHTML = "Open";
     document.getElementById("roomAside").style.width = "80px";
-    document.getElementById("navBtn").style.alignSelf = "center";
     document.getElementById("disconnectButton").style.display = "none";
     document.getElementById("roomTitle").style.display = "none";
     document.getElementById("usersInRoom").style.display = "none";
