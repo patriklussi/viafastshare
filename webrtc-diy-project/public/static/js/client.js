@@ -190,12 +190,12 @@ function updateUsers(peerList,room) {
  // console.log("PEERS", peerList,"room",room);
   usersInRoom.innerHTML = "";
   for(let peers of peerList){
+    let userNameList = document.createElement("li");
     if(peers.room === room){
-      console.log(peers.name);
-      usersInRoom.append(peers.name);
+    userNameList.innerHTML = peers.name;
+    usersInRoom.append(userNameList);
     }
   }
-
 }
 
 socket.on("updateName", () => {
