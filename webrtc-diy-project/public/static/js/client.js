@@ -28,6 +28,9 @@ myPeer.on("open", function (id) {
   userIdYes = id;
   peerObj.id = userIdYes;
 });
+socket.on("give-id",(socketId)=>{
+  peerObj.socketId = socketId;
+});
 
 document.addEventListener("keyup", (event) => {
   if (event.target.matches("#roomNameInput")) {
@@ -180,6 +183,7 @@ let constraints = {
     displaySurface: "application" | "browser" | "monitor" | "window",
   },
 };
+
 var localPeerList = [];
 function updateUsers(peerList,room) {
   console.log("PEERLIST",peerList);
@@ -187,6 +191,7 @@ function updateUsers(peerList,room) {
   console.log("LocalPeerList",localPeerList);
  // let peers = JSON.parse(window.localStorage.getItem(room));
   const usersInRoom = document.querySelector("#usersInRoom");
+
  // console.log("PEERS", peerList,"room",room);
   usersInRoom.innerHTML = "";
   for(let peers of peerList){
@@ -198,6 +203,7 @@ function updateUsers(peerList,room) {
   }
 }
 
+
 socket.on("updateName", () => {
   console.log("hello");
   displayUserName();
@@ -207,7 +213,7 @@ function connectToAnotherUser(room,peerList) {
 
   const shareButton = document.querySelector("#shareButton");
   let roomUsersList = document.querySelector(".createRoom__roomContainer");
-  if (peerList.length === 1) {
+  if (getNumberOfUsersInRoom(peerList,room) === 1) {
     console.log("EHJAWHJDhj");
 
     deleteRoomBtn.innerHTML = "Delete room";
@@ -404,21 +410,14 @@ socket.on("updatesLeaverList",(peerList,room)=>{
 })
 
 socket.on("user-disconnected", (userId, room,peerList) => {
+
   console.log("User", userId, "has disconnected");
-  /*
-  let peerList = JSON.parse(window.localStorage.getItem(room));
-  peerList = peerList.filter((peers) => {
-    return peers.id !== userId;
-  });
-  */  
   console.log("PEERLISTRJQAJDF",peerList);
   updateUsers(peerList,room);
- // window.localStorage.setItem(room, JSON.stringify(peerList));
-  //let deleteBtn = document.querySelector("#disconnectButton");
-
   let roomAside = document.querySelector("#roomAside");
-  
-  if (peerList.length === 1) {
+ 
+  if(getNumberOfUsersInRoom(peerList,room) === 1) {
+
     deleteRoomBtn.innerHTML = "Delete room";
     roomAside.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
@@ -426,6 +425,19 @@ socket.on("user-disconnected", (userId, room,peerList) => {
     });
   }
 });
+
+function getNumberOfUsersInRoom(peerList,room){
+  let count = 0;
+  for(let peer of peerList){
+    console.log(peer);
+    if(peer.room === room){
+      count +=1;
+      
+    }
+  }
+  console.log("print count",count);
+  return count;
+}
 document.addEventListener("click", (event) => {
   let menuButton = document.querySelector("#menuBtn");
   let menuOpen = true;

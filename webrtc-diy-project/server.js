@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 let roomList = [];
 let peerList = [];
-let anotherList = [];
+
 
 
 app.use("/static", express.static(path.resolve(__dirname, "public", "static")));
@@ -18,7 +18,7 @@ app.get("/*", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("connected");
-
+  socket.emit("give-id",socket.id);
   socket.on("sendArrayInfo", () => {
     socket.emit("sendRoomArray", roomList);
   });
@@ -84,11 +84,26 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    
     console.log(peerList);
-   
+    console.log("HE DISCONNECTED");
       console.log(peerList);
     console.log("disconnected", socket.id);
-    console.log("Testar disconnect on refresh");
+    let peerId;
+    let roomName;
+    for(let peer of peerList){
+      if(peer.socketId === socket.id){
+        peerId = peer.id; 
+        roomName = peer.room;
+        break;
+      }
+    }
+    peerList = peerList.filter((peers) => {
+      return peers.id !== peerId;
+    });
+
+    socket.broadcast.to(roomName).emit("user-disconnected", peerId, roomName,peerList);
+  
   });
   
 
