@@ -58,7 +58,7 @@ socket.on("sendTest", (peerList) => {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
-    if(roomNameInput.value !== ""){
+    if (roomNameInput.value !== "") {
       const room = roomNameInput.value;
       console.log("New room created with name: ", room);
       socket.emit("room-name", room);
@@ -68,7 +68,6 @@ document.addEventListener("click", (event) => {
     } else {
       socket.emit("sendArrayInfo");
     }
- 
   }
 });
 
@@ -326,16 +325,27 @@ myPeer.on("call", (call) => {
   let caller = document.createElement("p");
   let video = document.createElement("video");
   video.setAttribute("id", "videoTag");
-  let fsButton = document.createElement("button");
-  fsButton.innerHTML = "Fullscreen";
+  let videoBar = document.createElement("div");
+  videoBar.classList.add("video__bar");
+  let fsButton = document.createElement("i");
   fsButton.setAttribute("id", "fsButton");
-  fsButton.classList.add("button--light");
+  fsButton.innerText = "fullscreen";
+  fsButton.classList.add("material-icons");
+  fsButton.style.fontSize = "36px";
+  fsButton.style.color = "black";
   ingoingMediaConnections.set(call.peer, call);
   call.answer();
   console.log("Call answered", call.peer);
   let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, fsButton, callingPeer, caller);
+    addVideoStream(
+      userVideoStream,
+      video,
+      fsButton,
+      callingPeer,
+      caller,
+      videoBar
+    );
   });
 
   call.on("close", () => {
@@ -343,10 +353,19 @@ myPeer.on("call", (call) => {
     video.remove();
     caller.innerHTML = "";
     fsButton.remove();
+    videoBar.remove();
+    //fsButton.style.display = "none";
   });
 });
 
-function addVideoStream(userVideoStream, video, fsButton, callingPeer, caller) {
+function addVideoStream(
+  userVideoStream,
+  video,
+  fsButton,
+  callingPeer,
+  caller,
+  videoBar
+) {
   let roomAside = document.querySelector("#whoIsSharingContainer");
   const peerList = JSON.parse(window.localStorage.getItem(ClickedRoomName));
   for (let peers of peerList) {
@@ -360,7 +379,8 @@ function addVideoStream(userVideoStream, video, fsButton, callingPeer, caller) {
 
   video.play();
   videoGrid.append(video);
-  videoGrid.append(fsButton);
+  videoBar.append(fsButton);
+  videoGrid.append(videoBar);
   roomAside.append(caller);
 }
 

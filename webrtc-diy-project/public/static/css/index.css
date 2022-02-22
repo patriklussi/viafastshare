@@ -203,7 +203,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 .menu-btn {
   position: relative;
@@ -257,10 +257,23 @@ h3 {
 .menu-btn.open .menu-btn__burger::after {
   transform: rotate(-45deg) translate(35px, 35px);
 }
+.fs__wrapper {
+  font-size: 2.5rem;
+  margin: 0;
+  padding: 1rem;
+  color: black;
+}
+
 video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.video__bar {
+  background: rgb(216, 215, 215);
+  width: 100%;
+  height: 35px;
 }
 #videoGrid {
   width: 80%;
@@ -280,7 +293,7 @@ video {
 }
 #deleteButton {
   background: #6d6d6d;
-  color:white;
+  color: white;
 }
 #connectCondition {
   display: none;
@@ -295,6 +308,6 @@ video {
 }
 
 #alertShare {
-  font-size:  2rem;
+  font-size: 2rem;
 }
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap");
