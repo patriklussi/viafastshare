@@ -14,10 +14,8 @@ export default class extends abstractView {
     <main id="mainRoom" class="room">
       
       <aside id="roomAside" class="room__aside">
-      <div id="menuBtn" class="menu-btn">
-          <div class="menu-btn__burger"> </div>
-        </div>
-
+      
+      <i id="menuBtn" class="material-icons menu__btn open">chevron_right</i>
         <h3 class="nav__header" id="roomTitle"> </h3>
         <svg id="svgLine" width="179" height="4" viewBox="0 0 179 4" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M-3 2H179" stroke="#FEF8F8" stroke-width="2.5"/>

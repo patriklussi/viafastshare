@@ -205,18 +205,19 @@ h3 {
   justify-content: center;
   transition: all 0.5s ease-in-out;
 }
-.menu-btn {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+.menu__btn {
   height: 50px;
+  width: 100%;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
   margin-bottom: 1rem;
 }
 
+.material-icons.open {
+  transition: all 0.5s ease-in-out;
+  transform: rotate(180deg);
+}
+/*
 .menu-btn__burger {
   width: 40px;
   height: 5px;
@@ -245,7 +246,7 @@ h3 {
 .menu-btn__burger::after {
   transform: translateY(16px);
 }
-.menu-btn.open .menu-btn__burger {
+.menu-btn.open  {
   transform: translateX(-50px);
   background: transparent;
 }
@@ -256,7 +257,7 @@ h3 {
 
 .menu-btn.open .menu-btn__burger::after {
   transform: rotate(-45deg) translate(35px, 35px);
-}
+} */
 .fs__wrapper {
   font-size: 2.5rem;
   margin: 0;
@@ -310,5 +311,10 @@ video {
 
 #alertShare {
   font-size: 2rem;
+}
+#menuBtn {
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
 }
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap");

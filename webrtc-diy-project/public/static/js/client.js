@@ -422,19 +422,17 @@ socket.on("user-disconnected", (userId, room) => {
     });
   }
 });
+let menuOpen = false;
 document.addEventListener("click", (event) => {
   let menuButton = document.querySelector("#menuBtn");
-  let menuOpen = true;
-  if (event.target.matches("#menuBtn")) {
+  if (event.target.matches("#menuBtn" || document.querySelector("#burger"))) {
     if (!menuOpen) {
-      console.log("clicked !menuOpen");
-      menuButton.classList.remove("open");
-      menuOpen = false;
-      toggle(menuOpen);
-    } else {
-      console.log("clicked else");
       menuButton.classList.add("open");
       menuOpen = true;
+      toggle(menuOpen);
+    } else {
+      menuButton.classList.remove("open");
+      menuOpen = false;
       toggle(menuOpen);
     }
   }
@@ -443,6 +441,7 @@ document.addEventListener("click", (event) => {
 function toggle(menuOpen) {
   if (menuOpen) {
     document.getElementById("roomAside").style.width = "250px";
+
     document.getElementById("disconnectButton").style.display = "flex";
     document.getElementById("roomTitle").style.display = "block";
     document.getElementById("usersInRoom").style.display = "block";
@@ -456,6 +455,7 @@ function toggle(menuOpen) {
     document.getElementById("usersInRoom").style.display = "none";
     document.getElementById("nameHolder").style.display = "none";
     document.getElementById("svgLine").style.display = "none";
+
     deleteRoomBtn.style.display = "none";
   }
 }
