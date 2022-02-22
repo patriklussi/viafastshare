@@ -138,7 +138,7 @@ socket.on("sendRoomArray", (roomList) => {
 
 socket.on("call-function", (room,peerList) => {
   console.log("CONNECTOANOTHER USER PEERLIST",peerList);
-  connectToAnotherUser(room);
+  connectToAnotherUser(room,peerList);
 });
 
 socket.on("user-connected", (peerList, userId, room) => {
@@ -203,11 +203,11 @@ socket.on("updateName", () => {
   displayUserName();
 });
 
-function connectToAnotherUser(room) {
- // let peerList = JSON.parse(window.localStorage.getItem(room));
+function connectToAnotherUser(room,peerList) {
+
   const shareButton = document.querySelector("#shareButton");
-  let roomAside = document.querySelector("#roomAside");
-  if (localPeerList.length === 1) {
+  let roomUsersList = document.querySelector(".createRoom__roomContainer");
+  if (peerList.length === 1) {
     console.log("EHJAWHJDhj");
 
     deleteRoomBtn.innerHTML = "Delete room";
@@ -339,14 +339,7 @@ myPeer.on("call", (call) => {
   console.log("Call answered", call.peer);
   let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
-    addVideoStream(
-      userVideoStream,
-      video,
-      fsButton,
-      callingPeer,
-      caller,
-      videoBar
-    );
+    addVideoStream(userVideoStream,video,fsButton,callingPeer,caller,videoBar);
   });
 
   call.on("close", () => {
@@ -359,7 +352,7 @@ myPeer.on("call", (call) => {
   });
 });
 
-function addVideoStream(userVideoStream, video, fsButton, callingPeer, caller) {
+function addVideoStream(userVideoStream, video, fsButton, callingPeer, caller,videoBar) {
   let roomAside = document.querySelector("#roomAside");
   /*
   const peerList = JSON.parse(window.localStorage.getItem(ClickedRoomName));
