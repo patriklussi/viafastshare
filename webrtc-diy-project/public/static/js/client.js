@@ -388,6 +388,12 @@ socket.on("user-disconnected", (userId, room,peerList) => {
   //let deleteBtn = document.querySelector("#disconnectButton");
 
   let roomAside = document.querySelector("#roomAside");
+  
+
+
+
+
+
   if (peerList.length === 1) {
     deleteRoomBtn.innerHTML = "delete room";
     roomAside.append(deleteRoomBtn);
@@ -402,6 +408,8 @@ document.addEventListener("click", (event) => {
     toggle(toggleNav);
   }
 });
+
+
 
 function toggle(toggleNav) {
   if (toggleNav.innerHTML == "Open") {
