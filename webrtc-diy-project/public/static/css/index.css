@@ -274,6 +274,7 @@ video {
   background: rgb(216, 215, 215);
   width: 100%;
   height: 35px;
+  cursor: pointer;
 }
 #videoGrid {
   width: 80%;
