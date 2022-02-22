@@ -271,8 +271,15 @@ function shareMedia(room,peerList) {
     peersToLoop.forEach((peer) => {
       console.log(peer);
       if(peer.room === room){
-        var call = myPeer.call(peer.id, stream);
+      var call = myPeer.call(peer.id, stream);
       outgoingMediaConnections.set(peer.id, call);
+      stream.getTracks().forEach(function (track) {
+        track.addEventListener("ended", () => {
+          shareButton.innerText = "Start sharing";
+         // alertYouAreSharing.innerHTML = "";
+          stopShare();
+        });
+      });
       }
       
     });
