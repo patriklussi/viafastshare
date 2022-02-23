@@ -16,7 +16,7 @@ app.get("/*", (req, res) => {
 
 io.on("connection", (socket) => {
 
-  socket.emit("give-id-socket-id", socket.id);
+  socket.emit("give-socket-id", socket.id);
 
   socket.on("send-RoomList-Info", () => {
     socket.emit("send-roomList", roomList);
@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
         break;
       }
     }
-    filterPeerList(peerList,peerId);
+    filterPeerList(peerId);
     socket.broadcast
       .to(roomName)
       .emit("user-disconnected", peerId, roomName, peerList);

@@ -141,6 +141,9 @@ socket.on("disconnect-mediaconnection", (userId) => {
 socket.on("user-disconnected", (userId, room, peerList) => {
   console.log("User", userId, "has disconnected");
   updateUsersList(peerList, room);
+  let vidoTagToRemove = document.querySelector("video");
+  console.log(vid);
+  videoTagToRemove.remove();
   let roomAside = document.querySelector("#roomAside");
 
   if (getNumberOfUsersInRoom(peerList, room) === 1) {
@@ -156,7 +159,7 @@ function updateUsersList(peerList, room) {
   console.log("PEERLIST", peerList);
   localPeerList = peerList;
   console.log("LocalPeerList", localPeerList);
-
+ 
   const usersInRoom = document.querySelector("#usersInRoom");
 
   usersInRoom.innerHTML = "";
