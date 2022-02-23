@@ -37,70 +37,36 @@ myPeer.on("open", function (id) {
   userId = id;
   peerObj.id = userId;
 });
+
+myPeer.on("call", (call) => {
+  let caller = document.createElement("p");
+  let video = document.createElement("video");
+  video.setAttribute("id", "videoTag");
+  let videoBar = document.createElement("div");
+  videoBar.classList.add("video__bar");
+  let fsButton = document.createElement("i");
+  fsButton.setAttribute("id", "fsButton");
+  fsButton.classList.add("material-icons");
+  fsButton.style.fontSize = "36px";
+  fsButton.style.color = "black";
+  ingoingMediaConnections.set(call.peer, call);
+  call.answer();
+  console.log("Call answered", call.peer);
+  call.on("stream", (userVideoStream) => {
+    addVideoStream(userVideoStream, video, fsButton, caller, videoBar);
+  });
+
+  call.on("close", () => {
+    console.log("Closing!");
+    video.remove();
+    caller.innerHTML = "";
+    fsButton.remove();
+    videoBar.remove();
+  });
+});
+
 socket.on("give-socket-id", (socketId) => {
   peerObj.socketId = socketId;
-});
-
-document.addEventListener("keyup", (event) => {
-  if (event.target.matches("#roomNameInput")) {
-    if (event.key === "Enter") {
-      console.log("testar enter press on input");
-      event.preventDefault();
-      document.querySelector("#roomNameButton").click();
-    }
-  }
-});
-
-document.addEventListener("keyup", (event) => {
-  if (event.target.matches("#enterName")) {
-    if (event.key === "Enter") {
-      console.log("testar enter press on input");
-      event.preventDefault();
-      document.querySelector("#nameOKBtn").click();
-    }
-  }
-});
-
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#roomNameButton")) {
-    if (roomNameInput.value !== "") {
-      const room = roomNameInput.value;
-      console.log("New room created with name: ", room);
-      socket.emit("room-name", room);
-      socket.emit("send-RoomList-Info");
-      roomNameInput.value = "";
-    } else {
-      socket.emit("send-RoomList-Info");
-    }
-  }
-});
-
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#refresh")) {
-    socket.emit("send-RoomList-Info"); 
-  }
-});
-
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#nameOKBtn")) {
-    const enterName = document.querySelector("#enterName");
-    console.log("username " + enterName.value + " was created");
-    window.sessionStorage.setItem("names", enterName.value);
-    const connectBtn = document.querySelector("#connectCondition");
-    const nameBtn = document.querySelector("#nameOKBtn");
-    const info = document.querySelector("#registerInfo");
-
-    let enterNameValue = enterName.value;
-    if (enterNameValue != "") {
-      connectBtn.style.display = "block";
-      nameBtn.style.display = "none";
-      enterName.style.display = "none";
-      info.innerHTML = "You're entering as " + enterNameValue;
-    } else {
-      alertName();
-    }
-    enterName.value = "";
-  }
 });
 
 socket.on("send-roomList", (roomList) => {
@@ -153,6 +119,39 @@ socket.on("updateNameDisplay", (peerList, room) => {
   updateUsersList(peerList, room);
 });
 
+socket.on("alert-room", (roomName) => {
+  const alert = document.querySelector("#alert");
+  alert.innerHTML = " Room " + roomName + " already exists!";
+  setTimeout(() => {
+    alert.innerHTML = " ";
+  }, 3000);
+});
+
+socket.on("disconnect-mediaconnection", (userId) => {
+  console.log("Disconnect mediaconnection", ingoingMediaConnections);
+  if (ingoingMediaConnections.has(userId)) {
+    console.log("Deleting connection from ", userId);
+    ingoingMediaConnections.get(userId).close();
+    ingoingMediaConnections.delete(userId);
+  } else {
+    console.log("has no connection from", userId);
+  }
+});
+
+socket.on("user-disconnected", (userId, room, peerList) => {
+  console.log("User", userId, "has disconnected");
+  updateUsersList(peerList, room);
+  let roomAside = document.querySelector("#roomAside");
+
+  if (getNumberOfUsersInRoom(peerList, room) === 1) {
+    deleteRoomBtn.innerHTML = "Delete room";
+    roomAside.append(deleteRoomBtn);
+    deleteRoomBtn.addEventListener("click", () => {
+      socket.emit("delete-room", room, peerList, userId);
+    });
+  }
+});
+
 function updateUsersList(peerList, room) {
   console.log("PEERLIST", peerList);
   localPeerList = peerList;
@@ -201,14 +200,6 @@ function connectToAnotherUser(room, peerList) {
     }
   });
 }
-
-socket.on("alert-room", (roomName) => {
-  const alert = document.querySelector("#alert");
-  alert.innerHTML = " Room " + roomName + " already exists!";
-  setTimeout(() => {
-    alert.innerHTML = " ";
-  }, 3000);
-});
 
 function alertRoomList() {
   const roomListAlert = document.querySelector("#roomAlertP");
@@ -259,7 +250,7 @@ function startShareMedia(room, peerList, alertYouAreSharing) {
     });
 }
 
-function stopVideoTrack(){
+function stopVideoTrack() {
   window.srcObject.getTracks().forEach(function (track) {
     track.stop();
   });
@@ -280,44 +271,6 @@ function stopShareMedia() {
   console.log("disconnect");
 }
 
-socket.on("disconnect-mediaconnection", (userId) => {
-  console.log("Disconnect mediaconnection", ingoingMediaConnections);
-  if (ingoingMediaConnections.has(userId)) {
-    console.log("Deleting connection from ", userId);
-    ingoingMediaConnections.get(userId).close();
-    ingoingMediaConnections.delete(userId);
-  } else {
-    console.log("has no connection from", userId);
-  }
-});
-
-myPeer.on("call", (call) => {
-  let caller = document.createElement("p");
-  let video = document.createElement("video");
-  video.setAttribute("id", "videoTag");
-  let videoBar = document.createElement("div");
-  videoBar.classList.add("video__bar");
-  let fsButton = document.createElement("i");
-  fsButton.setAttribute("id", "fsButton");
-  fsButton.classList.add("material-icons");
-  fsButton.style.fontSize = "36px";
-  fsButton.style.color = "black";
-  ingoingMediaConnections.set(call.peer, call);
-  call.answer();
-  console.log("Call answered", call.peer);
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, fsButton, caller, videoBar);
-  });
-
-  call.on("close", () => {
-    console.log("Closing!");
-    video.remove();
-    caller.innerHTML = "";
-    fsButton.remove();
-    videoBar.remove();
-  });
-});
-
 function addVideoStream(userVideoStream, video, fsButton, caller, videoBar) {
   let roomAside = document.querySelector("#roomAside");
 
@@ -331,30 +284,6 @@ function addVideoStream(userVideoStream, video, fsButton, caller, videoBar) {
   roomAside.append(caller);
 }
 
-document.addEventListener("click", (event) => {
-  if (event.target.matches("#disconnectButton")) {
-    if (window.srcObject != null) {
-     stopVideoTrack();
-     stopShareMedia();
-    }
-    socket.emit("leave-room", clickedRoomName, userId);
-  }
-});
-
-socket.on("user-disconnected", (userId, room, peerList) => {
-  console.log("User", userId, "has disconnected");
-  updateUsersList(peerList, room);
-  let roomAside = document.querySelector("#roomAside");
-
-  if (getNumberOfUsersInRoom(peerList, room) === 1) {
-    deleteRoomBtn.innerHTML = "Delete room";
-    roomAside.append(deleteRoomBtn);
-    deleteRoomBtn.addEventListener("click", () => {
-      socket.emit("delete-room", room, peerList, userId);
-    });
-  }
-});
-
 function getNumberOfUsersInRoom(peerList, room) {
   let count = 0;
   for (let peer of peerList) {
@@ -366,21 +295,6 @@ function getNumberOfUsersInRoom(peerList, room) {
   console.log("print count", count);
   return count;
 }
-
-document.addEventListener("click", (event) => {
-  let menuButton = document.querySelector("#menuBtn");
-  if (event.target.matches("#menuBtn")) {
-    if (!menuOpen) {
-      menuButton.classList.add("open");
-      menuOpen = true;
-      toggle(menuOpen);
-    } else {
-      menuButton.classList.remove("open");
-      menuOpen = false;
-      toggle(menuOpen);
-    }
-  }
-});
 
 function toggle(menuOpen) {
   if (menuOpen) {
@@ -402,6 +316,93 @@ function toggle(menuOpen) {
     deleteRoomBtn.style.display = "none";
   }
 }
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#nameOKBtn")) {
+    const enterName = document.querySelector("#enterName");
+    console.log("username " + enterName.value + " was created");
+    window.sessionStorage.setItem("names", enterName.value);
+    const connectBtn = document.querySelector("#connectCondition");
+    const nameBtn = document.querySelector("#nameOKBtn");
+    const info = document.querySelector("#registerInfo");
+
+    let enterNameValue = enterName.value;
+    if (enterNameValue != "") {
+      connectBtn.style.display = "block";
+      nameBtn.style.display = "none";
+      enterName.style.display = "none";
+      info.innerHTML = "You're entering as " + enterNameValue;
+    } else {
+      alertName();
+    }
+    enterName.value = "";
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#disconnectButton")) {
+    if (window.srcObject != null) {
+      stopVideoTrack();
+      stopShareMedia();
+    }
+    socket.emit("leave-room", clickedRoomName, userId);
+  }
+});
+
+document.addEventListener("click", (event) => {
+  let menuButton = document.querySelector("#menuBtn");
+  if (event.target.matches("#menuBtn")) {
+    if (!menuOpen) {
+      menuButton.classList.add("open");
+      menuOpen = true;
+      toggle(menuOpen);
+    } else {
+      menuButton.classList.remove("open");
+      menuOpen = false;
+      toggle(menuOpen);
+    }
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.target.matches("#roomNameInput")) {
+    if (event.key === "Enter") {
+      console.log("testar enter press on input");
+      event.preventDefault();
+      document.querySelector("#roomNameButton").click();
+    }
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.target.matches("#enterName")) {
+    if (event.key === "Enter") {
+      console.log("testar enter press on input");
+      event.preventDefault();
+      document.querySelector("#nameOKBtn").click();
+    }
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#roomNameButton")) {
+    if (roomNameInput.value !== "") {
+      const room = roomNameInput.value;
+      console.log("New room created with name: ", room);
+      socket.emit("room-name", room);
+      socket.emit("send-RoomList-Info");
+      roomNameInput.value = "";
+    } else {
+      socket.emit("send-RoomList-Info");
+    }
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (event.target.matches("#refresh")) {
+    socket.emit("send-RoomList-Info");
+  }
+});
 
 document.addEventListener("click", (event) => {
   var elem = document.getElementById("videoTag");
