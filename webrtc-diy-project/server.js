@@ -15,8 +15,12 @@ app.get("/*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
+<<<<<<< Updated upstream
 
   socket.emit("give-socket-id", socket.id);
+=======
+  socket.emit("give-id-socket-id", socket.id);
+>>>>>>> Stashed changes
 
   socket.on("send-RoomList-Info", () => {
     socket.emit("send-roomList", roomList);
@@ -31,7 +35,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join-room", (peerObj, room) => {
-
     if (peerList.includes(peerObj.id)) {
     } else {
       socket.join(room);
@@ -62,7 +65,7 @@ io.on("connection", (socket) => {
     console.log("removed room:", roomList);
   });
 
-  function filterPeerList(userId){
+  function filterPeerList(userId) {
     peerList = peerList.filter((peers) => {
       return peers.id !== userId;
     });

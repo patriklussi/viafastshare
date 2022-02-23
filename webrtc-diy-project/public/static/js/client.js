@@ -191,7 +191,7 @@ function connectToAnotherUser(room, peerList) {
     if (event.target.matches("#shareButton")) {
       let alertYouAreSharing = document.querySelector("#alertShare");
       if (shareButton.innerText == "Start sharing") {
-        startShareMedia(room, localPeerList, alertYouAreSharing);
+        startShareMedia(room, localPeerList, alertYouAreSharing, shareButton);
         shareButton.innerHTML = "Stop sharing";
         shareButton.classList.replace("button--light", "button");
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
@@ -222,7 +222,7 @@ function alertName() {
   }, 3000);
 }
 
-function startShareMedia(room, peerList, alertYouAreSharing) {
+function startShareMedia(room, peerList, alertYouAreSharing, shareButton) {
   console.log("PEERLIST CURRENT", peerList);
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userId;
@@ -238,8 +238,9 @@ function startShareMedia(room, peerList, alertYouAreSharing) {
           stream.getTracks().forEach(function (track) {
             track.addEventListener("ended", () => {
               shareButton.innerText = "Start sharing";
+              shareButton.classList.replace("button", "button--light");
               alertYouAreSharing.innerHTML = "";
-              stopShare();
+              stopShareMedia();
             });
           });
         }
