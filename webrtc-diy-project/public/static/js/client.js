@@ -5,6 +5,16 @@ deleteRoomBtn.setAttribute("id", "deleteButton");
 deleteRoomBtn.setAttribute("href", "/createRoom");
 deleteRoomBtn.classList.add("button--light", "button--small");
 deleteRoomBtn.setAttribute("data-link", "  ");
+var ClickedRoomName;
+let constraints = {
+  video: {
+    cursor: "always" | "motion" | "never",
+    displaySurface: "application" | "browser" | "monitor" | "window",
+  },
+};
+
+var localPeerList = [];
+let menuOpen = false;
 
 //const socket = io("https://viafastshare.herokuapp.com/");
 const socket = io();
@@ -41,10 +51,6 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
-window.onload = function () {
-  socket.emit("tesing", userIdYes);
-};
-
 document.addEventListener("keyup", (event) => {
   if (event.target.matches("#enterName")) {
     if (event.key === "Enter") {
@@ -53,14 +59,6 @@ document.addEventListener("keyup", (event) => {
       document.querySelector("#nameOKBtn").click();
     }
   }
-});
-
-socket.on("test-message", (peerList, text) => {
-  console.log(peerList, text);
-});
-
-socket.on("sendTest", (peerList) => {
-  console.log("Peerlist", peerList);
 });
 
 document.addEventListener("click", (event) => {
@@ -105,10 +103,8 @@ document.addEventListener("click", (event) => {
   }
 });
 
-var ClickedRoomName;
 socket.on("sendRoomArray", (roomList) => {
   const displayRoomName = document.querySelector("#displayRoomName");
-  // displayUserName();
   displayRoomName.innerHTML = "";
   if (roomList.length === 0) {
     alertRoomList();
@@ -146,7 +142,6 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("PeerList: ", peerList);
   console.log("user " + userId + " has connected");
   console.log("Current mediaConnections: ", ingoingMediaConnections);
-  console.log("HELLO THERE");
   deleteRoomBtn.remove();
   updateUsers(peerList, room);
   console.log("before");
@@ -157,23 +152,10 @@ socket.on("room-display", function (room) {
   roomTitle.innerHTML = room;
 });
 
-socket.on("pushToLs", (peerList, room) => {
-  console.log("HHHHH", peerList);
-  updateUsers(peerList, room);
-});
-
 socket.on("updateNameDisplay", (peerList, room) => {
   updateUsers(peerList, room);
 });
 
-let constraints = {
-  video: {
-    cursor: "always" | "motion" | "never",
-    displaySurface: "application" | "browser" | "monitor" | "window",
-  },
-};
-
-var localPeerList = [];
 function updateUsers(peerList, room) {
   console.log("PEERLIST", peerList);
   localPeerList = peerList;
@@ -195,8 +177,6 @@ function connectToAnotherUser(room, peerList) {
   const shareButton = document.querySelector("#shareButton");
   let roomUsersList = document.querySelector(".createRoom__roomContainer");
   if (getNumberOfUsersInRoom(peerList, room) === 1) {
-    console.log("EHJAWHJDhj");
-
     deleteRoomBtn.innerHTML = "Delete room";
     roomUsersList.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
@@ -210,7 +190,7 @@ function connectToAnotherUser(room, peerList) {
     if (event.target.matches("#shareButton")) {
       let alertYouAreSharing = document.querySelector("#alertShare");
       if (shareButton.innerText == "Start sharing") {
-        shareMedia(room, localPeerList,alertYouAreSharing);
+        shareMedia(room, localPeerList, alertYouAreSharing);
         shareButton.innerHTML = "Stop sharing";
         shareButton.classList.replace("button--light", "button");
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
@@ -249,7 +229,7 @@ function alertName() {
   }, 3000);
 }
 
-function shareMedia(room, peerList,alertYouAreSharing) {
+function shareMedia(room, peerList, alertYouAreSharing) {
   console.log("PEERLIST CURRENT", peerList);
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userIdYes;
@@ -282,16 +262,6 @@ function shareMedia(room, peerList,alertYouAreSharing) {
     });
 }
 
-//window.srcObject.getVideoTracks()[0].addEventListener('ended', () => console.log('screensharing has ended'))
-/*
-window.srcObject.getTracks().forEach(function (track) {
-  track.addEventListener("ended",()=>{
-    console.log("stopped stream");
-  });
-
-});
-*/
-
 function stopShare() {
   socket.emit("stop-call", showRoomName, userIdYes);
   console.log("Stop sharing");
@@ -320,10 +290,6 @@ socket.on("disconnect-mediaconnection", (userId) => {
   }
 });
 
-window.reload = function () {
-  socket.emit("disconnect", ClickedRoomName, userIdYes);
-};
-
 myPeer.on("call", (call) => {
   let caller = document.createElement("p");
   let video = document.createElement("video");
@@ -332,23 +298,14 @@ myPeer.on("call", (call) => {
   videoBar.classList.add("video__bar");
   let fsButton = document.createElement("i");
   fsButton.setAttribute("id", "fsButton");
-  fsButton.innerText = "fullscreen";
   fsButton.classList.add("material-icons");
   fsButton.style.fontSize = "36px";
   fsButton.style.color = "black";
   ingoingMediaConnections.set(call.peer, call);
   call.answer();
   console.log("Call answered", call.peer);
-  let callingPeer = call.peer;
   call.on("stream", (userVideoStream) => {
-    addVideoStream(
-      userVideoStream,
-      video,
-      fsButton,
-      callingPeer,
-      caller,
-      videoBar
-    );
+    addVideoStream(userVideoStream, video, fsButton, caller, videoBar);
   });
 
   call.on("close", () => {
@@ -357,18 +314,10 @@ myPeer.on("call", (call) => {
     caller.innerHTML = "";
     fsButton.remove();
     videoBar.remove();
-    //fsButton.style.display = "none";
   });
 });
 
-function addVideoStream(
-  userVideoStream,
-  video,
-  fsButton,
-  callingPeer,
-  caller,
-  videoBar
-) {
+function addVideoStream(userVideoStream, video, fsButton, caller, videoBar) {
   let roomAside = document.querySelector("#roomAside");
 
   const videoGrid = document.getElementById("videoGrid");
@@ -385,6 +334,7 @@ document.addEventListener("click", (event) => {
   if (event.target.matches("#disconnectButton")) {
     if (window.srcObject != null) {
       window.srcObject.getTracks().forEach(function (track) {
+        track.stop();
         stopShare();
       });
     }
@@ -393,11 +343,8 @@ document.addEventListener("click", (event) => {
   }
 });
 
-socket.on("updatesLeaverList", (peerList, room) => {});
-
 socket.on("user-disconnected", (userId, room, peerList) => {
   console.log("User", userId, "has disconnected");
-  console.log("PEERLISTRJQAJDF", peerList);
   updateUsers(peerList, room);
   let roomAside = document.querySelector("#roomAside");
 
@@ -422,7 +369,6 @@ function getNumberOfUsersInRoom(peerList, room) {
   return count;
 }
 
-let menuOpen = false;
 document.addEventListener("click", (event) => {
   let menuButton = document.querySelector("#menuBtn");
   if (event.target.matches("#menuBtn")) {
