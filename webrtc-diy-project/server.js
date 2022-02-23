@@ -101,7 +101,7 @@ io.on("connection", (socket) => {
     peerList = peerList.filter((peers) => {
       return peers.id !== peerId;
     });
-
+    console.log(peerList);
     socket.broadcast.to(roomName).emit("user-disconnected", peerId, roomName,peerList);
   
   });

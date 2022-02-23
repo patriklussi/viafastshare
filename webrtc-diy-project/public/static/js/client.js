@@ -155,13 +155,7 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("before");
 });
 
-function pushToLocalStorage(peerList, room) {
-  let temp = JSON.parse(window.localStorage.getItem(room));
-  temp = peerList;
-  window.localStorage.setItem(room, JSON.stringify(temp));
-  // updateUsers(room);
-  console.log("after");
-}
+
 
 socket.on("room-display", function (room) {
   let roomTitle = document.querySelector("#roomTitle");
@@ -204,10 +198,7 @@ function updateUsers(peerList,room) {
 }
 
 
-socket.on("updateName", () => {
-  console.log("hello");
-  displayUserName();
-});
+
 
 function connectToAnotherUser(room,peerList) {
 
@@ -282,7 +273,7 @@ function shareMedia(room,peerList) {
       stream.getTracks().forEach(function (track) {
         track.addEventListener("ended", () => {
           shareButton.innerText = "Start sharing";
-         // alertYouAreSharing.innerHTML = "";
+         alertYouAreSharing.innerHTML = "";
           stopShare();
         });
       });
@@ -290,6 +281,13 @@ function shareMedia(room,peerList) {
       
     });
     window.srcObject = stream;
+  })
+  .catch(function(err) {
+    let alert = document.querySelector("#alertShare");
+    let shareBtn = document.querySelector("#shareButton");
+    shareBtn.classList.replace("button", "button--light");
+   alert.innerHTML = "";
+   shareBtn.innerHTML = "Start sharing";
   });
 }
 
