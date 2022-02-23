@@ -141,14 +141,16 @@ socket.on("disconnect-mediaconnection", (userId) => {
 socket.on("user-disconnected", (userId, room, peerList) => {
   console.log("User", userId, "has disconnected");
   updateUsersList(peerList, room);
-  let vidoTagToRemove = document.querySelector("video");
-  console.log(vid);
-  videoTagToRemove.remove();
-  let roomAside = document.querySelector("#roomAside");
+  let videoTagToRemove = document.querySelector("video");
+  if(videoTagToRemove !==null){
+    videoTagToRemove.remove();
+  }
+ 
+  let roomContainer = document.querySelector(".createRoom__roomContainer");
 
   if (getNumberOfUsersInRoom(peerList, room) === 1) {
     deleteRoomBtn.innerHTML = "Delete room";
-    roomAside.append(deleteRoomBtn);
+    roomContainer.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
       socket.emit("delete-room", room, peerList, userId);
     });
