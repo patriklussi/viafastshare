@@ -15,12 +15,7 @@ app.get("/*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-<<<<<<< Updated upstream
-
   socket.emit("give-socket-id", socket.id);
-=======
-  socket.emit("give-id-socket-id", socket.id);
->>>>>>> Stashed changes
 
   socket.on("send-RoomList-Info", () => {
     socket.emit("send-roomList", roomList);
