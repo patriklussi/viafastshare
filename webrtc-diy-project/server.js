@@ -15,32 +15,28 @@ app.get("/*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
-  socket.emit("give-id", socket.id);
-  socket.on("sendArrayInfo", () => {
-    socket.emit("sendRoomArray", roomList);
+
+  socket.emit("give-id-socket-id", socket.id);
+
+  socket.on("send-RoomList-Info", () => {
+    socket.emit("send-roomList", roomList);
   });
 
   socket.on("room-name", (room) => {
     if (roomList.includes(room)) {
       socket.emit("alert-room", room);
     } else {
-      console.log(peerList);
-
       roomList.push(room);
     }
   });
 
   socket.on("join-room", (peerObj, room) => {
-    console.log("UserID", peerObj);
+
     if (peerList.includes(peerObj.id)) {
     } else {
-      console.log("joined room: ", peerObj.id, room);
-
       socket.join(room);
       peerObj.room = room;
       peerList.push(peerObj);
-      console.log(peerList);
       socket.emit("updateNameDisplay", peerList, room);
       socket.broadcast
         .to(room)
@@ -60,20 +56,19 @@ io.on("connection", (socket) => {
     roomList = roomList.filter((roomName) => {
       return roomName !== room;
     });
-
     peerList = peerList.filter((peers) => {
       return peers.id === userId;
     });
-    console.log("NEW PEERLISTD 2", peerList);
-
     console.log("removed room:", roomList);
   });
 
+  function filterPeerList(userId){
+    peerList = peerList.filter((peers) => {
+      return peers.id !== userId;
+    });
+  }
+
   socket.on("disconnect", () => {
-    console.log(peerList);
-    console.log("HE DISCONNECTED");
-    console.log(peerList);
-    console.log("disconnected", socket.id);
     let peerId;
     let roomName;
     for (let peer of peerList) {
@@ -83,25 +78,16 @@ io.on("connection", (socket) => {
         break;
       }
     }
-    peerList = peerList.filter((peers) => {
-      return peers.id !== peerId;
-    });
-    console.log(peerList);
+    filterPeerList(peerList,peerId);
     socket.broadcast
       .to(roomName)
       .emit("user-disconnected", peerId, roomName, peerList);
   });
 
-  console.log(peerList);
-
   socket.on("leave-room", (room, userId) => {
     console.log(userId, "left room");
     socket.leave(room);
-    console.log("PEERLIST BEFORE", peerList);
-
-    peerList = peerList.filter((peers) => {
-      return peers.id !== userId;
-    });
+    filterPeerList(userId);
     console.log("PEERLIST AFTER", peerList);
     socket.broadcast.to(room).emit("user-disconnected", userId, room, peerList);
   });
