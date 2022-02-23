@@ -148,7 +148,6 @@ socket.on("user-connected", (peerList, userId, room) => {
   console.log("Current mediaConnections: ", ingoingMediaConnections);
   console.log("HELLO THERE");
   deleteRoomBtn.remove();
-  //pushToLocalStorage(peerList, room);
   updateUsers(peerList, room);
   console.log("before");
 });
@@ -179,10 +178,9 @@ function updateUsers(peerList, room) {
   console.log("PEERLIST", peerList);
   localPeerList = peerList;
   console.log("LocalPeerList", localPeerList);
-  // let peers = JSON.parse(window.localStorage.getItem(room));
+
   const usersInRoom = document.querySelector("#usersInRoom");
 
-  // console.log("PEERS", peerList,"room",room);
   usersInRoom.innerHTML = "";
   for (let peers of peerList) {
     let userNameList = document.createElement("li");
@@ -372,14 +370,7 @@ function addVideoStream(
   videoBar
 ) {
   let roomAside = document.querySelector("#roomAside");
-  /*
-  const peerList = JSON.parse(window.localStorage.getItem(ClickedRoomName));
-  for (let peers of peerList) {
-    if (peers.id === callingPeer) {
-      caller.innerHTML = peers.name + " is sharing";
-    }
-  }
-*/
+
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
 
@@ -399,14 +390,6 @@ document.addEventListener("click", (event) => {
     }
 
     socket.emit("leave-room", ClickedRoomName, userIdYes);
-    /*
-    let ls = window.localStorage.getItem(ClickedRoomName);
-    let temp = JSON.parse(ls);
-    let newList = temp.filter((peers) => {
-      return peers.id !== userIdYes;
-    });
-    window.localStorage.setItem(ClickedRoomName, JSON.stringify(newList));
-    */
   }
 });
 
@@ -442,7 +425,7 @@ function getNumberOfUsersInRoom(peerList, room) {
 let menuOpen = false;
 document.addEventListener("click", (event) => {
   let menuButton = document.querySelector("#menuBtn");
-  if (event.target.matches("#menuBtn" || document.querySelector("#burger"))) {
+  if (event.target.matches("#menuBtn")) {
     if (!menuOpen) {
       menuButton.classList.add("open");
       menuOpen = true;
@@ -455,11 +438,9 @@ document.addEventListener("click", (event) => {
   }
 });
 
-function toggle(toggleNav) {
-  if (toggleNav.innerHTML == "Open") {
-    toggleNav.innerHTML = "Close";
+function toggle(menuOpen) {
+  if (menuOpen) {
     document.getElementById("roomAside").style.width = "250px";
-
     document.getElementById("disconnectButton").style.display = "flex";
     document.getElementById("roomTitle").style.display = "block";
     document.getElementById("usersInRoom").style.display = "block";
