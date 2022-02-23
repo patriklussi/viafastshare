@@ -210,7 +210,7 @@ function connectToAnotherUser(room, peerList) {
     if (event.target.matches("#shareButton")) {
       let alertYouAreSharing = document.querySelector("#alertShare");
       if (shareButton.innerText == "Start sharing") {
-        shareMedia(room, localPeerList);
+        shareMedia(room, localPeerList,alertYouAreSharing);
         shareButton.innerHTML = "Stop sharing";
         shareButton.classList.replace("button--light", "button");
         alertYouAreSharing.innerHTML = "You are sharing your screen!";
@@ -249,7 +249,7 @@ function alertName() {
   }, 3000);
 }
 
-function shareMedia(room, peerList) {
+function shareMedia(room, peerList,alertYouAreSharing) {
   console.log("PEERLIST CURRENT", peerList);
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userIdYes;
