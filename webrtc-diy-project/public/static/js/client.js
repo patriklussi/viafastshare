@@ -90,6 +90,7 @@ socket.on("send-roomList", (roomList) => {
         clickedRoomName = room;
         peerObj.name = sessionName;
         socket.emit("join-room", peerObj, room);
+
         socket.emit("call", room);
       });
     }
@@ -142,11 +143,11 @@ socket.on("user-disconnected", (userId, room, peerList) => {
   console.log("User", userId, "has disconnected");
   updateUsersList(peerList, room);
   let videoTagToRemove = document.querySelector("video");
-  if(videoTagToRemove !==null){
+  if (videoTagToRemove !== null) {
     videoTagToRemove.remove();
   }
- 
-  let roomContainer = document.querySelector(".createRoom__roomContainer");
+
+  let roomContainer = document.querySelector(".room__container");
 
   if (getNumberOfUsersInRoom(peerList, room) === 1) {
     deleteRoomBtn.innerHTML = "Delete room";
@@ -161,7 +162,7 @@ function updateUsersList(peerList, room) {
   console.log("PEERLIST", peerList);
   localPeerList = peerList;
   console.log("LocalPeerList", localPeerList);
- 
+
   const usersInRoom = document.querySelector("#usersInRoom");
 
   usersInRoom.innerHTML = "";
@@ -176,7 +177,7 @@ function updateUsersList(peerList, room) {
 
 function connectToAnotherUser(room, peerList) {
   const shareButton = document.querySelector("#shareButton");
-  let roomUsersList = document.querySelector(".createRoom__roomContainer");
+  let roomUsersList = document.querySelector(".room__container");
   if (getNumberOfUsersInRoom(peerList, room) === 1) {
     deleteRoomBtn.innerHTML = "Delete room";
     roomUsersList.append(deleteRoomBtn);
