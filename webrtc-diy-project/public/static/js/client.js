@@ -18,6 +18,11 @@ let menuOpen = false;
 
 
 
+
+
+
+
+
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
@@ -292,6 +297,7 @@ function addVideoStream(userVideoStream, video, fsButton, caller, videoBar,whoIs
   videoGrid.append(videoBar);
   roomAside.append(caller);
 }
+
 
 function getNumberOfUsersInRoom(peerList, room) {
   let count = 0;
