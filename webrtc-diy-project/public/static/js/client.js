@@ -16,28 +16,29 @@ let constraints = {
 var localPeerList = [];
 let menuOpen = false;
 
-const socket = io("https://viafastshare.herokuapp.com/");
-//const socket = io();
+
+
+
+
+
+
+
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
 var userId;
 var showRoomName;
-
+const socket = io("https://viafastshare.herokuapp.com/");
 var myPeer = new Peer(undefined, {
   host: "0.peerjs.com",
-  //host: "/",
   port: "443",
- // port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
 });
-
 myPeer.on("open", function (id) {
 
   userId = id;
   peerObj.id = userId;
 });
-
 myPeer.on("call", (call) => {
   let caller = document.createElement("p");
   let video = document.createElement("video");
@@ -153,6 +154,8 @@ socket.on("user-disconnected", (userId, room, peerList) => {
     roomContainer.append(deleteRoomBtn);
     deleteRoomBtn.addEventListener("click", () => {
       socket.emit("delete-room", room, peerList, userId);
+      stopVideoTrack();
+      stopShareMedia();
     });
   }
 });
@@ -219,14 +222,14 @@ function alertName() {
 }
 
 function startShareMedia(room, peerList, alertYouAreSharing, shareButton) {
-
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userId;
   });
+  console.log(peersToLoop);
   navigator.mediaDevices
     .getDisplayMedia(constraints)
     .then((stream) => {
-      peersToLoop.forEach((peer) => {
+     peersToLoop = peersToLoop.forEach((peer) => {
         console.log(peer);
         if (peer.room === room) {
           var call = myPeer.call(peer.id, stream);
@@ -253,9 +256,12 @@ function startShareMedia(room, peerList, alertYouAreSharing, shareButton) {
 }
 
 function stopVideoTrack() {
-  window.srcObject.getTracks().forEach(function (track) {
-    track.stop();
-  });
+  if(Window.srcObject != null){
+    window.srcObject.getTracks().forEach(function (track) {
+      track.stop();
+    });
+  }
+  
 }
 
 function stopShareMedia() {

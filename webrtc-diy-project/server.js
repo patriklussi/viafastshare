@@ -83,10 +83,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leave-room", (room, userId) => {
-
+    console.log(peerList);
     socket.leave(room);
     filterPeerList(userId);
-  
+    console.log(peerList);
     socket.broadcast.to(room).emit("user-disconnected", userId, room, peerList);
   });
 });
