@@ -23,7 +23,7 @@ export default class extends abstractView {
           <ul class="createRoom__list" id="displayRoomName">
             <li id="roomHolder"></li>
           </ul>
-          <button class="button--light button--small" id="refresh"> Refresh rooms list </button>
+          <button class="button--light button--small" id="refresh"> Get rooms</button>
           <p id="roomAlertP" class="alert--light"></p>
         </section>  
 
