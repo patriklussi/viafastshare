@@ -98,8 +98,8 @@ h3 {
   transition: 0.5s;
   align-items: flex-start;
 }
-.createRoom__list,
-.roomUsers__list {
+
+.createRoom__list {
   display: flex;
   flex-direction: column;
   padding-top: 1rem;
@@ -121,14 +121,13 @@ h3 {
   justify-content: center;
   align-items: center;
 }
-.createRoom__userContainer {
+.room__userContainer {
   display: flex;
   justify-content: flex-start;
   height: 20%;
   width: 100%;
 }
-.createRoom__roomContainer,
-.roomUsers__container {
+.room__container {
   height: 80%;
   width: 100%;
   justify-content: space-between;
@@ -196,17 +195,39 @@ h3 {
   box-shadow: 1px 2px 2px #5d6062;
   font-size: 1rem;
 }
+
 .button--small {
   width: 10rem;
   margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.5s ease-in-out;
 }
+.menu__btn {
+  height: 50px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.material-icons.open {
+  transition: all 0.5s ease-in-out;
+  transform: rotate(180deg);
+}
+
 video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.video__bar {
+  background: rgb(216, 215, 215);
+  width: 100%;
+  height: 35px;
+  cursor: pointer;
 }
 #videoGrid {
   width: 80%;
@@ -224,6 +245,10 @@ video {
 #userIcon {
   align-self: end;
 }
+#deleteButton {
+  background: #6d6d6d;
+  color: white;
+}
 #connectCondition {
   display: none;
   color: #fff;
@@ -236,4 +261,12 @@ video {
   font-weight: bold;
 }
 
+#alertShare {
+  font-size: 2rem;
+}
+#menuBtn {
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+}
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100&display=swap");
