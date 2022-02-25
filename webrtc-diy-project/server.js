@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
     }
   });
   socket.on("call", (room) => {
-    console.log("clicked room: ", room);
+
     socket.emit("call-function", room, peerList);
   });
 
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
     peerList = peerList.filter((peers) => {
       return peers.id === userId;
     });
-    console.log("removed room:", roomList);
+   
   });
 
   function filterPeerList(userId) {
@@ -83,10 +83,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leave-room", (room, userId) => {
-    console.log(userId, "left room");
+
     socket.leave(room);
     filterPeerList(userId);
-    console.log("PEERLIST AFTER", peerList);
+  
     socket.broadcast.to(room).emit("user-disconnected", userId, room, peerList);
   });
 });

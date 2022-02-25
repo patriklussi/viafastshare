@@ -22,7 +22,7 @@ export default class extends abstractView {
 
         <section class="room__container">
           <ul id="usersInRoom" class="createRoom__list" id="displayRoomName"></ul>
-          <a class="button--light button--small"  id="disconnectButton"  href="/createRoom" data-link>Leave room </a>
+          <a class="button--light button--small"  id="disconnectButton"  href="/createRoom" data-link>Leave</a>
         </section>
                    
         <section class="room__userContainer">

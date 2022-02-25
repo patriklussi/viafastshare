@@ -16,8 +16,8 @@ let constraints = {
 var localPeerList = [];
 let menuOpen = false;
 
-const socket = io("https://viafastshare.herokuapp.com/");
-//const socket = io();
+//const socket = io("https://viafastshare.herokuapp.com/");
+const socket = io();
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
@@ -25,15 +25,15 @@ var userId;
 var showRoomName;
 
 var myPeer = new Peer(undefined, {
-  host: "0.peerjs.com",
-  //host: "/",
-  port: "443",
-  //port: "3001",
+  //host: "0.peerjs.com",
+  host: "/",
+  //port: "443",
+  port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
 });
 
 myPeer.on("open", function (id) {
-  console.log("My peer id", id);
+
   userId = id;
   peerObj.id = userId;
 });
@@ -41,25 +41,28 @@ myPeer.on("open", function (id) {
 myPeer.on("call", (call) => {
   let caller = document.createElement("p");
   let video = document.createElement("video");
+  let whoIsSharingContainer = document.querySelector("#whoIsSharingContainer")
   video.setAttribute("id", "videoTag");
   let videoBar = document.createElement("div");
   videoBar.classList.add("video__bar");
   let fsButton = document.createElement("i");
   fsButton.setAttribute("id", "fsButton");
+  fsButton.innerHTML ="fullscreen";
   fsButton.classList.add("material-icons");
   fsButton.style.fontSize = "36px";
   fsButton.style.color = "black";
   ingoingMediaConnections.set(call.peer, call);
+  let callingPeer = call.peer;
   call.answer();
-  console.log("Call answered", call.peer);
+
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, fsButton, caller, videoBar);
+    addVideoStream(userVideoStream, video, fsButton, caller, videoBar,whoIsSharingContainer,callingPeer);
   });
 
   call.on("close", () => {
-    console.log("Closing!");
+ 
     video.remove();
-    caller.innerHTML = "";
+    whoIsSharingContainer.innerHTML = "";
     fsButton.remove();
     videoBar.remove();
   });
@@ -85,7 +88,7 @@ socket.on("send-roomList", (roomList) => {
 
       showRoomName = room;
       roomName.addEventListener("click", () => {
-        console.log("CLICKED ROOM", room);
+   
         let sessionName = window.sessionStorage.getItem("names");
         clickedRoomName = room;
         peerObj.name = sessionName;
@@ -98,17 +101,15 @@ socket.on("send-roomList", (roomList) => {
 });
 
 socket.on("call-function", (room, peerList) => {
-  console.log("CONNECTOANOTHER USER PEERLIST", peerList);
+ 
   connectToAnotherUser(room, peerList);
 });
 
 socket.on("user-connected", (peerList, userId, room) => {
-  console.log("PeerList: ", peerList);
-  console.log("user " + userId + " has connected");
-  console.log("Current mediaConnections: ", ingoingMediaConnections);
+
   deleteRoomBtn.remove();
   updateUsersList(peerList, room);
-  console.log("before");
+
 });
 
 socket.on("room-display", function (room) {
@@ -129,18 +130,16 @@ socket.on("alert-room", (roomName) => {
 });
 
 socket.on("disconnect-mediaconnection", (userId) => {
-  console.log("Disconnect mediaconnection", ingoingMediaConnections);
+
   if (ingoingMediaConnections.has(userId)) {
-    console.log("Deleting connection from ", userId);
+
     ingoingMediaConnections.get(userId).close();
     ingoingMediaConnections.delete(userId);
-  } else {
-    console.log("has no connection from", userId);
-  }
+  } 
 });
 
 socket.on("user-disconnected", (userId, room, peerList) => {
-  console.log("User", userId, "has disconnected");
+
   updateUsersList(peerList, room);
   let videoTagToRemove = document.querySelector("video");
   if (videoTagToRemove !== null) {
@@ -159,12 +158,8 @@ socket.on("user-disconnected", (userId, room, peerList) => {
 });
 
 function updateUsersList(peerList, room) {
-  console.log("PEERLIST", peerList);
   localPeerList = peerList;
-  console.log("LocalPeerList", localPeerList);
-
   const usersInRoom = document.querySelector("#usersInRoom");
-
   usersInRoom.innerHTML = "";
   for (let peers of peerList) {
     let userNameList = document.createElement("li");
@@ -186,7 +181,7 @@ function connectToAnotherUser(room, peerList) {
     });
   }
 
-  console.log("Room name: ", room);
+
 
   document.addEventListener("click", (event) => {
     if (event.target.matches("#shareButton")) {
@@ -224,7 +219,7 @@ function alertName() {
 }
 
 function startShareMedia(room, peerList, alertYouAreSharing, shareButton) {
-  console.log("PEERLIST CURRENT", peerList);
+
   let peersToLoop = peerList.filter((peers) => {
     return peers.id !== userId;
   });
@@ -265,7 +260,7 @@ function stopVideoTrack() {
 
 function stopShareMedia() {
   socket.emit("stop-call", showRoomName, userId);
-  console.log("Stop sharing");
+ 
   let shareButton = document.querySelector("#shareButton");
   shareButton.classList.replace("button", "button--light");
   stopVideoTrack();
@@ -275,15 +270,21 @@ function stopShareMedia() {
     }
   });
   outgoingMediaConnections.clear();
-  console.log("disconnect");
+
 }
 
-function addVideoStream(userVideoStream, video, fsButton, caller, videoBar) {
+function addVideoStream(userVideoStream, video, fsButton, caller, videoBar,whoIsSharingContainer,callingPeer) {
   let roomAside = document.querySelector("#roomAside");
 
   const videoGrid = document.getElementById("videoGrid");
   video.srcObject = userVideoStream;
 
+  console.log(localPeerList);
+  for(let peer of localPeerList){
+    if(peer.id ===callingPeer){
+     whoIsSharingContainer.innerHTML = peer.name + " is sharing";
+    }
+  }
   video.play();
   videoGrid.append(video);
   videoBar.append(fsButton);
@@ -294,13 +295,12 @@ function addVideoStream(userVideoStream, video, fsButton, caller, videoBar) {
 function getNumberOfUsersInRoom(peerList, room) {
   let count = 0;
   for (let peer of peerList) {
-    console.log(peer);
+
     if (peer.room === room) {
       count += 1;
     }
 
   }
-  console.log("print count", count);
   return count;
 }
 
@@ -333,7 +333,7 @@ function toggle(menuOpen) {
 document.addEventListener("click", (event) => {
   if (event.target.matches("#nameOKBtn")) {
     const enterName = document.querySelector("#enterName");
-    console.log("username " + enterName.value + " was created");
+    
     window.sessionStorage.setItem("names", enterName.value);
     const connectBtn = document.querySelector("#connectCondition");
     const nameBtn = document.querySelector("#nameOKBtn");
@@ -380,7 +380,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("keyup", (event) => {
   if (event.target.matches("#roomNameInput")) {
     if (event.key === "Enter") {
-      console.log("testar enter press on input");
+   
       event.preventDefault();
       document.querySelector("#roomNameButton").click();
     }
@@ -390,7 +390,7 @@ document.addEventListener("keyup", (event) => {
 document.addEventListener("keyup", (event) => {
   if (event.target.matches("#enterName")) {
     if (event.key === "Enter") {
-      console.log("testar enter press on input");
+    
       event.preventDefault();
       document.querySelector("#nameOKBtn").click();
     }
@@ -401,7 +401,7 @@ document.addEventListener("click", (event) => {
   if (event.target.matches("#roomNameButton")) {
     if (roomNameInput.value !== "") {
       const room = roomNameInput.value;
-      console.log("New room created with name: ", room);
+
       socket.emit("room-name", room);
       socket.emit("send-RoomList-Info");
       roomNameInput.value = "";
