@@ -16,8 +16,8 @@ let constraints = {
 var localPeerList = [];
 let menuOpen = false;
 
-//const socket = io("https://viafastshare.herokuapp.com/");
-const socket = io();
+const socket = io("https://viafastshare.herokuapp.com/");
+//const socket = io();
 const ingoingMediaConnections = new Map();
 const outgoingMediaConnections = new Map();
 const peerObj = {};
@@ -25,10 +25,10 @@ var userId;
 var showRoomName;
 
 var myPeer = new Peer(undefined, {
-  //host: "0.peerjs.com",
-  host: "/",
-  //port: "443",
-  port: "3001",
+  host: "0.peerjs.com",
+  //host: "/",
+  port: "443",
+  //port: "3001",
   config: { iceServers: [{ url: "stun:stun.l.google.com:19302" }] },
 });
 
@@ -298,10 +298,16 @@ function getNumberOfUsersInRoom(peerList, room) {
     if (peer.room === room) {
       count += 1;
     }
+
   }
   console.log("print count", count);
   return count;
 }
+
+
+    
+
+
 
 function toggle(menuOpen) {
   if (menuOpen) {
