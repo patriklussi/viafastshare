@@ -292,6 +292,7 @@ function addVideoStream(userVideoStream, video, fsButton, caller, videoBar,whoIs
   roomAside.append(caller);
 }
 
+
 function getNumberOfUsersInRoom(peerList, room) {
   let count = 0;
   for (let peer of peerList) {
